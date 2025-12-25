@@ -224,8 +224,9 @@ void read_from_socket(int sock_fd, Msg** q, int *len){
 		exit(EXIT_FAILURE);
 	}
 	if(n == 0){
-		char msg[100] = "Nothing To Read";
+		char msg[100] = "Nothing To Read \n";
 		write_to_log(msg);
+		*len = 0;
 		return;
 	}
 	buf[n] = '\0';
@@ -394,6 +395,21 @@ void* handle_received_msgs(void* node){
 			pthread_testcancel();
 		} else if (r > 0) {
 			read_from_socket(p.sockfd, &q, &len);
+			if(len == 0){
+				Peer* temp = head;
+				while(temp){
+					if(!strcmp(temp->ip, p.ip) && temp->port == p.port){
+						char msg[200];
+						snprintf(msg, sizeof(msg),"Connection Closed by remote ip %s port %d \n", temp->ip, temp->port);
+						write_to_log(msg);
+						pthread_rwlock_wrlock(&temp->lock);
+						temp->sockfd = -1;
+						pthread_rwlock_unlock(&temp->lock);
+						return NULL;
+					}
+					temp = temp->next;
+				}
+			}
 			if(q && q->msgType == KEEPALIVE){
 				char msgStr[200] = {'\0'};
 				snprintf(msgStr, sizeof(msgStr), "\n KeepAlive Received From IP %s Port %s \n", q->ipAddress, q->port);
