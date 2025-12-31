@@ -27,10 +27,12 @@ pthread_cond_t checkPeerConnectionsCond = PTHREAD_COND_INITIALIZER;
 void* handle_received_msgs(void* node);
 typedef struct Request{
 	char id[IdLen];
-	char srcIP[IpAddrLen];
+	char srcIp[IpAddrLen];
 	char srcPort[PortLen];
 	char originIp[IpAddrLen];
 	char originPort[PortLen];
+	char dstIp[IpAddrLen];
+	char dstPort[PortLen];
 	bool complete;
 	struct Request* next;
 	pthread_rwlock_t lock;
@@ -103,9 +105,6 @@ void* generate_id(){
 }
 
 void print_qm(Msg* qm){
-	if(qm->cmd != LS){
-		return;
-	}
         printf("MSGTYPE %d \n",qm->msgType);
         printf("IDLEN %d \n",qm->idLen);
         printf("srcIpAddressLen %d \n",qm->srcIpLen);
@@ -473,8 +472,12 @@ bool add_request(Msg *msg){
 	pthread_mutex_lock(&requestTailLock);
 	requestTail->next = malloc(sizeof(Request));
 	strcpy(requestTail->next->id,msg->id);
-	strcpy(requestTail->next->srcIP, msg->srcIp);
+	strcpy(requestTail->next->srcIp, msg->srcIp);
 	strcpy(requestTail->next->srcPort, msg->srcPort); 
+	strcpy(requestTail->next->originIp, msg->originIp);
+	strcpy(requestTail->next->originPort, msg->originPort); 
+	strcpy(requestTail->next->dstIp, msg->dstIp);
+	strcpy(requestTail->next->dstPort, msg->dstPort); 
 	requestTail->next->complete = true;
 	requestTail = requestTail->next;
 	pthread_mutex_unlock(&requestTailLock);
@@ -484,7 +487,6 @@ bool add_request(Msg *msg){
 
 void* request_forwarder(void* msg1){
 	printf("\nRequest Forwarder\n");
-	print_qm(msg1);
 	Msg msg = *(Msg*)msg1;
 	Peer* temp = head;
 	while(temp){
@@ -497,7 +499,6 @@ void* request_forwarder(void* msg1){
 			strcpy(msg.srcIp,serverIP);
 			strcpy(msg.srcPort,serverPortStr);
 			//strcpy(msg.dstIp,temp->ip);
-			print_qm(&msg);
 			int len = serialize_query(&msg, buf1, 2000);
 			printf("Sending to sockfd: %d Len: %d Neighbor IP%s NeighborPort %d \n", temp->sockfd,len,temp->ip,temp->port);
 			write(temp->sockfd, buf1, len);
@@ -513,106 +514,134 @@ void* request_forwarder(void* msg1){
 void* response_forwarder(void* msg1){
 	Msg respMsg  = *(Msg*)msg1;
 	Msg *msg = &respMsg;
-	Peer* neighborPtr = head;
-        while(neighborPtr){
-		printf("Neighbor Ptr %s Port %d Msg Src%s Msg Port %s\n",neighborPtr->ip, neighborPtr->port,msg->srcIp, msg->srcPort);
-		if(strcmp(neighborPtr->ip, msg->srcIp) == 0 && neighborPtr->port == atoi( msg->srcPort)){
-			break;
-		}
-		neighborPtr = neighborPtr->next;
-	}
-	printf("Send Response back %p \n", neighborPtr);
 	if(msg->msgType == REQUEST){
+		Peer* neighborPtr = head;
+		char buf[100] = {'\0'};
+		int nread = 0;
+		while(neighborPtr){
+			if(strcmp(neighborPtr->ip, msg->srcIp) == 0 && neighborPtr->port == atoi( msg->srcPort)){
+				break;
+			}
+			neighborPtr = neighborPtr->next;
+		}
 		if(msg->cmd == LS){
         		FILE *fp = popen("ls -l","r");
-			char buf[10] = {'\0'};
-			int nread = 0;
 			while((nread = fread(buf, 1, sizeof(buf),fp)) > 0){
 				Msg qm;
 				qm.msgType = RESPONSE;
 				qm.idLen = msg->idLen;
-				
 				qm.srcIpLen = strlen(serverIP);
 				strncpy(qm.srcIp, serverIP, qm.srcIpLen);
-
 				qm.originIpLen = strlen(serverIP);
 				strncpy(qm.originIp, serverIP, qm.originIpLen);
-				
-				qm.dstIpLen = qm.srcIpLen;
-				strncpy(qm.dstIp, qm.srcIp, qm.dstIpLen);
-				
+				qm.dstIpLen = msg->originIpLen;
+				strncpy(qm.dstIp, msg->originIp, msg->originIpLen);
 				qm.srcPortLen = strlen(serverPortStr);
 				strncpy(qm.srcPort,serverPortStr,qm.srcPortLen);
-
 				qm.originPortLen = strlen(serverPortStr);
 				strncpy(qm.originPort,serverPortStr,qm.originPortLen);
-				
-				qm.dstPortLen = msg->srcPortLen;
-				strncpy(qm.srcPort, msg->srcPort, qm.dstPortLen);
-				
+				qm.dstPortLen = msg->originPortLen;
+				strncpy(qm.dstPort, msg->originPort, qm.dstPortLen);
 				strncpy(qm.id, msg->id ,qm.idLen);
 				qm.cmd = NO_CMD;
 				qm.payloadLen = strlen(buf);
 				strncpy(qm.payload, buf, qm.payloadLen);
 				qm.complete = false;
 				uint8_t buf1[2000] = {'\0'};
-				print_qm(&qm);
 				int len = serialize_query(&qm, buf1,2000 );
-				printf("Sending Response %d SockFd == %p\n",len, neighborPtr);
 				write(neighborPtr->sockfd, buf1, len);
 			}
         		pclose(fp);
-			Msg qm;
-			qm.msgType = RESPONSE;
-			qm.idLen = msg->idLen;
-			qm.srcIpLen = strlen(serverIP);
-			strncpy(qm.srcIp, serverIP, qm.srcIpLen);
-			qm.originIpLen = strlen(serverIP);
-			strncpy(qm.originIp, serverIP, qm.originIpLen);
-			qm.dstIpLen = msg->srcIpLen;
-			strncpy(qm.dstIp, msg->srcIp, qm.dstIpLen);
-			qm.dstPortLen = strlen(msg->srcPort);
-			strncpy(qm.id, msg->id, qm.idLen);
-			qm.cmd = NO_CMD;
-			qm.payloadLen = 0;
-			strncpy(qm.payload, buf, qm.payloadLen);
-			qm.complete = true;
-			uint8_t buf1[2000];
-			print_qm(&qm);
-			int len = serialize_query(&qm, buf1,2000 );
-			printf("Sending Complete %d\n",len);
-			write(neighborPtr->sockfd, buf1, len);
 		}else if(msg->cmd == RM){
 		}else if(msg->cmd == DOWNLOAD){
-		}
-	}else if(msg->msgType == RESPONSE){
-		if(strcmp(msg->dstIp,serverIP) && strcmp(msg->dstPort, serverPortStr)){
-			printf("Recived Response %s\n",msg->payload);	
-		}else{
-			uint8_t buf1[2000];
-			//
-				/*strcpy(msg->srcIpLen, itoa(strlen(serverIP)));
-				strncpy(msg.srcIp, serverIP, msg.srcIpLen);
-
-				msg.originIpLen = strlen(serverIP);
+			printf("File To Read %s \n", msg->payload);
+        		FILE *fp = fopen(msg->payload,"r");
+			char buf[100] = {'\0'};
+			int nread = 0;
+			while((nread = fread(buf, 1, sizeof(buf),fp)) > 0){
+				printf("Read Buf == %s\n",buf);
+				Msg qm;
+				qm.msgType = RESPONSE;
+				qm.idLen = msg->idLen;
+				qm.srcIpLen = strlen(serverIP);
+				strncpy(qm.srcIp, serverIP, qm.srcIpLen);
+				qm.originIpLen = strlen(serverIP);
 				strncpy(qm.originIp, serverIP, qm.originIpLen);
-				
-				msg.dstIpLen = qm.srcIpLen;
-				strncpy(qm.dstIp, qm.srcIp, qm.dstIpLen);
-				
-				msg.srcPortLen = strlen(serverPortStr);
+				qm.dstIpLen = msg->originIpLen;
+				strncpy(qm.dstIp, msg->originIp, msg->originIpLen);
+				qm.srcPortLen = strlen(serverPortStr);
 				strncpy(qm.srcPort,serverPortStr,qm.srcPortLen);
-
-				msg.originPortLen = strlen(serverPortStr);
+				qm.originPortLen = strlen(serverPortStr);
 				strncpy(qm.originPort,serverPortStr,qm.originPortLen);
-				
-				qm.dstPortLen = msg->srcPortLen;*/
-			//
-			printf("\nForward the message to the source\n");
-			print_qm(msg);
-			int len = serialize_query(msg, buf1,2000 );
-			printf("Sending %d\n",len);
-			write(neighborPtr->sockfd, buf1, len);
+				qm.dstPortLen = msg->originPortLen;
+				strncpy(qm.dstPort, msg->originPort, qm.dstPortLen);
+				strncpy(qm.id, msg->id ,qm.idLen);
+				qm.cmd = NO_CMD;
+				qm.payloadLen = strlen(buf);
+				strncpy(qm.payload, buf, qm.payloadLen);
+				qm.complete = false;
+				uint8_t buf1[2000] = {'\0'};
+				int len = serialize_query(&qm, buf1,2000 );
+				write(neighborPtr->sockfd, buf1, len);
+			}
+        		fclose(fp);
+		}
+		Msg qm;
+		qm.msgType = RESPONSE;
+		qm.idLen = msg->idLen;
+		qm.srcIpLen = strlen(serverIP);
+		strncpy(qm.srcIp, serverIP, qm.srcIpLen);
+		qm.originIpLen = strlen(serverIP);
+		strncpy(qm.originIp, serverIP, qm.originIpLen);
+		qm.dstIpLen = msg->srcIpLen;
+		strncpy(qm.dstIp, msg->srcIp, qm.dstIpLen);
+		qm.dstPortLen = strlen(msg->srcPort);
+		strncpy(qm.id, msg->id, qm.idLen);
+		qm.cmd = NO_CMD;
+		qm.payloadLen = 0;
+		strncpy(qm.payload, buf, qm.payloadLen);
+		qm.complete = true;
+		uint8_t buf1[2000];
+		int len = serialize_query(&qm, buf1,2000 );
+		printf("Sending Complete %d\n",len);
+		write(neighborPtr->sockfd, buf1, len);
+	}else if(msg->msgType == RESPONSE){
+		printf("Msg Dst %s ServerIP %s DstPort %s ServerPortStr %s \n",msg->dstIp, serverIP, msg->dstPort, serverPortStr);
+		if(strcmp(msg->dstIp,serverIP)==0 && strcmp(msg->dstPort, serverPortStr) == 0){
+			printf(" Payload received %s \n",msg->payload);
+			printf("YAYAYAYA");
+		}else{
+
+				Request* tempReq = requestHead;
+				Peer* neighborPtr = NULL;
+				while(tempReq){
+					printf("TempReq->id %s msg->id %s originIP1 %s dstIP %s originPort %s dstPort %s \n", tempReq->id, msg->id, tempReq->originIp, msg->dstIp,tempReq->originPort, msg->dstPort);
+					if(strcmp(tempReq->id , msg->id) == 0  && (strcmp(tempReq->originIp, msg->dstIp) == 0) && (strcmp(tempReq->originPort, msg->dstPort) == 0)){
+						Peer* tempPeer = head;
+						while(tempPeer){
+							if((strcmp(tempPeer->ip, tempReq->srcIp) == 0) && tempPeer->port == atoi(tempReq->srcPort)){
+								neighborPtr = tempPeer;
+								printf("NeighborPtr == %s %d\n", neighborPtr->ip,neighborPtr->port);
+								break;
+							}
+							tempPeer = tempPeer->next;
+						}
+						break;
+					}
+					tempReq = tempReq->next;
+				}
+				uint8_t buf1[2000];
+			
+				msg->srcIpLen =  strlen(serverIP);
+				strncpy(msg->srcIp, serverIP, msg->srcIpLen);
+				msg->srcPortLen = strlen(serverPortStr);
+				strncpy(msg->srcPort,serverPortStr,msg->srcPortLen);
+
+				printf("\nForward the message to the source\n");
+				printf("Complete %d\n", msg->complete);
+				int len = serialize_query(msg, buf1,2000 );
+				printf("Sending %d %d\n",len, neighborPtr->sockfd);
+				write(neighborPtr->sockfd, buf1, len);
 		}
 	}
 
@@ -628,8 +657,8 @@ void* handle_cmd_msg_types(Msg* q){
 		received_ttl_msg = true;
 		pthread_cond_signal(&ttlCond);
 		pthread_mutex_unlock(&ttlMutex);
-	} else if(q && q->cmd == LS && q->msgType == REQUEST){
-		printf("\nSending Reuqest\n");
+	} else if(q && (q->cmd == LS || q->cmd == DOWNLOAD || q->cmd == RM) && q->msgType == REQUEST){
+		printf("\nReceived Request Payload:%s Src %s origin:%s dst %s dst Port %s \n", q->payload, q->srcIp,q->originIp,q->dstIp, q->dstPort  );
 		if(add_request(q)){
 			if(strcmp(q->dstIp, serverIP) == 0 && strcmp(q->dstPort, serverPortStr) == 0){
 				printf("\nRequest for myself\n");
@@ -643,12 +672,11 @@ void* handle_cmd_msg_types(Msg* q){
 				pthread_join(request_forwarder_id, NULL);
 			}
 		}
-	} else if(q && q->cmd == RM && q->msgType == REQUEST){
-
-	} else if(q && q->cmd == DOWNLOAD && q->msgType == REQUEST){
-
 	} else if(q && q->msgType == RESPONSE){
-
+		printf("\nResponse for neighbor\n");
+		pthread_t response_forwarder_id;
+		pthread_create(&response_forwarder_id, NULL, response_forwarder, q);
+		pthread_join(response_forwarder_id, NULL);
 	}
 	return NULL;
 }
@@ -657,7 +685,7 @@ void* handle_cmd_msg_types(Msg* q){
 void* handle_received_msgs(void* node){
 	Peer p = *(Peer*)node;
 	pthread_t checkTTL = 100;
-	//pthread_create(&checkTTL, NULL, check_ttl, &p.thread);
+	pthread_create(&checkTTL, NULL, check_ttl, &p.thread);
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
     	pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
 	while(1){
@@ -696,8 +724,6 @@ void* handle_received_msgs(void* node){
 					temp = temp->next;
 				}
 			} else {
-				printf("HANDLE_RECEIVED_MSGS %d %d \n", q->cmd, q->msgType);
-				print_qm(q);
 				handle_cmd_msg_types(q);
 			}
 			free(q);
@@ -852,7 +878,7 @@ void* listNeighbors(){
 void* listRequests(){
 	Request* temp =  requestHead;
 	while(temp){
-		printf("Request ID: %s serverIP %s srcPort %s complete %d \n", temp->id, temp->srcIP, temp->srcPort, temp->complete);
+		printf("Request ID: %s serverIP %s srcPort %s complete %d \n", temp->id, temp->srcIp, temp->srcPort, temp->complete);
 		temp = temp->next;
 	}
 	return NULL;
@@ -885,8 +911,8 @@ void* prompt(){
 		printf("4) Neighbors \n");
 		printf("Enter your Choice");
 		scanf("%d",&choice);
-		char serverIP[100];
-		char port[100];
+		char dstIp[100];
+		char dstPort[100];
 		char fileName[100];
 		switch(choice){
 			case 1:{
@@ -908,22 +934,40 @@ void* prompt(){
 			       }
 			case 2:{
 				printf("Enter the server ip");
-				scanf("%s", serverIP);
+				scanf("%s", dstIp);
 				printf("Enter the Port");
-				scanf("%s", port);
+				scanf("%s", dstPort);
 				printf("Enter the File Name");
 				scanf("%s", fileName);
 				Msg msg;
         			msg.cmd = RM;
 				strcpy(msg.payload, fileName);
 				msg.payloadLen = strlen(fileName);
+				msg.dstIpLen = strlen(dstIp);
+				strcpy(msg.dstIp, dstIp);
+				msg.dstPortLen = strlen(dstPort);
+				strcpy(msg.dstPort, dstPort);
 				pthread_t initial_id;
 				pthread_create(&initial_id, NULL, sendInitialRequest, &msg);
 				break;
 			       }
 			case 3:{
+				printf("Enter the server ip");
+				scanf("%s", dstIp);
+				printf("Enter the Port");
+				scanf("%s", dstPort);
 				printf("Enter the File Name");
 				scanf("%s", fileName);
+				Msg msg;
+        			msg.cmd = DOWNLOAD;
+				strcpy(msg.payload, fileName);
+				msg.payloadLen = strlen(fileName);
+				msg.dstIpLen = strlen(dstIp);
+				strcpy(msg.dstIp, dstIp);
+				msg.dstPortLen = strlen(dstPort);
+				strcpy(msg.dstPort, dstPort);
+				pthread_t initial_id;
+				pthread_create(&initial_id, NULL, sendInitialRequest, &msg);
 				break;
 			       }
 			case 4:{
@@ -966,7 +1010,7 @@ int main(int argc, char** argv){
 	pthread_t generateId = 4;
 	pthread_create(&generateId, NULL, generate_id, NULL);
 	pthread_t sendTTL = 4;
-	//pthread_create(&sendTTL, NULL, send_ttl, NULL);
+	pthread_create(&sendTTL, NULL, send_ttl, NULL);
 	pthread_join(connect_with_higher_ip_port, NULL);
 	pthread_join(prompt_t, NULL);
 	pthread_join(generateId, NULL);

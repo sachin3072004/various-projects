@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 int serverPort = 0 ;
+char serverPortStr[10] = {'\0'};
 char serverIP[100] = {'\0'};
 typedef struct Peer{
 	char ip[100];
