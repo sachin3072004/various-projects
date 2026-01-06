@@ -1,0 +1,30 @@
+Installation on AWS c5n.2xlarge
+1)  sudo apt-get update && sudo apt-get upgrade -yq
+2) sudo apt-get install -yq build-essential ninja-build python3-pip \
+    linux-headers-$(uname -r) pkg-config libnuma-dev
+3) sudo apt install python3-pyelftools meson
+4)  wget https://fast.dpdk.org/rel/dpdk-23.07.tar.xz
+5) tar xvf dpdk-23.07.tar.xz
+6) cd dpdk-23.07
+7) meson setup -Dexamples=all build
+sudo ninja -C build install; sudo ldconfig
+
+8) sudo apt install git gcc-12
+9) sudo mkdir /mnt/huge
+sudo mount -t hugetlbfs -o pagesize=1G none /mnt/huge
+sudo bash -c 'echo 4 > /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages'
+sudo bash -c 'echo 1024 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages'
+
+10) sudo modprobe vfio
+11) sudo modprobe vfio-pci
+12) sudo bash -c 'echo 1 > /sys/module/vfio/parameters/enable_unsafe_noiommu_mode'
+13) sudo apt install net-tools
+14a) sudo ip link set ens7 down
+14b) sudo ip link set ens6 down
+15a)  sudo dpdk-devbind.py --bind=vfio-pci ens6
+15b)  sudo dpdk-devbind.py --bind=vfio-pci ens7
+
+
+To Test start testpmd and send packets to the interface from another machine.
+1) sudo ./build/app/dpdk-testpmd
+2) sudo ping -i .01 -c 100 192.102.1.188
