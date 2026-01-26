@@ -1,0 +1,4 @@
+1)  clang -O2 -g -target bpf -D__TARGET_ARCH_x86 -c hello.bpf.c -o hello.bpf.o
+2) llvm-strip -g hello.bpf.o 
+3) bpftool gen skeleton hello.bpf.o > hello.skel.h
+4) cc -O2 -g hello.c -o hello -lbpf -lelf -lz
