@@ -2,3 +2,6 @@
 2) llvm-strip -g hello.bpf.o 
 3) bpftool gen skeleton hello.bpf.o > hello.skel.h
 4) cc -O2 -g hello.c -o hello -lbpf -lelf -lz
+
+5) sudo bpftool  map dump name hmap
+6) sudo cat /proc/kallsyms | less // list of functions for kprobe

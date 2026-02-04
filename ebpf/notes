@@ -1,0 +1,66 @@
+1) strace=> show all the system call used in a process
+2) tcpdump is a tracing tools.
+3) bpftrace is built on libbcc and libbpf. good for 1 liners
+2) BCC suited for complex scripts
+4) execsnoop is the BPF tool which can show all the running programs and with args that are used to execute the program
+5) Functions used in kprobe and uprobe should be non inline functions
+
+BPFTrace:-
+6a) bpftrace is a high-level tracing language and CLI tool for Linux that compiles small scripts (DTrace-like syntax) to eBPF bytecode and loads them into the kernel.
+6) example of kprobe:- sudo bpftrace -e 'tracepoint:syscalls:sys_enter_openat {printf("%s %s\n", comm, str(args->filename));}'
+7) sudo bpftrace -l 'tracepoint:syscalls:sys_enter_open*' => to see what sys_enter_open exists
+8) sudo bpftrace -e 'tracepoint:syscalls:sys_enter_open* {@[probe] = count();}'=> to see which variant ofsys_enter_open is used more often.
+9) bpftrace comes with 20 utilities and bcc comes with 70
+
+BPF Tool:- 
+10) bpftool is used to inspect bpf program
+11) sudo bpftool prog show
+12) sudo ip link set dev ens7 xdpgeneric obj hello.bpf.o sec xdp
+13) sudo ip link set dev ens7 xdpgeneric off
+14) sudo bpftool map dump id 224
+
+EBPF Data structure:-
+12) bpf_map_lookup_elem(map,key) =>
+13) bpf_map_update_elem(map,k,val)
+14) bpf_map_delete_elemt(map,key);
+15) bpf_get_current_pid_tgid() => 
+16) bpf_get_current_comm
+17) bpf_perf_event_output()
+18) bpf_get_current_task
+19) bpf_spin_lock() / bpf_spin_unlock
+
+20 Pinning:- all bpf programs/Maps are mounted at /sys/fs/bpf. 
+21) sudo ethtool -L ens7 combined 2
+22) sudo ifconfig ens7 mtu 1500 up 
+
+There are following utilites to measure perforamce of the system.
+a) uptime
+2) dmesg | tail
+3) vmstat l
+4) mpstat -P All 1
+5) pidstat l
+6) iostat -xz l
+7) free -m
+8) sar -n DEV 1
+9) sar -n TCP,ETCP l
+1) top
+
+XDP:-
+1) there are 4 queues
+a) fill :- application provides buffer to the fill queue.
+b) rx:- Kernel takes a buffer from the fill queue and provide it to the rx queue. if fill queue is empty. kernel need to be woken up by poll systemcall. Call a syscall such as poll()/recvfrom() (or sendto() for TX), which checks umem->need_wakeup and calls ndo_xsk_wakeup() in the driver.
+c) tx:- The application is the producer for the TX ring. And app notify the kernel/nic. once kernel sends the packet out. it puts that frame in the completion queue.
+d) completion:- the app consumes from that ring to know which UMEM buffers can be reused.
+
+Copy mode vs non copy mode:-
+1) in copy mode the packet is directly copied in the umem buffer by nic driver.
+2) in non-copy mode packet is first copied in the nic's driver buffer and from there it is copied in the umem buffer.
+
+3) In the AF_XDP zero-copy networking model, communication between the kernel and user space happens through shared memory ring buffers. 
+The struct xsk_ring_prod handles the side that produces entries for the kernel to consume. There are two types of producer rings:
+Fill ring: The user space produces empty buffer addresses for the kernel to fill with incoming packets (Rx path).
+TX ring: The user space produces descriptors (index, length, offset) for packets it intends to transmit (Tx path). 
+
+System calls for AF_XDP:-
+1) XSK_RING_PROD__RESERVE() -> this system call is used to reserver the slots in the Prod queue.
+2) 
