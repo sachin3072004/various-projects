@@ -1,0 +1,5 @@
+
+clang -O2 -g -target bpf -D__TARGET_ARCH_x86 -c hello.bpf.c -o hello.bpf.o
+llvm-strip -g hello.bpf.o 
+#bpftool gen skeleton hello.bpf.o > hello.skel.h
+cc -O2 -g userspace_switch.c -o userspace_switch -lxdp -lbpf -lelf -lz -pthread
