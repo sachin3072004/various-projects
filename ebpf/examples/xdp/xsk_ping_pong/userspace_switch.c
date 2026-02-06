@@ -146,13 +146,13 @@ static void handle_receive_packets(struct xsk_ring_cons *rx,void* packet_buffer)
 
 		addr = xsk_umem__add_offset_to_addr(addr); // handle headroom
 		void *data = xsk_umem__get_data(packet_buffer, addr);
-		/*if(make_icmp_echo_reply(data, desc->len) == 0){
+		if(make_icmp_echo_reply(data, desc->len) == 0){
 			if (!af_xdp_send_frame(addr, len)) {}
 			else {}
 			
-		}*/
+		}
 
-		/*struct ethhdr *eth = data;
+		struct ethhdr *eth = data;
 		printf("Proto %d \n", ntohs(eth->h_proto));
 		if (ntohs(eth->h_proto) != ETH_P_IP)
 		continue;
@@ -166,7 +166,7 @@ static void handle_receive_packets(struct xsk_ring_cons *rx,void* packet_buffer)
 		inet_ntop(AF_INET, &s, src_ip, sizeof(src_ip));
 		inet_ntop(AF_INET, &d, dst_ip, sizeof(dst_ip));
 
-		printf("src=%s dst=%s len=%u\n", src_ip, dst_ip, len);*/
+		printf("src=%s dst=%s len=%u\n", src_ip, dst_ip, len);
 
 	}
 	printf("Rcvd %d\n", rcvd);
@@ -186,7 +186,7 @@ int main(){
                 exit(EXIT_FAILURE);
         }
 	xsk_umem__create(&umem, packet_buffer, packet_buffer_size, &fq, &cq, NULL);
-	int queue_num = 1;
+	int queue_num = 0;
 	
 	 char errmsg[1024];
 	signal(SIGINT, handle_signal);
