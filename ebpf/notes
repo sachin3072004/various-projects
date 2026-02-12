@@ -32,7 +32,7 @@ EBPF Data structure:-
 20 Pinning:- all bpf programs/Maps are mounted at /sys/fs/bpf. 
 21) sudo ethtool -L ens7 combined 2
 22) sudo ifconfig ens7 mtu 1500 up 
-
+23) sudo xdp-loader unload --all ifname ens7
 There are following utilites to measure perforamce of the system.
 a) uptime
 2) dmesg | tail
@@ -47,9 +47,9 @@ a) uptime
 
 XDP:-
 1) there are 4 queues
-a) fill :- application provides buffer to the fill queue.
-b) rx:- Kernel takes a buffer from the fill queue and provide it to the rx queue. if fill queue is empty. kernel need to be woken up by poll systemcall. Call a syscall such as poll()/recvfrom() (or sendto() for TX), which checks umem->need_wakeup and calls ndo_xsk_wakeup() in the driver.
-c) tx:- The application is the producer for the TX ring. And app notify the kernel/nic. once kernel sends the packet out. it puts that frame in the completion queue.
+a) fill :- application provides buffer to the fill queue. fill queue slots contains the umem addresses.
+b) rx:- Kernel takes a buffer(umem address) from the fill queue and provide it to the rx queue. if fill queue is empty. kernel need to be woken up by poll systemcall. Call a syscall such as poll()/recvfrom() (or sendto() for TX), which checks umem->need_wakeup and calls ndo_xsk_wakeup() in the driver.
+c) tx:- The application is the producer for the TX ring. And app notify the kernel/nic. once kernel sends the packet out. it puts that frame in the completion queue. Sometimes you do not need to call sendto if you are polling. because polling sends the messages from tx queue.
 d) completion:- the app consumes from that ring to know which UMEM buffers can be reused.
 
 Copy mode vs non copy mode:-
@@ -62,5 +62,53 @@ Fill ring: The user space produces empty buffer addresses for the kernel to fill
 TX ring: The user space produces descriptors (index, length, offset) for packets it intends to transmit (Tx path). 
 
 System calls for AF_XDP:-
-1) XSK_RING_PROD__RESERVE() -> this system call is used to reserver the slots in the Prod queue.
-2) 
+1) XSK_RING_PROD__RESERVE() -> this system call is used to reserver the slots in the Prod queue.It mainly reserves an array of nb _u64.
+2) xsk_ring_prod__fill_addr() -> it fills the __64 slots in fill array with umem offset. the differece between each slot should be equal to frame_size. so that packet can be placed.if packet is bigger than frame size then packet can be placed in multiple bufffer.
+
+q:- what does xskmap contain ?
+A:- Key (4 bytes): A __u32 integer representing an index. In most implementations, this corresponds to the RX queue ID of the network interface.
+Value (4 bytes): In userspace, you provide a File Descriptor (FD) of an AF_XDP socket. Inside the kernel, this is converted into a direct pointer to the struct xdp_sock object. socket is per queue.
+
+q:- Multi-buffer (scatter-gather) in XDP/AF_XDP means a single logical packet is split across multiple UMEM frames / descriptors, instead of being forced to fit in one 2048‑byte frame.
+
+What it does conceptually
+A large packet (e.g. 4K or 9K jumbo) is stored as several fragments, each fragment in its own frame (e.g. frame 0, frame 1, frame 2…).
+
+The NIC and driver use hardware scatter‑gather so they can DMA different parts of the same packet into different buffers, and link them via metadata instead of copying into one big contiguous buffer.
+
+In AF_XDP, this shows up as multiple RX/TX descriptors for one packet, with a continuation flag (e.g. XDP_PKT_CONTD) saying “this packet continues in the next descriptor. 
+
+Chapter-1
+ebpf can do following things1
+1) Performance tracing
+2) hihg performance networking
+3) detecting malicious activity
+
+q:- What is kprobe?
+a:- kprobe is attaching trap with the kernel code.
+
+
+q:- What is the issue with Kernel modules ?
+A:- If kernel module crashes than kernel crashes. Kernel module could be full of vulnerability. while in case of ebpf, there is a verifier. which makes sure ebpf program will be loaded only when if its safe to run.
+
+In case of routing,XDP offers performace gain of 2.5X than linux based networking.
+In case of LB, xdp offrs 4.5x performance gain.
+
+Chapter-2
+To look for good examples:
+https://github.com/iovisor/bcc
+
+
+Some interesting maps are:
+1) FIFO
+2) first -in last out
+3) LRU map
+4) LPM
+5) BLoom filters
+6)sockmap
+7) devmap
+
+There are maps which are not per CPU. To solve the concurrency problem in that case we use spinlokc.
+q:- what is a tail call ?
+A:-
+							    of map/
