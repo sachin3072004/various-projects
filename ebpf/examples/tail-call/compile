@@ -1,0 +1,3 @@
+
+clang -O2 -g -target bpf -D__TARGET_ARCH_x86 -c tail-call.bpf.c -o tail-call.bpf.o
+cc -O2 -g tail-call.c -o tail-call -lxdp -lbpf -lelf -lz -pthread
