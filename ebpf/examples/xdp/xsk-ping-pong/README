@@ -1,0 +1,5 @@
+This program replys to the icmp ping sent on ens7.
+ens7 is hard coded in the code for now.
+commands to execute are
+./command
+sudo ./userspace_switch

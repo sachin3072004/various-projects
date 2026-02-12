@@ -1,0 +1,3 @@
+
+clang -O2 -g -target bpf -D__TARGET_ARCH_x86 -c minimal-drop.bpf.c -o minimal-drop.bpf.o
+cc -O2 -g minimal-drop.c -o userspace_switch -lxdp -lbpf -lelf -lz -pthread
