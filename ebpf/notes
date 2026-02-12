@@ -110,5 +110,7 @@ Some interesting maps are:
 
 There are maps which are not per CPU. To solve the concurrency problem in that case we use spinlokc.
 q:- what is a tail call ?
-A:-
-							    of map/
+A:- tail call is like execev. calling function is overwritten by callee.
+
+q:- How to check if dirver supports skb/native mode?
+A:-  sudo xdp-loader status
