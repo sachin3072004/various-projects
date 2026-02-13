@@ -1,4 +1,4 @@
-This program replys to the icmp ping sent on ens7.
+This program replies to the icmp ping sent on ens7. ICMP reply message is prepared in the userspace and sent back via AP_XDP socket
 ens7 is hard coded in the code for now.
 commands to execute are
 ./command
