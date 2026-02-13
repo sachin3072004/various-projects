@@ -1,0 +1,10 @@
+1) install 24.04 on aws
+2) cd
+git clone https://github.com/p4lang/tutorials
+mkdir -p src
+cd src
+../tutorials/vm-ubuntu-24.04/install.sh |& tee log.txt
+
+
+a) every directory has a make file. That is used to start the mininet.
+b) log_msg() is the command to print messages
