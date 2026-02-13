@@ -1,5 +1,3 @@
-// SPDX-License-Identifier: Apache-2.0
-/* -*- P4_16 -*- */
 #include <core.p4>
 #include <v1model.p4>
 
@@ -7,12 +5,6 @@ const bit<16> TYPE_IPV4 = 0x800;
 const bit<8> TYPE_ICMP = 0x008;
 const bit<8> TYPE_ICMP_ECHO_REPLY = 0x000;
 
-/*************************************************************************
-*********************** H E A D E R S  ***********************************
-* This program skeleton defines minimal Ethernet and IPv4 headers and    *
-* a simple LPM (Longest-Prefix Match) IPv4 forwarding pipeline.          *
-* The exercise intentionally leaves TODOs for learners to implement.     *
-*************************************************************************/
 
 typedef bit<9>  egressSpec_t;   // Standard BMv2 uses 9 bits for egress_spec
 typedef bit<48> macAddr_t;      // Ethernet MAC address
@@ -48,16 +40,6 @@ struct headers {
     ipv4_t       ipv4;
 }
 
-/*************************************************************************
-*********************** P A R S E R  *************************************
-* New to P4? A typical parser does this:
-*   start -> parse_ethernet
-*   parse_ethernet:
-*       if etherType == TYPE_IPV4 -> parse_ipv4
-*       else accept
-*   parse_ipv4 -> accept
-* This skeleton leaves the actual states as a TODO to implement later.   *
-*************************************************************************/
 
 parser MyParser(packet_in packet,
                 out headers hdr,
@@ -109,22 +91,6 @@ control MyIngress(inout headers hdr,
         mark_to_drop(standard_metadata);
     }
 
-    /*********************************************************************
-     * NOTE FOR NEW READERS:
-     * 'ipv4_forward(dstAddr, port)' is invoked by table 'ipv4_lpm'.
-     *
-     * The values for 'dstAddr' and 'port' are *action data* supplied by
-     * the control plane when it installs entries in 'ipv4_lpm'.
-     *
-     * They mean:
-     *   - dstAddr  => Ethernet destination MAC for the next hop
-     *   - port     => output port (ultimately written to standard_metadata.egress_spec)
-     *
-     * Example (BMv2 simple_switch_CLI):
-     *   table_add ipv4_lpm ipv4_forward 10.0.1.1/32 => 00:00:00:00:01:00 1
-     * which passes MAC=00:00:00:00:01:00 and PORT=1 as action parameters
-     * into ipv4_forward(dstAddr, port).
-     *********************************************************************/
     action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
         hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
         hdr.ethernet.dstAddr = dstAddr;
@@ -133,12 +99,6 @@ control MyIngress(inout headers hdr,
         log_msg("IPV4_FORWARD SRC {} DST {}\n", {hdr.ethernet.srcAddr,  hdr.ethernet.dstAddr});
     }
 
-    /*********************************************************************
-     * LPM table for IPv4:
-     *   - Matches on hdr.ipv4.dstAddr using longest-prefix match (lpm)
-     *   - On hit, calls ipv4_forward with *action data* populated by the
-     *     control plane when it installs the table entry.
-     *********************************************************************/
     table ipv4_lpm {
         key = {
             hdr.ipv4.dstAddr: lpm;
@@ -153,11 +113,6 @@ control MyIngress(inout headers hdr,
     }
 
     apply {
-        /* TODO: fix ingress control logic
-         *  - Good practice: apply ipv4_lpm only when the IPv4 header is valid, e.g.:
-         *      if (hdr.ipv4.isValid()) { ipv4_lpm.apply(); }
-         *    This skeleton currently applies unconditionally for the exercise.
-         */
         ipv4_lpm.apply();
     }
 }
