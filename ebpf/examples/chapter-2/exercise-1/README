@@ -1,0 +1,2 @@
+1) Store odd and even process ids in different maps
+And display the entries of the maps at an interval of 5 secs.
