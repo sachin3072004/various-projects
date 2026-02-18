@@ -1,0 +1,10 @@
+1) In this code, I am tracking which files are opened by different process.
+I am using 'tracepoint/syscall/sys_enter_open' to track opened files. map is an array and value is string.
+
+Following command can be used to look for kprobe symbols
+cat /sys/kernel/debug/tracing/available_filter_function
+
+list of tracepoints:
+/sys/kernel/debug/tracing/events/syscalls
+Important:
+While kprobes hook into kernel function entries, Tracepoints (specifically sys_enter_openat) are the official, stable interface for monitoring syscalls initiated by user-space applications
