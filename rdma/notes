@@ -1,0 +1,133 @@
+From RDMA SNIA tutorial:- 
+DMA:- is direct memory access. Where HW componenets can read and write to memroy withut involving the CPU.
+RDMA:- is reading and writing to memroy over the network.different stacks. e.g infinband, roce
+
+ROCE was developed in 2010.
+1) QP(Queue Pair):- SQ(Send Queue) is used to post the operations. (RQ) is used to receive the operations. in multi application, there could be multiple QPs, resulting in parrallel processing. WQE is posted on these queue pairs.
+WQE contains multiple parameters. WQE contains operation id,remote address to read/write.
+2) CP(Completion Queuee):- Several CQ. Single queue or multiple queues. to read CQ. polling mode can be used. polling is CPU intensive. other method is interrupt based. 
+3) MR(Memory Region):- memory region is registered with RNIC to read from and write to. Once memroy region is registerd then L-Key local key is returned to RNIC. R_KEY is the remote key.
+
+SGE:- scatter/Gather Element. Used as a basic data structure 
+Gather: During a "Send" or "Write" operation, the RDMA hardware collects data from multiple discrete SGE locations and transmits them as a single continuous stream.
+Scatter: During a "Receive" or "Read" operation, the incoming continuous stream is split and written into the various memory locations specified by the SGEs.
+Protection domain:- In Remote Direct Memory Access (RDMA), a Protection Domain (PD) is a logical container that acts as a security boundary to isolate RDMA resources and ensure they can only interact with each other.
+
+SRQ:- QP without recive queue. But shared receive queue.
+4-QP
+1) RC:- like TCP
+2) UC:-
+3) RD:- 
+4) UD:- like UDP
+
+The Problem: The "QP Explosion"
+In a standard RC setup, every process on Node A needs a dedicated Queue Pair (QP) for every process it communicates with on Node B.
+If you have N processes per node, you need N² connections between two nodes.
+In a cluster with thousands of nodes, this consumes massive amounts of NIC memory for connection metadata, leading to cache misses and severe performance degradation.
+The Solution: XRC
+XRC decouples the Receive side of the connection from the specific process. It introduces two main components:
+XRC SRQ (Shared Receive Queue): A single receive queue that can be shared by all processes on the same node.
+XRC Target: A special destination identifier that allows any process on a remote node to send data to any process on the local node using a single underlying connection.
+
+1. Fast Path (Data Plane)
+These are the "Data Transfer Verbs." They are designed to be "OS Bypass" operations, meaning they talk directly to the hardware without a kernel context switch.
+Key Characteristic: They are non-blocking (asynchronous). You "post" a request to a queue and check for completion later.
+2) 2. Slow Path (Control Plane)
+These are the "Setup Verbs." They involve the Operating System kernel to allocate resources, manage memory, and configure the hardware.
+Key Characteristic: They are blocking (synchronous). The CPU must wait for the kernel and hardware to finish the task.
+
+stages
+1) register memory
+2) send L-key and receive R-Key
+3) post and read/wrtite operations
+4) diconnect
+
+
+Server
+1) On RDMA Server, create an event channel to recv rdmacm events.
+2) bind address
+3) Create listener/ return port/address
+4) Wait for connection request
+5) After receiving the request server create CQ,PD and QP.
+6) Now accepts the connection
+5) After receiving the request servercreate CQ,PD and QP.
+6) Now accepts the connection
+5) After receiving the request servercreate CQ,PD and QP.
+6) Now accepts the connection
+5) After receiving the request servercreate CQ,PD and QP.
+6) Now accepts the connection
+5) After receiving the request servercreate CQ,PD and QP.
+6) Now accepts the connection
+
+Client:-
+1) On RDMA Client, create an event channel to recv rdmacm events.
+2) Create connection identifier
+3) resolve peer address, and bind the connection to local device
+4) REsolve route to peer
+5) Create PD, CQ adn QP
+
+
+Imperial college london:-
+https://www.doc.ic.ac.uk/~jgiceva/teaching/ssc18-rdma.pdf
+
+1) RDMA is a hardware mechanism through which the network card (NIC) can directly access all or parts of the main memory of a remote node without involving the processor.
+
+Main highlights of RDMA
+▪ Zero-copy data
+▪ Bypasses the CPU
+▪ Bypasses the OS kernel
+▪ Message based transactions
+
+
+Benefits of using RDMA
+✓ High throughput (bandwidth)
+✓ Low end-to-end latencies
+✓ Low CPU utilization
+One-sided RDMA operations do not involve the remote CPU at all.
+✓ Low memory bus contention
+No data is copied between the user space and kernel, and the other way around.
+✓ Asynchronous operations
+Great for overlapping communication and computation.
+
+
+Buffers need to be registered with the network card before used
+During the registration process:
+▪ Pin memory so that it cannot be swapped by the Operating System.
+▪ Store the address translation information in the NIC.
+▪ Set permissions for the memory region.
+▪ Return a remote and local key, which are used by the adapters when
+executing the RDMA operations.
+
+Work Queues:-
+RDMA communication is based on a set of three queues
+▪ Send
+▪ Receive
+▪ Completion
+The send and receive queues are there to schedule the work to be done.
+A completion queue is used to notify when the work has been completed.
+
+
+Applications issue a job using a work request or a work queue element
+A work request is a small struct with a pointer to a buffer:
+▪ In a send queue – it’s a pointer to a message to be sent.
+▪ In a receive queue – it’s shows where an incoming message should be
+placed.
+Once a work request has been completed, the adapter creates a
+completion queue element and enqueues it in the completion queue.
+
+RDMA networks support two types of memory access models:
+▪ One sided – RDMA read and write + atomic operations
+▪ Two sided – RDMA send and receive
+
+Both need to have created their queues:
+▪ A queue pair of a send and a receive queue.
+▪ A completion queue for the queue pair.
+Sender’s work request has a pointer to a buffer that it wants to send. The
+WQE is enqueued in the send queue.
+Receiver’s work request has a pointer to an empty buffer for receiving the
+message. The WQE is enqueued in the receive queue.
+
+MPI uses RDMA.
+
+Youtube: Netdev 0x16 - RDMA programming tutorial
+Other than Infiniband there is AWS EFA/ intel omnipath are example of RDMA
