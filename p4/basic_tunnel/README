@@ -1,0 +1,3 @@
+This code example routes the traffic on the basis of dst_id instead of routing on the basis of dst ip address.
+command to run:-
+h1 ./send.py 10.0.2.2 "testing" --dst_id=2
