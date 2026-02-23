@@ -131,3 +131,34 @@ MPI uses RDMA.
 
 Youtube: Netdev 0x16 - RDMA programming tutorial
 Other than Infiniband there is AWS EFA/ intel omnipath are example of RDMA
+
+
+Instructions to install soft-Roce:-
+https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_infiniband_and_rdma_networks/configuring-roce_configuring-infiniband-and-rdma-networks
+1) dnf install iproute libibverbs libibverbs-utils infiniband-diags
+2) rdma link add rxe0 type rxe netdev eth0
+3) [ec2-user@ip-172-31-31-182 rdma]$ rdma link show
+link rxe0/1 state ACTIVE physical_state LINK_UP netdev eth0 
+4) [ec2-user@ip-172-31-31-182 basic-server]$ ibv_devices 
+    device                 node GUID
+    ------              ----------------
+    rxe0                08ffe4fffeb1e97b
+
+5) [ec2-user@ip-172-31-31-182 rdma]$ ibstat rxe0
+CA 'rxe0'
+        CA type: 
+        Number of ports: 1
+        Firmware version: 
+        Hardware version: 
+        Node GUID: 0x08ffe4fffeb1e97b
+        System image GUID: 0x08ffe4fffeb1e97b
+        Port 1:
+                State: Active
+                Physical state: LinkUp
+                Rate: 2.5
+                Base lid: 0
+                LMC: 0
+                SM lid: 0
+                Capability mask: 0x00010000
+                Port GUID: 0x08ffe4fffeb1e97b
+                Link layer: Ethernet
