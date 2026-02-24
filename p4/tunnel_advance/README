@@ -1,0 +1,3 @@
+This exercise is the next step of the basic tunnel exercise.
+In this exercise, I am adding the tunnel header at the ingress router and removing the tunnel header at the egress router.
+Control plane files s1-runtime, s2-tuntime and s3-runtime contains the  mac addresses of the host addresses
