@@ -1,0 +1,5 @@
+
+clang -O2 -g -target bpf -D__TARGET_ARCH_x86 -c xdp-hello-world.bpf.c -o xdp-hello-world.bpf.o
+#llvm-strip -g hello.bpf.o 
+#bpftool gen skeleton hello.bpf.o > hello.skel.h
+cc -O2 -g userspace-xdp-hello-world.c -o userspace-xdp-hello-world -lbpf -lelf -lz
