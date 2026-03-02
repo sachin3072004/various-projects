@@ -114,3 +114,31 @@ A:- tail call is like execev. calling function is overwritten by callee.
 
 q:- How to check if dirver supports skb/native mode?
 A:-  sudo xdp-loader status
+
+ebpf program is converted into bytecode first and then compiled into machine code.
+there are 10 registers in ebpf VM. register 10 is stack frame.
+
+
+BEFORE RUNNING EBPF/XDP program IMP INFORMATION:-
+21) sudo ethtool -L ens7 combined 2
+22) sudo ifconfig ens7 mtu 1500 up 
+Always run program wih sudo
+
+To See logs:-
+sudo cat /sys/kernel/debug/tracing/trace_pipe
+sudo bpftool prog tracelog
+
+to detach
+bpftool net detach xdp dev ens7
+
+
+=> tp_btf is used for raw_tp
+=> There is not tp_btf equivalent for tp
+include/trace/events/sched.h => raw_tp function prototype
+Example :-SEC("tp_btf/sched_wakeup")
+void BPF_PROG(sched_wakeup, struct task_struct* task){
+BPF_PROG can be userd with raw_tp or tp_BTF
+
+=> Function Arg
+cat /sys/kernel/debug/tracing/events/sched/sched_wakeup/format
+Example:- BPF_PROG is not used with Tracepoint
