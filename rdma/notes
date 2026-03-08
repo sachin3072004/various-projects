@@ -162,3 +162,15 @@ CA 'rxe0'
                 Capability mask: 0x00010000
                 Port GUID: 0x08ffe4fffeb1e97b
                 Link layer: Ethernet
+
+Q:- How CPU is involed in RDMA ?
+A:- 1) CPU is involed in setting up the job not in data trasnsfer
+    2) NICs are involed in data transfer
+    3) CPU comes back only to check if the job is done. That is how RDMA achieves line rate BW without overwhelming the CPU.
+    4) CPU writes to the local memory region and then NIC DMA from memory region and packets are sent over the network
+    5) Now other NIC reads from the wire and write to the memory region 
+
+Q:- Memory region keys ?
+A:- Yes. A registered RDMA memory region has two keys: an lkey (local key) and an rkey (remote key).
+a) the lkey is used by the local HCA whenever it accesses this MR from the local side, e.g., for send/recv work requests or local DMA.
+b) The rkey is used by a remote HCA to access this MR via one‑sided operations such as RDMA READ, RDMA WRITE, and atomics. You hand the rkey (plus base address and length) to the remote peer out‑of‑band; it then puts the rkey into wr.wr.rdma.rkey for its RDMA ops, and the target HCA validates that key before touching your memory.
