@@ -1,0 +1,2 @@
+This is classic RDMA one-sided READ use case.
+The client pulls data firectly from server memory over NIC, Zero server CPU involvement after setup.
