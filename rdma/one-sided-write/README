@@ -1,0 +1,2 @@
+This is an example of one-side-write. where Server CPU is not involved.
+Client is DMAing to Server's memory.
