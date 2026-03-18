@@ -174,3 +174,7 @@ Q:- Memory region keys ?
 A:- Yes. A registered RDMA memory region has two keys: an lkey (local key) and an rkey (remote key).
 a) the lkey is used by the local HCA whenever it accesses this MR from the local side, e.g., for send/recv work requests or local DMA.
 b) The rkey is used by a remote HCA to access this MR via one‑sided operations such as RDMA READ, RDMA WRITE, and atomics. You hand the rkey (plus base address and length) to the remote peer out‑of‑band; it then puts the rkey into wr.wr.rdma.rkey for its RDMA ops, and the target HCA validates that key before touching your memory.
+
+
+Q:- When does wc.status = IBV_WC_SUCCESS generated ?
+A:- The sender’s IBV_WC_SEND is generated only after this remote-side receive processing (including its CQE generation and ACK) has completed at the NIC/transport level, but that still does not imply the remote app has polled and processed its CQE
