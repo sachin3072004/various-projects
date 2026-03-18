@@ -1,0 +1,4 @@
+SRQ is important in case of multi-client-server.
+Instead of assigning multiple buffer we can share one buffer between multiple clients.
+Recive queue is shared between all the clients.
+in ibv_poll_cq , wc.qp_num contains which qp is responsible for sending the message.
