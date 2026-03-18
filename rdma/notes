@@ -178,3 +178,8 @@ b) The rkey is used by a remote HCA to access this MR via one‑sided operations
 
 Q:- When does wc.status = IBV_WC_SUCCESS generated ?
 A:- The sender’s IBV_WC_SEND is generated only after this remote-side receive processing (including its CQE generation and ACK) has completed at the NIC/transport level, but that still does not imply the remote app has polled and processed its CQE
+
+Q:- Diff between completion Channel vs completion queue ?
+A:- In RDMA (Remote Direct Memory Access) and asynchronous programming, Completion Channels and Completion Queues (CQs) serve different, complementary roles. A Completion Queue holds the results of completed work requests, while a Completion Channel is a notification mechanism used to inform an application that a new entry has arrived in that queue. 
+
+ibv_get_CQ_event vs ibv_poll_cq: ibv_get_cq_event  is to stop CPU utilization while ibv_poll_cq CPU keeps on polling and waste CPU core cycles. one ibv_get_cq_event returns now we can poll the CQ.
