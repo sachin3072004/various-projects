@@ -21,156 +21,195 @@ struct Msg{
         char   data[1000];
 };
 
+struct ibv_pd *pd;
+struct ibv_comp_channel *comp_channel;
+struct ibv_srq *srq;
+
 struct Bookkeeper{
 	struct rdma_cm_id *id;
-	struct ibv_pd *pd;
 	struct ibv_cq *cq;
 	struct ibv_qp *qp;
-	struct ibv_srq *srq;
 	char* send_buf;
 	struct ibv_mr *send_mr;
-
 	char* recv_buf;
 	struct ibv_mr *recv_mr;
+	int send_num;
+	int recv_num;
+	int last_sent;
+	int last_recv;
 };
 
-struct Bookkeeper bk;
+struct Bookkeeper bk[100];
 
-int poll_cq(){
-	struct ibv_wc wc = {0};
+enum SendRecv {
+	Send = 0,
+	Recv	
+};
+
+void poll_cq(int threadNo,int index,enum SendRecv sendRecv){
+	if(sendRecv == Recv && bk[threadNo].last_recv >= index){
+		return;
+	}	
+	if(sendRecv == Send && bk[threadNo].last_sent >= index){
+		return;
+	}	
+	struct ibv_cq *cq;
+	void *cq_ctx;
+	printf("In POLL CQ waiting for get CQ event %d \n", sendRecv);	
+	ibv_get_cq_event(comp_channel, &cq, &cq_ctx);
+
+	printf("After waiting CQ got an event \n");	
+	ibv_ack_cq_events(cq, 1);
+	ibv_req_notify_cq(cq, 0);
+	struct ibv_wc wc[200];
 	int n = 0;
 	do {
-		n = ibv_poll_cq(bk.cq, 1, &wc);
-		if(n == 0){
-                        continue;
-                }
-                if(wc.status != IBV_WC_SUCCESS){
-			printf("Polling Failed %d \n", wc.status);                       	
-			printf("Status: %s \n",ibv_wc_status_str(wc.status));
-			struct ibv_qp_attr qp_attr;
-			    struct ibv_qp_init_attr qp_init_attr;
-			    int attr_mask;
-			    int rc;
-
-			    // Define which attributes we want to query
-			    attr_mask = IBV_QP_STATE | IBV_QP_PATH_MTU;
-
-			    // Call ibv_query_qp
-			    rc = ibv_query_qp(bk.qp, &qp_attr, attr_mask, &qp_init_attr);
-				 printf("QP Number: %d\n", bk.qp->qp_num);
-    				printf("QP State: %d\n", qp_attr.qp_state);
-    				printf("Path MTU: %d\n", qp_attr.path_mtu);
-			exit(0);
-                }
-                if(wc.opcode == IBV_WC_RECV || wc.opcode == IBV_WC_SEND){
-			printf("IN CQ POLL WC_OPCODE %d IBV_WC_SEND %d IBV_WC_RECV %d Send BUF %s Recv_Buf %s Sent by: %d \n",wc.opcode, IBV_WC_SEND, IBV_WC_RECV,bk.send_buf, bk.recv_buf, wc.qp_num);
-			return wc.opcode;
-                }
-		usleep(1000);
+		//n = ibv_poll_cq(bk.cq, 1, &wc);
+		n = ibv_poll_cq(cq, 200, wc);
 	}while(n == 0);
-	if(n){
-		printf("It should not come here\n");
-		exit(0);
+	printf("N == %d \n", n);
+	for(int i =0;i<n;i++){
+		if(wc[i].status != IBV_WC_SUCCESS){
+			printf("Error %s\n", ibv_wc_status_str(wc[i].status));
+			exit(1);
+		}
+		printf("I %d OPCODE: %d Send %d Recv %d \n",i,wc[i].opcode,IBV_WC_SEND, IBV_WC_RECV);
+		if(wc[i].opcode == IBV_WC_SEND){
+			printf("Sent %s WR_ID %d \n",bk[threadNo].send_buf, wc[i].wr_id);
+			bk[threadNo].last_sent = wc[i].wr_id;
+		}else if(wc[i].opcode == IBV_WC_RECV){
+			printf("Received %s WR_ID %d \n",bk[threadNo].recv_buf, wc[i].wr_id);
+			bk[threadNo].last_recv = wc[i].wr_id;
+		}
+		
 	}
-	return -1;
 }
 
-void setup_receive_buf(){
+void setup_receive_buf(int threadNo){
 	struct ibv_sge sge = {
-                .addr = (uintptr_t)bk.recv_buf,
+                .addr = (uintptr_t)bk[threadNo].recv_buf,
                 .length = BUFFER_SIZE,
-                .lkey = bk.recv_mr->lkey,
+                .lkey = bk[threadNo].recv_mr->lkey,
                 };
         struct ibv_recv_wr *bad_wr;
         struct ibv_recv_wr wr = {
-                .wr_id = 1,
+                .wr_id = ++bk[threadNo].recv_num,
                 .sg_list = &sge,
                 .num_sge = 1,
                 };
-	printf("QP %p \n",bk.qp);
+	printf("QP %p \n",bk[threadNo].qp);
 	//ibv_post_recv(bk.qp, &wr, &bad_wr);
-	ibv_post_srq_recv(bk.srq, &wr, &bad_wr);
+	ibv_post_srq_recv(srq, &wr, &bad_wr);
 		
 }
 
 void create_srq(){
 	struct ibv_srq_init_attr srq_attr = {
 		.attr = {
-			.max_wr = 1,
+			.max_wr = 10,
 			.max_sge = 1,
 		},
 	};
-	bk.srq = ibv_create_srq(bk.pd, &srq_attr);
-}
-void  get_data_from_client(){
-	printf("Recv Polling Started\n");
-	int result = poll_cq();	
-	if(result != IBV_WC_RECV){
-		printf("Wrong Action in get_data_from_client\n");
-		//exit(0);
+	if(!srq){
+		srq = ibv_create_srq(pd, &srq_attr);
 	}
+}
+
+void  get_data_from_client(int threadNo){
+	printf("Recv Polling Started\n");
+	poll_cq(threadNo, bk[threadNo].recv_num, Recv);	
 	printf("Recv Polling Ended\n");
-	printf("Server Received: %s\n", bk.recv_buf);
-	setup_receive_buf();
+	printf("Server Received: %s\n", bk[threadNo].recv_buf);
+	setup_receive_buf(threadNo);
 	
 }
 
-void setup_send_buf(){
+void setup_send_buf(int threadNo){
 	 struct ibv_sge send_sge = {
-        .addr = (uintptr_t)bk.send_buf,
+        .addr = (uintptr_t)bk[threadNo].send_buf,
         .length = BUFFER_SIZE,
-        .lkey = bk.send_mr->lkey,
+        .lkey = bk[threadNo].send_mr->lkey,
         };
         struct ibv_send_wr send_wr = {
-        .wr_id = 20,
+        .wr_id = ++bk[threadNo].send_num,
         .sg_list = &send_sge,
         .num_sge = 1,
         .opcode = IBV_WR_SEND,
         .send_flags = IBV_SEND_SIGNALED,
         };
         struct ibv_send_wr *bad_send;
-        ibv_post_send(bk.qp, &send_wr, &bad_send);	
+        ibv_post_send(bk[threadNo].qp, &send_wr, &bad_send);	
 }
 
-void send_line(char* line){
-	memset(bk.send_buf,'\0', BUFFER_SIZE);
-	strcpy(bk.send_buf, line);
-	setup_send_buf();
+void send_line(int threadNo, char* line){
+	memset(bk[threadNo].send_buf,'\0', BUFFER_SIZE);
+	strcpy(bk[threadNo].send_buf, line);
+	setup_send_buf(threadNo);
 	printf("Send Polling Started\n");
-	int result = poll_cq();	
-	if(result != IBV_WC_SEND){
-		printf("Wrong Action in RECV\n");
-		//exit(0);
-	}
+	poll_cq(threadNo, bk[threadNo].send_num, Send);	
 	printf("Send Polling Ended\n");
-	printf("Server Sent: %s\n", bk.send_buf);
+	printf("Server Sent: %s\n", bk[threadNo].send_buf);
 }
 
-void setup_connection(){
-
-	printf("Id %p \n", bk.id);
-	bk.pd = ibv_alloc_pd(bk.id->verbs);
+void setup_connection(int threadNo){
+	printf("Id %d %p \n",threadNo,  bk[threadNo].id);
+	if(!pd){
+		pd = ibv_alloc_pd(bk[threadNo].id->verbs);
+	}
 	create_srq();
-	bk.recv_buf = calloc(1, BUFFER_SIZE);
-	bk.recv_mr = ibv_reg_mr(bk.pd, bk.recv_buf, BUFFER_SIZE, IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE | IBV_ACCESS_REMOTE_READ);
-	bk.cq = ibv_create_cq(bk.id->verbs, CQ_DEPTH, NULL, NULL, 0);
-	bk.send_buf = calloc(1, BUFFER_SIZE);
-	bk.send_mr = ibv_reg_mr(bk.pd, bk.send_buf, BUFFER_SIZE, IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE | IBV_ACCESS_REMOTE_READ);
+	bk[threadNo].recv_buf = calloc(1, BUFFER_SIZE);
+	bk[threadNo].recv_mr = ibv_reg_mr(pd, bk[threadNo].recv_buf, BUFFER_SIZE, IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE | IBV_ACCESS_REMOTE_READ);
+	if(!comp_channel){
+		comp_channel = ibv_create_comp_channel(bk[threadNo].id->verbs);
+	}
+	bk[threadNo].cq = ibv_create_cq(bk[threadNo].id->verbs, CQ_DEPTH, NULL, comp_channel, 0);
+	ibv_req_notify_cq(bk[threadNo].cq, 0);
+	bk[threadNo].send_buf = calloc(1, BUFFER_SIZE);
+	bk[threadNo].send_mr = ibv_reg_mr(pd, bk[threadNo].send_buf, BUFFER_SIZE, IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE | IBV_ACCESS_REMOTE_READ);
 	printf("Setup_connection \n");
 	struct ibv_qp_init_attr qp_init_attr;
 	memset(&qp_init_attr, 0, sizeof(qp_init_attr));
-	qp_init_attr.send_cq = bk.cq; // Previously created
-	qp_init_attr.recv_cq = bk.cq; // Previously created
-	qp_init_attr.srq    = bk.srq;
+	qp_init_attr.send_cq = bk[threadNo].cq; // Previously created
+	qp_init_attr.recv_cq = bk[threadNo].cq; // Previously created
+	qp_init_attr.srq    = srq;
 	qp_init_attr.qp_type = IBV_QPT_RC;
 	qp_init_attr.cap.max_send_wr = 10;
 	qp_init_attr.cap.max_recv_wr = 0;
 	qp_init_attr.cap.max_send_sge = 1;
 	qp_init_attr.cap.max_recv_sge = 1;
-	rdma_create_qp (bk.id, bk.pd, &qp_init_attr);
-	bk.qp = bk.id->qp;
-	printf("Created QP %d\n ", bk.qp->qp_num);
-	usleep(5000000);
+	rdma_create_qp (bk[threadNo].id, pd, &qp_init_attr);
+	bk[threadNo].qp = bk[threadNo].id->qp;
+	printf("Created QP %d\n ", bk[threadNo].qp->qp_num);
+}
+
+
+void* handle_client_request(void* args){
+	int index = *(int*)args;
+	printf("Index == %d\n", index);
+	setup_connection(index);
+	setup_receive_buf(index);
+	struct rdma_conn_param conn_param = {};
+	rdma_accept (bk[index].id, &conn_param);
+	get_data_from_client(index);	
+	char fileName[100];
+	strcpy(fileName, bk[index].recv_buf); 
+	printf("FileName %s\n", fileName);
+	FILE* fp = fopen(fileName, "r");
+	if(!fp){
+		printf("File failed to open");
+		exit(0);
+	}
+
+	char line[100] = {'\0'};
+	while(fgets(line, 100, fp) != NULL){
+		printf("Ready to Send %s\n",line);
+		send_line(index, line);
+		get_data_from_client(index);
+	}
+	fclose(fp);	
+	while(1){
+		sleep(10);
+	}		
 }
 
 int main(){
@@ -185,33 +224,24 @@ int main(){
 	rdma_bind_addr (id, (struct sockaddr*)&addr);
 	int backlog = 10;
 	rdma_listen(id, backlog);
-	struct rdma_cm_event *event;
-	rdma_get_cm_event (ch, &event);
-	bk.id = event->id;
-	setup_connection();
-	setup_receive_buf();
-	rdma_ack_cm_event (event);	
-	struct rdma_conn_param conn_param = {};
-	rdma_accept (bk.id, &conn_param);
-	get_data_from_client();	
-	char fileName[100];
-	strcpy(fileName, bk.recv_buf); 
-	printf("FileName %s\n", fileName);
-	FILE* fp = fopen(fileName, "r");
-	if(!fp){
-		printf("File failed to open");
-		exit(0);
+	int num = 0;
+	int thread_ids[100] = {0};
+	for(int i = 0;i<100;i++){
+		thread_ids[i] = i;
 	}
-
-	char line[100] = {'\0'};
-	while(fgets(line, 100, fp) != NULL){
-		printf("Ready to Send %s\n",line);
-		send_line(line);
-		get_data_from_client();
-	}
-	fclose(fp);	
+	pthread_t thread[100];
 	while(1){
-		sleep(10);
-	}		
+		struct rdma_cm_event *event;
+		printf("Num ====================================================== %d\n", num);
+		rdma_get_cm_event (ch, &event);
+		bk[num].id = event->id;
+		rdma_ack_cm_event (event);	
+		printf("\n Thread Creation \n");
+		if(event->event == RDMA_CM_EVENT_CONNECT_REQUEST){
+			pthread_create(&thread[num], NULL, &handle_client_request, &thread_ids[num]);
+			num += 1;
+		}
+	}
+	
 	
 }
