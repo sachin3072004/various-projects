@@ -183,3 +183,47 @@ Q:- Diff between completion Channel vs completion queue ?
 A:- In RDMA (Remote Direct Memory Access) and asynchronous programming, Completion Channels and Completion Queues (CQs) serve different, complementary roles. A Completion Queue holds the results of completed work requests, while a Completion Channel is a notification mechanism used to inform an application that a new entry has arrived in that queue. 
 
 ibv_get_CQ_event vs ibv_poll_cq: ibv_get_cq_event  is to stop CPU utilization while ibv_poll_cq CPU keeps on polling and waste CPU core cycles. one ibv_get_cq_event returns now we can poll the CQ.
+RDMA_PS_TCP
+Provides reliable, connection-oriented QP communication. Unlike TCP, the RDMA port space provides message, not stream, based communication.
+RDMA_PS_UDP
+Provides unreliable, connectionless QP communication. Supports both datagram and multicast communication.
+
+
+RDMA knowledge:-
+1) 1. Completion Queue (CQ)
+What it is: A storage buffer (queue) in the RDMA hardware memory.
+Function: When an RDMA operation (Send, Receive, Write) finishes, the hardware writes a struct ibv_wc (Work Completion) into this queue.
+
+Completion Channel (CC)
+What it is: A Linux file descriptor (kernel-level mechanism) used for blocking notifications.
+Function: It allows your application to "sleep" and wait for the hardware to trigger an interrupt when the CQ is no longer empty.
+How you use it: You call ibv_get_cq_event on the channel. This is like sitting inside your house and waiting for the doorbell to ring before you walk out to the mailbox.
+Performance: It saves CPU power but adds latency (microseconds) because it involves a kernel context switch.
+
+In RDMA programming, rdma_buffer_register (or its standard library equivalent, ibv_reg_mr) is required because the network hardware needs a stable, secure, and direct way to access your application's memory without involving the CPU. if the Memory Region (registered via rdma_buffer_register) is the "warehouse" where your data is stored, the Queue Pair (QP) is the "delivery truck" and the "road" that moves the data between systems.
+In RDMA, you cannot send data without a Queue Pair. It is the fundamental communication endpoint, similar to a Socket in standard TCP/IP networking
+
+rdma_get_cm_event retrieves control-plane events (connection setup/teardown) via librdmacm, requiring acknowledgement with rdma_ack_cm_event. Conversely, ibv_get_cq_event retrieves data-plane completion events (send/recv completion) via libibverbs, needing acknowledgment via ibv_ack_cq_events. Both are generally blocking but can be configured otherwise
+
+
+Server side API:-
+1) rdma_create_event_channel
+2) rdma_create_id
+3) rdma_bind_addr
+4) rdma_listen
+5) rdma_create_qp
+6) IBV_POST_RECV
+7) rdma_accept
+8) ibv_post_send
+Client Side API:-
+1) Create event channel:-
+2) resolve addr :- Takes destination ip address and figures out which  local RDMA device and port can reach. Internally performs ARP lookup to resolve destination ip ->mac address
+3) resolve route:- Populates the GRH(Global routing header) e.g. source GID, destination GID, hop limit, traffic class. Stores everything in the id->route. which rdma_connect and rdma_create_qp consume. 2 different machines can have same GID. One machine can have multiple GIDS./sys/class/infiniband/rxe0/ports/1/gids/
+4) Create protection domain
+5) Create Completion queue:- CWQ is the place where completed tasks are reported.
+6) ibv_reg_mr :- In RDMA programming, ibv_reg_mr() is the function used to register a Memory Region (MR), which is essential for allowing an RDMA device to access local memory. 
+7) Create_qp
+8) ibv_post_recv
+9) rdma_connect
+10) ibv_post_send
+11) poll_cq
