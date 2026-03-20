@@ -183,6 +183,7 @@ Q:- Diff between completion Channel vs completion queue ?
 A:- In RDMA (Remote Direct Memory Access) and asynchronous programming, Completion Channels and Completion Queues (CQs) serve different, complementary roles. A Completion Queue holds the results of completed work requests, while a Completion Channel is a notification mechanism used to inform an application that a new entry has arrived in that queue. 
 
 ibv_get_CQ_event vs ibv_poll_cq: ibv_get_cq_event  is to stop CPU utilization while ibv_poll_cq CPU keeps on polling and waste CPU core cycles. one ibv_get_cq_event returns now we can poll the CQ.
+<<<<<<< HEAD
 RDMA_PS_TCP
 Provides reliable, connection-oriented QP communication. Unlike TCP, the RDMA port space provides message, not stream, based communication.
 RDMA_PS_UDP
@@ -227,3 +228,14 @@ Client Side API:-
 9) rdma_connect
 10) ibv_post_send
 11) poll_cq
+
+Transport Retry Counter Exceeded 
+This error indicates that the sender did not receive any acknowledgment (Ack or Nack) from the remote side within the specified timeout period. 
+Cause: This usually means a fundamental connectivity issue.
+The remote system might be in a bad state, disconnected, or completely down.
+If it happens during the initial connection phase, it often points to incorrect connection attributes.
+If it happens after the connection is established, it means the remote Queue Pair is likely unavailable.
+Result: The local transport timeout retry count is exceeded, leading to the error. 
+
+RNR Retry Counter Exceeded
+This error (RNR stands for Receiver Not Ready) indicates that the sender received a Receiver Not Ready Nack (RNR Nack) from the remote side, but after repeated retries, the condition persisted and the RNR Nack retry count was exceeded. 
