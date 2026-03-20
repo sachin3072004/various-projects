@@ -1,0 +1,2 @@
+in this example 2 buffers are used by SRQ. instead of using one buffer SRQ is using pool of 2 buffers
+and message is received in each buffer alternately.
