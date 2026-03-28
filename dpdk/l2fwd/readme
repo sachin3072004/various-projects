@@ -1,0 +1,49 @@
+# l2switch — Two-Port MAC-Learning L2 Switch (DPDK)
+
+A minimal but production-correct L2 switch that reproduces the core of the
+official `l2fwd` sample while wiring in `rte_hash` for MAC learning and
+`rte_timer` for entry aging.
+
+---
+
+## Topology
+
+```
+  NIC port 0                           NIC port 1
+  ──────────┐                        ┌──────────
+  host A    │◄──── l2switch ────────►│  host B
+  ──────────┘                        └──────────
+```
+
+Packets arriving on port 0 are forwarded to port 1, and vice versa.
+
+---
+
+## Data-Plane Pipeline (per packet)
+
+```
+rte_eth_rx_burst(port)
+        │
+        ▼
+   ┌────────────┐
+   │ Learn src  │  mac_learn(src_mac → ingress_port)
+   │  MAC       │  rte_hash_add_key() → positional slot
+   └─────┬──────┘
+         │
+         ▼
+   ┌─────────────┐
+   │ Lookup dst  │  rte_hash_lookup(dst_mac)
+   │  MAC        │  hit  → use stored egress port
+   └─────┬───────┘  miss → flood (send to other port)
+         │
+         ▼
+   ┌─────────────┐
+   │ Hair-pin    │  drop if dst_port == ingress_port
+   │  guard      │
+   └─────┬───────┘
+         │
+         ▼
+rte_eth_tx_burst(egress_port)
+```
+
+send_pkt generates packets by the help of scapy.
