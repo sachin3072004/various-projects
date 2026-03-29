@@ -74,7 +74,20 @@ static int lcore_worker(void* args){
 			uint16_t eth_type = rte_be_to_cpu_16(eth_hdr->ether_type);
 			if (eth_type == RTE_ETHER_TYPE_IPV4) {
 				struct rte_ipv4_hdr* outer_ipv4  = rte_pktmbuf_mtod_offset(pkts_burst[i], struct rte_ipv4_hdr*, sizeof(struct rte_ether_hdr));
-				printf("next_proto_id %d \n", outer_ipv4->next_proto_id);
+				if(outer_ipv4->next_proto_id == IPPROTO_ICMP){
+					struct rte_ether_hdr *eth = rte_pktmbuf_mtod(pkts_burst[i], struct rte_ether_hdr *);
+					struct Key src_key = {
+						.mac = eth->src_addr,
+					};
+					struct Value v = {
+						.port = cores_recv_port[rte_lcore_id()],
+						.last_seen = rte_get_timer_cycles()
+					};
+					int ret = rte_hash_add_key_data(table, &src_key, &v);
+					if(ret == 0){
+						printf("XXXXXXX Mac Address has been added\n");
+					}
+				}
 				if(outer_ipv4->next_proto_id == IPPROTO_GRE){
 					printf("RTE_LCORE_ID %d\n", rte_lcore_id());
 					struct rte_ether_hdr *eth = rte_pktmbuf_mtod_offset(pkts_burst[i], struct rte_ether_hdr *, sizeof(struct rte_ether_hdr) + sizeof(struct rte_ipv4_hdr) + sizeof(struct rte_gre_hdr));
@@ -86,23 +99,28 @@ static int lcore_worker(void* args){
 						.last_seen = rte_get_timer_cycles()
 					};
 					int ret = rte_hash_add_key_data(table, &src_key, &v);
+					printf("YYY Mac address added \n");
 					rte_pktmbuf_adj(pkts_burst[i], sizeof(struct rte_ether_hdr) +  sizeof(struct rte_ipv4_hdr) + sizeof(struct rte_gre_hdr));
-						int port;
+					struct rte_ether_hdr *eth1 = rte_pktmbuf_mtod(pkts_burst[i], struct rte_ether_hdr *);
+					struct Value *val;
+					int result = rte_hash_lookup_data(table, &eth1->dst_addr, (void**)(&val));
+					printf("Result %d\n", result);
+					if(result >0 ){
+						printf("Unicasting REsult Port %d \n", val->port);
+					}else{
+						uint16_t port;
 						RTE_ETH_FOREACH_DEV(port){
 							uint16_t in_port = cores_recv_port[rte_lcore_id()];
 							if(port != in_port){
 								continue;
 							}
-							printf("Sending to Port %d core %d pkt_recv %d \n", port, rte_lcore_id(), pkt_recv);
+							printf("Broadcasting Sending to Port %d core %d pkt_recv %d \n", port, rte_lcore_id(), pkt_recv);
 							struct rte_mbuf *clone = rte_pktmbuf_clone(pkts_burst[i], pool);
-
     							if (clone){
-								int ret = rte_eth_tx_burst(port, 0, &clone, 1);
+								int ret = rte_eth_tx_burst(cores_recv_port[rte_lcore_id()], 0, &clone, 1);
 								printf("Ret %d\n", ret);
 							}
-							//int ret = rte_eth_tx_burst(port, 0, &pkts_burst[i], 1);
-							//printf("Ret %d \n", ret);
-							struct rte_ipv4_hdr* outer_ipv4  = rte_pktmbuf_mtod_offset(clone, struct rte_ipv4_hdr*, sizeof(struct rte_ether_hdr));
+							struct rte_ipv4_hdr* outer_ipv4 = rte_pktmbuf_mtod_offset(clone, struct rte_ipv4_hdr*, sizeof(struct rte_ether_hdr));
 							rte_be32_t src_ip = outer_ipv4->src_addr;
 							char src_buf[50];
 							if (inet_ntop(AF_INET, &src_ip, src_buf, sizeof(src_buf))) {
@@ -121,6 +139,7 @@ static int lcore_worker(void* args){
 							printf("SRC_MAC %s DST_MAC %s \n", src_mac, dst_mac);
 						}
 						rte_pktmbuf_free(pkts_burst[i]);
+					}
 				}
 			}
 		}
