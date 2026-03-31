@@ -1,0 +1,1 @@
+__global__ in front of a function shows that this function will run on GPU.
