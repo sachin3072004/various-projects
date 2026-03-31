@@ -1,5 +1,5 @@
 # l2switch — Two-Port MAC-Learning L2 Switch (DPDK)
-
+gcc -O3 -march=native switch.c -o switch $(pkg-config --cflags --libs libdpdk)
 A minimal but production-correct L2 switch that reproduces the core of the
 official `l2fwd` sample while wiring in `rte_hash` for MAC learning and
 `rte_timer` for entry aging.

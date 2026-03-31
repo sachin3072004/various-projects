@@ -28,3 +28,6 @@ sudo bash -c 'echo 1024 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
 To Test start testpmd and send packets to the interface from another machine.
 1) sudo ./build/app/dpdk-testpmd
 2) sudo ping -i .01 -c 100 192.102.1.188
+
+1) rte_lpm (IPv4 / 24-8 split :- Direct indexed table
+2) rte_fib (DIR-24-8 / trie / LC-trie) : trie form
