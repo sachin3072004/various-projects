@@ -1,1 +1,6 @@
+export PATH=/usr/local/cuda/bin:$PATH
 __global__ in front of a function shows that this function will run on GPU.
+
+
+GRID:- Collection of all the threads
+Block:- Threads in grid are arranged in blocks
