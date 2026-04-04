@@ -1,0 +1,5 @@
+This is implementation of firewall in p4lang.
+In this experiment I am using p4 lang's bloom filter construct.
+Bloom filter is used as a hash.If bloom filter has seen certain hash <srcIP,dstIP,srcPort,dstPort> before then it lets pass through packet.
+Otherwise it drops it. while packet going from inside to outside the bloom filter is populated.
+While packet coming from outside to inside bloom filter is checked.
