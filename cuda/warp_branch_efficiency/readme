@@ -1,0 +1,11 @@
+This exercise is to show branch efficiency because of the divergent code.
+because of the divergent code the path of the execution changes and few threads executes different instructions then regular flow.
+That causes some inefficiency in the execution path.
+3 types of warp
+1) Active:- Currently running on GPU
+2) stalled Wrap:- Not read for execution
+3) Eligible Wrap:- Not executing but ready for execution.  
+
+Commands to show inefficiency:
+nvcc -G -o divergence branch.cu
+nvprof --metrics divergence
