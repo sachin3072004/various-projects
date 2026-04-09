@@ -1,0 +1,3 @@
+This code shows the usage of __syncthreads. 
+An array of 1024 threads is added to find the result.
+grid size is 1.  __syncthreads synchronize threads of a block.
