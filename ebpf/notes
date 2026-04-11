@@ -142,3 +142,12 @@ BPF_PROG can be userd with raw_tp or tp_BTF
 => Function Arg
 cat /sys/kernel/debug/tracing/events/sched/sched_wakeup/format
 Example:- BPF_PROG is not used with Tracepoint
+
+Difference between TGID and PID
+Multiple threads will have same TGID.
+
+Tracepoint:-
+Tracepoint is a stable,pre-defined hook placed by kernel developers at meaningful location in kernel code.
+These API signature does not change with kernel update.
+list of tracepoint:-
+sudo ls /sys/kernel/debug/tracing/events
