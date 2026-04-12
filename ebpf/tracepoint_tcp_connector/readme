@@ -1,0 +1,4 @@
+It tracks all the TCP connection made by machine. port and ip info is published in userspace.
+clang -O2 -g -target bpf -D__TARGET_ARCH_x86 -I/usr/include/x86_64-linux-gnu -c tcp_connector.bpf.c -o tcp_connector.bpf.o
+gcc tcp_connector.c -o loader -lbpf
+sudo ./loader
