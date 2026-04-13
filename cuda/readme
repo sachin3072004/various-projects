@@ -4,3 +4,11 @@ __global__ in front of a function shows that this function will run on GPU.
 
 GRID:- Collection of all the threads
 Block:- Threads in grid are arranged in blocks
+
+
+GPU contains 5000 to 15000 ALUs.
+when one warp waits for the result from the ALU another warp starts executing in GPU as a result latancy(memory bound/airthmatic bound) hiding happens.
+
+shared memory is L1 cache. Sie of shared memory is assigned when kernel code is called.
+kernel<<<grid,block,shared_memory_size>>>
+Good tutorial on Cuda shared memroy:- https://www.youtube.com/watch?v=upGoZ00MlfI
