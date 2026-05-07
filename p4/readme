@@ -14,3 +14,12 @@ c) p4runtime is the standardized API that sits between controller and switch
 otherwise we punt it to controller. contoller sets the egress port in switch's table. Which can be used to egress packet.
 
 6) simple_switch_CLI --thrift-port 9091
+
+7) TCP Explicit Congestion Notification (ECN) is an extension to the Transmission Control Protocol (TCP) and Internet Protocol (IP) that allows routers to signal network congestion to end hosts without dropping packets. It enables endpoints to reduce their transmission rate proactively, reducing packet loss and latency for applications. 
+Check Point Software
+Check Point Software
+ +1
+Key Aspects of TCP ECN:
+Mechanism: When a router experiences congestion, it sets specific bits in the IP header (ECN-Capable Transport) instead of dropping the packet.
+Signaling: The receiver detects the "Congestion Experienced" (CE) mark and sends an ECN-Echo (ECE) flag to the sender in its TCP ACKs.
+Reaction: The sender reduces its congestion window as if a packet drop occurred, but without the cost of retransmitting lost data.
