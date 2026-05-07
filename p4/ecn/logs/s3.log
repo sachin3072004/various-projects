@@ -1,0 +1,1378 @@
+Calling target program-options parser
+[18:03:58.713] [bmv2] [D] [thread 25570] Set default default entry for table 'MyIngress.ipv4_lpm': MyIngress.drop - 
+[18:03:58.713] [bmv2] [D] [thread 25570] Set default default entry for table 'tbl_ecn132': ecn132 - 
+Adding interface s3-eth1 as port 1
+[18:03:58.715] [bmv2] [D] [thread 25570] Adding interface s3-eth1 as port 1
+Adding interface s3-eth2 as port 2
+[18:03:58.730] [bmv2] [D] [thread 25570] Adding interface s3-eth2 as port 2
+Adding interface s3-eth3 as port 3
+[18:03:58.741] [bmv2] [D] [thread 25570] Adding interface s3-eth3 as port 3
+Server listening on 0.0.0.0:50053
+[18:03:58.756] [bmv2] [I] [thread 25570] Starting Thrift server on port 9092
+[18:03:58.756] [bmv2] [I] [thread 25570] Thrift server was started
+[18:03:58.928] [bmv2] [D] [thread 25596] [0.0] [cxt 0] Processing packet received on port 2
+[18:03:58.928] [bmv2] [D] [thread 25596] [0.0] [cxt 0] Parser 'parser': start
+[18:03:58.928] [bmv2] [D] [thread 25596] [0.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:03:58.928] [bmv2] [D] [thread 25596] [0.0] [cxt 0] Extracting header 'ethernet'
+[18:03:58.929] [bmv2] [D] [thread 25596] [0.0] [cxt 0] Parser state 'start': key is 86dd
+[18:03:58.929] [bmv2] [T] [thread 25596] [0.0] [cxt 0] Bytes parsed: 14
+[18:03:58.929] [bmv2] [D] [thread 25596] [0.0] [cxt 0] Parser 'parser': end
+[18:03:58.929] [bmv2] [D] [thread 25596] [0.0] [cxt 0] Pipeline 'ingress': start
+[18:03:58.929] [bmv2] [T] [thread 25596] [0.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:03:58.929] [bmv2] [D] [thread 25596] [0.0] [cxt 0] Pipeline 'ingress': end
+[18:03:58.929] [bmv2] [D] [thread 25596] [0.0] [cxt 0] Egress port is 0
+[18:03:58.929] [bmv2] [D] [thread 25596] [1.0] [cxt 0] Processing packet received on port 2
+[18:03:58.929] [bmv2] [D] [thread 25596] [1.0] [cxt 0] Parser 'parser': start
+[18:03:58.929] [bmv2] [D] [thread 25596] [1.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:03:58.929] [bmv2] [D] [thread 25596] [1.0] [cxt 0] Extracting header 'ethernet'
+[18:03:58.929] [bmv2] [D] [thread 25596] [1.0] [cxt 0] Parser state 'start': key is 86dd
+[18:03:58.929] [bmv2] [D] [thread 25597] [0.0] [cxt 0] Pipeline 'egress': start
+[18:03:58.929] [bmv2] [T] [thread 25596] [1.0] [cxt 0] Bytes parsed: 14
+[18:03:58.929] [bmv2] [T] [thread 25597] [0.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:03:58.929] [bmv2] [D] [thread 25596] [1.0] [cxt 0] Parser 'parser': end
+[18:03:58.929] [bmv2] [D] [thread 25597] [0.0] [cxt 0] Looking up key:
+
+[18:03:58.929] [bmv2] [D] [thread 25597] [0.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:03:58.929] [bmv2] [D] [thread 25596] [1.0] [cxt 0] Pipeline 'ingress': start
+[18:03:58.929] [bmv2] [D] [thread 25597] [0.0] [cxt 0] Action entry is ecn132 - 
+[18:03:58.929] [bmv2] [T] [thread 25597] [0.0] [cxt 0] Action ecn132
+[18:03:58.929] [bmv2] [T] [thread 25596] [1.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:03:58.929] [bmv2] [T] [thread 25597] [0.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:58.929] [bmv2] [D] [thread 25596] [1.0] [cxt 0] Pipeline 'ingress': end
+[18:03:58.929] [bmv2] [T] [thread 25597] [0.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:58.929] [bmv2] [D] [thread 25596] [1.0] [cxt 0] Egress port is 0
+[18:03:58.929] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:03:58.929] [bmv2] [T] [thread 25597] [0.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:03:58.929] [bmv2] [D] [thread 25597] [0.0] [cxt 0] Pipeline 'egress': end
+[18:03:58.929] [bmv2] [D] [thread 25597] [0.0] [cxt 0] Deparser 'deparser': start
+[18:03:58.929] [bmv2] [T] [thread 25597] [0.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:03:58.929] [bmv2] [D] [thread 25597] [0.0] [cxt 0] Deparsing header 'ethernet'
+[18:03:58.929] [bmv2] [D] [thread 25597] [0.0] [cxt 0] Deparser 'deparser': end
+[18:03:58.929] [bmv2] [D] [thread 25597] [1.0] [cxt 0] Pipeline 'egress': start
+[18:03:58.929] [bmv2] [T] [thread 25597] [1.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:03:58.929] [bmv2] [D] [thread 25597] [1.0] [cxt 0] Looking up key:
+
+[18:03:58.929] [bmv2] [D] [thread 25597] [1.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:03:58.929] [bmv2] [D] [thread 25597] [1.0] [cxt 0] Action entry is ecn132 - 
+[18:03:58.929] [bmv2] [D] [thread 25601] [0.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[18:03:58.929] [bmv2] [T] [thread 25597] [1.0] [cxt 0] Action ecn132
+[18:03:58.929] [bmv2] [T] [thread 25597] [1.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:58.929] [bmv2] [T] [thread 25597] [1.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:58.929] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:03:58.929] [bmv2] [T] [thread 25597] [1.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:03:58.929] [bmv2] [D] [thread 25597] [1.0] [cxt 0] Pipeline 'egress': end
+[18:03:58.929] [bmv2] [D] [thread 25597] [1.0] [cxt 0] Deparser 'deparser': start
+[18:03:58.929] [bmv2] [T] [thread 25597] [1.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:03:58.929] [bmv2] [D] [thread 25597] [1.0] [cxt 0] Deparsing header 'ethernet'
+[18:03:58.929] [bmv2] [D] [thread 25597] [1.0] [cxt 0] Deparser 'deparser': end
+[18:03:58.929] [bmv2] [D] [thread 25601] [1.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:03:58.944] [bmv2] [D] [thread 25596] [2.0] [cxt 0] Processing packet received on port 3
+[18:03:58.944] [bmv2] [D] [thread 25596] [2.0] [cxt 0] Parser 'parser': start
+[18:03:58.944] [bmv2] [D] [thread 25596] [2.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:03:58.944] [bmv2] [D] [thread 25596] [2.0] [cxt 0] Extracting header 'ethernet'
+[18:03:58.944] [bmv2] [D] [thread 25596] [2.0] [cxt 0] Parser state 'start': key is 86dd
+[18:03:58.944] [bmv2] [T] [thread 25596] [2.0] [cxt 0] Bytes parsed: 14
+[18:03:58.944] [bmv2] [D] [thread 25596] [2.0] [cxt 0] Parser 'parser': end
+[18:03:58.944] [bmv2] [D] [thread 25596] [2.0] [cxt 0] Pipeline 'ingress': start
+[18:03:58.944] [bmv2] [T] [thread 25596] [2.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:03:58.944] [bmv2] [D] [thread 25596] [2.0] [cxt 0] Pipeline 'ingress': end
+[18:03:58.944] [bmv2] [D] [thread 25596] [2.0] [cxt 0] Egress port is 0
+[18:03:58.944] [bmv2] [D] [thread 25597] [2.0] [cxt 0] Pipeline 'egress': start
+[18:03:58.944] [bmv2] [T] [thread 25597] [2.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:03:58.944] [bmv2] [D] [thread 25597] [2.0] [cxt 0] Looking up key:
+
+[18:03:58.944] [bmv2] [D] [thread 25597] [2.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:03:58.944] [bmv2] [D] [thread 25597] [2.0] [cxt 0] Action entry is ecn132 - 
+[18:03:58.944] [bmv2] [T] [thread 25597] [2.0] [cxt 0] Action ecn132
+[18:03:58.944] [bmv2] [T] [thread 25597] [2.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:58.944] [bmv2] [T] [thread 25597] [2.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:58.944] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:03:58.944] [bmv2] [T] [thread 25597] [2.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:03:58.944] [bmv2] [D] [thread 25597] [2.0] [cxt 0] Pipeline 'egress': end
+[18:03:58.944] [bmv2] [D] [thread 25597] [2.0] [cxt 0] Deparser 'deparser': start
+[18:03:58.944] [bmv2] [T] [thread 25597] [2.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:03:58.944] [bmv2] [D] [thread 25597] [2.0] [cxt 0] Deparsing header 'ethernet'
+[18:03:58.944] [bmv2] [D] [thread 25597] [2.0] [cxt 0] Deparser 'deparser': end
+[18:03:58.944] [bmv2] [D] [thread 25601] [2.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[18:03:59.056] [bmv2] [D] [thread 25596] [3.0] [cxt 0] Processing packet received on port 2
+[18:03:59.056] [bmv2] [D] [thread 25596] [3.0] [cxt 0] Parser 'parser': start
+[18:03:59.056] [bmv2] [D] [thread 25596] [3.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:03:59.056] [bmv2] [D] [thread 25596] [3.0] [cxt 0] Extracting header 'ethernet'
+[18:03:59.056] [bmv2] [D] [thread 25596] [3.0] [cxt 0] Parser state 'start': key is 86dd
+[18:03:59.056] [bmv2] [T] [thread 25596] [3.0] [cxt 0] Bytes parsed: 14
+[18:03:59.056] [bmv2] [D] [thread 25596] [3.0] [cxt 0] Parser 'parser': end
+[18:03:59.056] [bmv2] [D] [thread 25596] [3.0] [cxt 0] Pipeline 'ingress': start
+[18:03:59.056] [bmv2] [T] [thread 25596] [3.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:03:59.056] [bmv2] [D] [thread 25596] [3.0] [cxt 0] Pipeline 'ingress': end
+[18:03:59.056] [bmv2] [D] [thread 25596] [3.0] [cxt 0] Egress port is 0
+[18:03:59.056] [bmv2] [D] [thread 25596] [4.0] [cxt 0] Processing packet received on port 2
+[18:03:59.056] [bmv2] [D] [thread 25596] [4.0] [cxt 0] Parser 'parser': start
+[18:03:59.056] [bmv2] [D] [thread 25596] [4.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:03:59.056] [bmv2] [D] [thread 25596] [4.0] [cxt 0] Extracting header 'ethernet'
+[18:03:59.056] [bmv2] [D] [thread 25596] [4.0] [cxt 0] Parser state 'start': key is 86dd
+[18:03:59.056] [bmv2] [T] [thread 25596] [4.0] [cxt 0] Bytes parsed: 14
+[18:03:59.056] [bmv2] [D] [thread 25597] [3.0] [cxt 0] Pipeline 'egress': start
+[18:03:59.056] [bmv2] [D] [thread 25596] [4.0] [cxt 0] Parser 'parser': end
+[18:03:59.056] [bmv2] [T] [thread 25597] [3.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:03:59.056] [bmv2] [D] [thread 25596] [4.0] [cxt 0] Pipeline 'ingress': start
+[18:03:59.056] [bmv2] [T] [thread 25596] [4.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:03:59.056] [bmv2] [D] [thread 25596] [4.0] [cxt 0] Pipeline 'ingress': end
+[18:03:59.056] [bmv2] [D] [thread 25597] [3.0] [cxt 0] Looking up key:
+
+[18:03:59.056] [bmv2] [D] [thread 25596] [4.0] [cxt 0] Egress port is 0
+[18:03:59.056] [bmv2] [D] [thread 25597] [3.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:03:59.057] [bmv2] [D] [thread 25597] [3.0] [cxt 0] Action entry is ecn132 - 
+[18:03:59.057] [bmv2] [T] [thread 25597] [3.0] [cxt 0] Action ecn132
+[18:03:59.057] [bmv2] [T] [thread 25597] [3.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.057] [bmv2] [T] [thread 25597] [3.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.057] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:03:59.057] [bmv2] [T] [thread 25597] [3.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:03:59.057] [bmv2] [D] [thread 25597] [3.0] [cxt 0] Pipeline 'egress': end
+[18:03:59.057] [bmv2] [D] [thread 25597] [3.0] [cxt 0] Deparser 'deparser': start
+[18:03:59.057] [bmv2] [T] [thread 25597] [3.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:03:59.057] [bmv2] [D] [thread 25597] [3.0] [cxt 0] Deparsing header 'ethernet'
+[18:03:59.057] [bmv2] [D] [thread 25597] [3.0] [cxt 0] Deparser 'deparser': end
+[18:03:59.057] [bmv2] [D] [thread 25597] [4.0] [cxt 0] Pipeline 'egress': start
+[18:03:59.057] [bmv2] [T] [thread 25597] [4.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:03:59.057] [bmv2] [D] [thread 25601] [3.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[18:03:59.057] [bmv2] [D] [thread 25597] [4.0] [cxt 0] Looking up key:
+
+[18:03:59.057] [bmv2] [D] [thread 25597] [4.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:03:59.057] [bmv2] [D] [thread 25597] [4.0] [cxt 0] Action entry is ecn132 - 
+[18:03:59.057] [bmv2] [T] [thread 25597] [4.0] [cxt 0] Action ecn132
+[18:03:59.057] [bmv2] [T] [thread 25597] [4.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.057] [bmv2] [T] [thread 25597] [4.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.057] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:03:59.057] [bmv2] [T] [thread 25597] [4.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:03:59.057] [bmv2] [D] [thread 25597] [4.0] [cxt 0] Pipeline 'egress': end
+[18:03:59.057] [bmv2] [D] [thread 25597] [4.0] [cxt 0] Deparser 'deparser': start
+[18:03:59.057] [bmv2] [T] [thread 25597] [4.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:03:59.057] [bmv2] [D] [thread 25597] [4.0] [cxt 0] Deparsing header 'ethernet'
+[18:03:59.057] [bmv2] [D] [thread 25597] [4.0] [cxt 0] Deparser 'deparser': end
+[18:03:59.057] [bmv2] [D] [thread 25601] [4.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:03:59.248] [bmv2] [D] [thread 25596] [5.0] [cxt 0] Processing packet received on port 3
+[18:03:59.248] [bmv2] [D] [thread 25596] [5.0] [cxt 0] Parser 'parser': start
+[18:03:59.248] [bmv2] [D] [thread 25596] [5.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:03:59.248] [bmv2] [D] [thread 25596] [5.0] [cxt 0] Extracting header 'ethernet'
+[18:03:59.248] [bmv2] [D] [thread 25596] [5.0] [cxt 0] Parser state 'start': key is 86dd
+[18:03:59.248] [bmv2] [T] [thread 25596] [5.0] [cxt 0] Bytes parsed: 14
+[18:03:59.248] [bmv2] [D] [thread 25596] [5.0] [cxt 0] Parser 'parser': end
+[18:03:59.248] [bmv2] [D] [thread 25596] [5.0] [cxt 0] Pipeline 'ingress': start
+[18:03:59.248] [bmv2] [T] [thread 25596] [5.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:03:59.248] [bmv2] [D] [thread 25596] [5.0] [cxt 0] Pipeline 'ingress': end
+[18:03:59.248] [bmv2] [D] [thread 25596] [5.0] [cxt 0] Egress port is 0
+[18:03:59.248] [bmv2] [D] [thread 25596] [6.0] [cxt 0] Processing packet received on port 3
+[18:03:59.248] [bmv2] [D] [thread 25596] [6.0] [cxt 0] Parser 'parser': start
+[18:03:59.248] [bmv2] [D] [thread 25596] [6.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:03:59.248] [bmv2] [D] [thread 25596] [6.0] [cxt 0] Extracting header 'ethernet'
+[18:03:59.248] [bmv2] [D] [thread 25596] [6.0] [cxt 0] Parser state 'start': key is 86dd
+[18:03:59.248] [bmv2] [T] [thread 25596] [6.0] [cxt 0] Bytes parsed: 14
+[18:03:59.248] [bmv2] [D] [thread 25596] [6.0] [cxt 0] Parser 'parser': end
+[18:03:59.248] [bmv2] [D] [thread 25596] [6.0] [cxt 0] Pipeline 'ingress': start
+[18:03:59.248] [bmv2] [D] [thread 25597] [5.0] [cxt 0] Pipeline 'egress': start
+[18:03:59.248] [bmv2] [T] [thread 25596] [6.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:03:59.248] [bmv2] [T] [thread 25597] [5.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:03:59.248] [bmv2] [D] [thread 25596] [6.0] [cxt 0] Pipeline 'ingress': end
+[18:03:59.249] [bmv2] [D] [thread 25596] [6.0] [cxt 0] Egress port is 0
+[18:03:59.249] [bmv2] [D] [thread 25597] [5.0] [cxt 0] Looking up key:
+
+[18:03:59.249] [bmv2] [D] [thread 25597] [5.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:03:59.249] [bmv2] [D] [thread 25597] [5.0] [cxt 0] Action entry is ecn132 - 
+[18:03:59.249] [bmv2] [T] [thread 25597] [5.0] [cxt 0] Action ecn132
+[18:03:59.249] [bmv2] [T] [thread 25597] [5.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.249] [bmv2] [T] [thread 25597] [5.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.249] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:03:59.249] [bmv2] [T] [thread 25597] [5.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:03:59.249] [bmv2] [D] [thread 25597] [5.0] [cxt 0] Pipeline 'egress': end
+[18:03:59.249] [bmv2] [D] [thread 25597] [5.0] [cxt 0] Deparser 'deparser': start
+[18:03:59.249] [bmv2] [T] [thread 25597] [5.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:03:59.249] [bmv2] [D] [thread 25597] [5.0] [cxt 0] Deparsing header 'ethernet'
+[18:03:59.249] [bmv2] [D] [thread 25597] [5.0] [cxt 0] Deparser 'deparser': end
+[18:03:59.249] [bmv2] [D] [thread 25597] [6.0] [cxt 0] Pipeline 'egress': start
+[18:03:59.249] [bmv2] [T] [thread 25597] [6.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:03:59.249] [bmv2] [D] [thread 25597] [6.0] [cxt 0] Looking up key:
+
+[18:03:59.249] [bmv2] [D] [thread 25597] [6.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:03:59.249] [bmv2] [D] [thread 25597] [6.0] [cxt 0] Action entry is ecn132 - 
+[18:03:59.249] [bmv2] [T] [thread 25597] [6.0] [cxt 0] Action ecn132
+[18:03:59.249] [bmv2] [D] [thread 25601] [5.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[18:03:59.249] [bmv2] [T] [thread 25597] [6.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.249] [bmv2] [T] [thread 25597] [6.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.249] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:03:59.249] [bmv2] [T] [thread 25597] [6.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:03:59.249] [bmv2] [D] [thread 25597] [6.0] [cxt 0] Pipeline 'egress': end
+[18:03:59.249] [bmv2] [D] [thread 25597] [6.0] [cxt 0] Deparser 'deparser': start
+[18:03:59.249] [bmv2] [T] [thread 25597] [6.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:03:59.249] [bmv2] [D] [thread 25597] [6.0] [cxt 0] Deparsing header 'ethernet'
+[18:03:59.249] [bmv2] [D] [thread 25597] [6.0] [cxt 0] Deparser 'deparser': end
+[18:03:59.249] [bmv2] [D] [thread 25601] [6.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:03:59.376] [bmv2] [D] [thread 25596] [7.0] [cxt 0] Processing packet received on port 1
+[18:03:59.376] [bmv2] [D] [thread 25596] [7.0] [cxt 0] Parser 'parser': start
+[18:03:59.376] [bmv2] [D] [thread 25596] [7.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:03:59.376] [bmv2] [D] [thread 25596] [7.0] [cxt 0] Extracting header 'ethernet'
+[18:03:59.376] [bmv2] [D] [thread 25596] [7.0] [cxt 0] Parser state 'start': key is 86dd
+[18:03:59.376] [bmv2] [T] [thread 25596] [7.0] [cxt 0] Bytes parsed: 14
+[18:03:59.376] [bmv2] [D] [thread 25596] [7.0] [cxt 0] Parser 'parser': end
+[18:03:59.376] [bmv2] [D] [thread 25596] [7.0] [cxt 0] Pipeline 'ingress': start
+[18:03:59.376] [bmv2] [T] [thread 25596] [7.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:03:59.376] [bmv2] [D] [thread 25596] [7.0] [cxt 0] Pipeline 'ingress': end
+[18:03:59.376] [bmv2] [D] [thread 25596] [7.0] [cxt 0] Egress port is 0
+[18:03:59.376] [bmv2] [D] [thread 25596] [8.0] [cxt 0] Processing packet received on port 1
+[18:03:59.376] [bmv2] [D] [thread 25596] [8.0] [cxt 0] Parser 'parser': start
+[18:03:59.376] [bmv2] [D] [thread 25596] [8.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:03:59.376] [bmv2] [D] [thread 25596] [8.0] [cxt 0] Extracting header 'ethernet'
+[18:03:59.376] [bmv2] [D] [thread 25596] [8.0] [cxt 0] Parser state 'start': key is 86dd
+[18:03:59.376] [bmv2] [T] [thread 25596] [8.0] [cxt 0] Bytes parsed: 14
+[18:03:59.376] [bmv2] [D] [thread 25596] [8.0] [cxt 0] Parser 'parser': end
+[18:03:59.376] [bmv2] [D] [thread 25596] [8.0] [cxt 0] Pipeline 'ingress': start
+[18:03:59.376] [bmv2] [D] [thread 25597] [7.0] [cxt 0] Pipeline 'egress': start
+[18:03:59.376] [bmv2] [T] [thread 25596] [8.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:03:59.376] [bmv2] [T] [thread 25597] [7.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:03:59.376] [bmv2] [D] [thread 25596] [8.0] [cxt 0] Pipeline 'ingress': end
+[18:03:59.376] [bmv2] [D] [thread 25596] [8.0] [cxt 0] Egress port is 0
+[18:03:59.376] [bmv2] [D] [thread 25597] [7.0] [cxt 0] Looking up key:
+
+[18:03:59.376] [bmv2] [D] [thread 25597] [7.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:03:59.376] [bmv2] [D] [thread 25597] [7.0] [cxt 0] Action entry is ecn132 - 
+[18:03:59.376] [bmv2] [T] [thread 25597] [7.0] [cxt 0] Action ecn132
+[18:03:59.376] [bmv2] [T] [thread 25597] [7.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.376] [bmv2] [T] [thread 25597] [7.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.376] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:03:59.377] [bmv2] [T] [thread 25597] [7.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:03:59.377] [bmv2] [D] [thread 25597] [7.0] [cxt 0] Pipeline 'egress': end
+[18:03:59.377] [bmv2] [D] [thread 25597] [7.0] [cxt 0] Deparser 'deparser': start
+[18:03:59.377] [bmv2] [T] [thread 25597] [7.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:03:59.377] [bmv2] [D] [thread 25597] [7.0] [cxt 0] Deparsing header 'ethernet'
+[18:03:59.377] [bmv2] [D] [thread 25597] [7.0] [cxt 0] Deparser 'deparser': end
+[18:03:59.377] [bmv2] [D] [thread 25597] [8.0] [cxt 0] Pipeline 'egress': start
+[18:03:59.377] [bmv2] [T] [thread 25597] [8.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:03:59.377] [bmv2] [D] [thread 25597] [8.0] [cxt 0] Looking up key:
+
+[18:03:59.377] [bmv2] [D] [thread 25597] [8.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:03:59.377] [bmv2] [D] [thread 25601] [7.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[18:03:59.377] [bmv2] [D] [thread 25597] [8.0] [cxt 0] Action entry is ecn132 - 
+[18:03:59.377] [bmv2] [T] [thread 25597] [8.0] [cxt 0] Action ecn132
+[18:03:59.377] [bmv2] [T] [thread 25597] [8.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.377] [bmv2] [T] [thread 25597] [8.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.377] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:03:59.377] [bmv2] [T] [thread 25597] [8.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:03:59.377] [bmv2] [D] [thread 25597] [8.0] [cxt 0] Pipeline 'egress': end
+[18:03:59.377] [bmv2] [D] [thread 25597] [8.0] [cxt 0] Deparser 'deparser': start
+[18:03:59.377] [bmv2] [T] [thread 25597] [8.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:03:59.377] [bmv2] [D] [thread 25597] [8.0] [cxt 0] Deparsing header 'ethernet'
+[18:03:59.377] [bmv2] [D] [thread 25597] [8.0] [cxt 0] Deparser 'deparser': end
+[18:03:59.377] [bmv2] [D] [thread 25601] [8.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:03:59.464] [bmv2] [D] [thread 25596] [9.0] [cxt 0] Processing packet received on port 2
+[18:03:59.464] [bmv2] [D] [thread 25596] [9.0] [cxt 0] Parser 'parser': start
+[18:03:59.464] [bmv2] [D] [thread 25596] [9.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:03:59.464] [bmv2] [D] [thread 25596] [9.0] [cxt 0] Extracting header 'ethernet'
+[18:03:59.464] [bmv2] [D] [thread 25596] [9.0] [cxt 0] Parser state 'start': key is 86dd
+[18:03:59.464] [bmv2] [T] [thread 25596] [9.0] [cxt 0] Bytes parsed: 14
+[18:03:59.464] [bmv2] [D] [thread 25596] [9.0] [cxt 0] Parser 'parser': end
+[18:03:59.464] [bmv2] [D] [thread 25596] [9.0] [cxt 0] Pipeline 'ingress': start
+[18:03:59.464] [bmv2] [T] [thread 25596] [9.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:03:59.464] [bmv2] [D] [thread 25596] [9.0] [cxt 0] Pipeline 'ingress': end
+[18:03:59.464] [bmv2] [D] [thread 25596] [9.0] [cxt 0] Egress port is 0
+[18:03:59.464] [bmv2] [D] [thread 25597] [9.0] [cxt 0] Pipeline 'egress': start
+[18:03:59.464] [bmv2] [T] [thread 25597] [9.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:03:59.464] [bmv2] [D] [thread 25597] [9.0] [cxt 0] Looking up key:
+
+[18:03:59.464] [bmv2] [D] [thread 25597] [9.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:03:59.464] [bmv2] [D] [thread 25597] [9.0] [cxt 0] Action entry is ecn132 - 
+[18:03:59.464] [bmv2] [T] [thread 25597] [9.0] [cxt 0] Action ecn132
+[18:03:59.464] [bmv2] [T] [thread 25597] [9.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.464] [bmv2] [T] [thread 25597] [9.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.464] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:03:59.464] [bmv2] [T] [thread 25597] [9.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:03:59.464] [bmv2] [D] [thread 25597] [9.0] [cxt 0] Pipeline 'egress': end
+[18:03:59.464] [bmv2] [D] [thread 25597] [9.0] [cxt 0] Deparser 'deparser': start
+[18:03:59.464] [bmv2] [T] [thread 25597] [9.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:03:59.464] [bmv2] [D] [thread 25597] [9.0] [cxt 0] Deparsing header 'ethernet'
+[18:03:59.464] [bmv2] [D] [thread 25597] [9.0] [cxt 0] Deparser 'deparser': end
+[18:03:59.464] [bmv2] [D] [thread 25601] [9.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[18:03:59.824] [bmv2] [D] [thread 25596] [10.0] [cxt 0] Processing packet received on port 2
+[18:03:59.824] [bmv2] [D] [thread 25596] [10.0] [cxt 0] Parser 'parser': start
+[18:03:59.824] [bmv2] [D] [thread 25596] [10.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:03:59.824] [bmv2] [D] [thread 25596] [10.0] [cxt 0] Extracting header 'ethernet'
+[18:03:59.824] [bmv2] [D] [thread 25596] [10.0] [cxt 0] Parser state 'start': key is 86dd
+[18:03:59.824] [bmv2] [T] [thread 25596] [10.0] [cxt 0] Bytes parsed: 14
+[18:03:59.824] [bmv2] [D] [thread 25596] [10.0] [cxt 0] Parser 'parser': end
+[18:03:59.824] [bmv2] [D] [thread 25596] [10.0] [cxt 0] Pipeline 'ingress': start
+[18:03:59.824] [bmv2] [T] [thread 25596] [10.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:03:59.824] [bmv2] [D] [thread 25596] [10.0] [cxt 0] Pipeline 'ingress': end
+[18:03:59.824] [bmv2] [D] [thread 25596] [10.0] [cxt 0] Egress port is 0
+[18:03:59.824] [bmv2] [D] [thread 25596] [11.0] [cxt 0] Processing packet received on port 3
+[18:03:59.824] [bmv2] [D] [thread 25596] [11.0] [cxt 0] Parser 'parser': start
+[18:03:59.824] [bmv2] [D] [thread 25596] [11.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:03:59.824] [bmv2] [D] [thread 25596] [11.0] [cxt 0] Extracting header 'ethernet'
+[18:03:59.824] [bmv2] [D] [thread 25596] [11.0] [cxt 0] Parser state 'start': key is 86dd
+[18:03:59.824] [bmv2] [T] [thread 25596] [11.0] [cxt 0] Bytes parsed: 14
+[18:03:59.824] [bmv2] [D] [thread 25596] [11.0] [cxt 0] Parser 'parser': end
+[18:03:59.824] [bmv2] [D] [thread 25596] [11.0] [cxt 0] Pipeline 'ingress': start
+[18:03:59.824] [bmv2] [T] [thread 25596] [11.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:03:59.824] [bmv2] [D] [thread 25597] [10.0] [cxt 0] Pipeline 'egress': start
+[18:03:59.824] [bmv2] [T] [thread 25597] [10.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:03:59.824] [bmv2] [D] [thread 25596] [11.0] [cxt 0] Pipeline 'ingress': end
+[18:03:59.824] [bmv2] [D] [thread 25597] [10.0] [cxt 0] Looking up key:
+
+[18:03:59.824] [bmv2] [D] [thread 25597] [10.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:03:59.824] [bmv2] [D] [thread 25597] [10.0] [cxt 0] Action entry is ecn132 - 
+[18:03:59.824] [bmv2] [D] [thread 25596] [11.0] [cxt 0] Egress port is 0
+[18:03:59.824] [bmv2] [T] [thread 25597] [10.0] [cxt 0] Action ecn132
+[18:03:59.824] [bmv2] [T] [thread 25597] [10.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.825] [bmv2] [T] [thread 25597] [10.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.825] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:03:59.825] [bmv2] [T] [thread 25597] [10.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:03:59.825] [bmv2] [D] [thread 25597] [10.0] [cxt 0] Pipeline 'egress': end
+[18:03:59.825] [bmv2] [D] [thread 25597] [10.0] [cxt 0] Deparser 'deparser': start
+[18:03:59.825] [bmv2] [T] [thread 25597] [10.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:03:59.825] [bmv2] [D] [thread 25597] [10.0] [cxt 0] Deparsing header 'ethernet'
+[18:03:59.825] [bmv2] [D] [thread 25597] [10.0] [cxt 0] Deparser 'deparser': end
+[18:03:59.825] [bmv2] [D] [thread 25597] [11.0] [cxt 0] Pipeline 'egress': start
+[18:03:59.825] [bmv2] [T] [thread 25597] [11.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:03:59.825] [bmv2] [D] [thread 25597] [11.0] [cxt 0] Looking up key:
+
+[18:03:59.825] [bmv2] [D] [thread 25601] [10.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[18:03:59.825] [bmv2] [D] [thread 25597] [11.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:03:59.825] [bmv2] [D] [thread 25597] [11.0] [cxt 0] Action entry is ecn132 - 
+[18:03:59.825] [bmv2] [T] [thread 25597] [11.0] [cxt 0] Action ecn132
+[18:03:59.825] [bmv2] [T] [thread 25597] [11.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.825] [bmv2] [T] [thread 25597] [11.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.825] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:03:59.825] [bmv2] [T] [thread 25597] [11.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:03:59.825] [bmv2] [D] [thread 25597] [11.0] [cxt 0] Pipeline 'egress': end
+[18:03:59.825] [bmv2] [D] [thread 25597] [11.0] [cxt 0] Deparser 'deparser': start
+[18:03:59.825] [bmv2] [T] [thread 25597] [11.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:03:59.825] [bmv2] [D] [thread 25597] [11.0] [cxt 0] Deparsing header 'ethernet'
+[18:03:59.825] [bmv2] [D] [thread 25597] [11.0] [cxt 0] Deparser 'deparser': end
+[18:03:59.825] [bmv2] [D] [thread 25601] [11.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[18:03:59.848] [bmv2] [D] [thread 25596] [12.0] [cxt 0] Processing packet received on port 1
+[18:03:59.848] [bmv2] [D] [thread 25596] [12.0] [cxt 0] Parser 'parser': start
+[18:03:59.848] [bmv2] [D] [thread 25596] [12.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:03:59.848] [bmv2] [D] [thread 25596] [12.0] [cxt 0] Extracting header 'ethernet'
+[18:03:59.848] [bmv2] [D] [thread 25596] [12.0] [cxt 0] Parser state 'start': key is 86dd
+[18:03:59.848] [bmv2] [T] [thread 25596] [12.0] [cxt 0] Bytes parsed: 14
+[18:03:59.848] [bmv2] [D] [thread 25596] [12.0] [cxt 0] Parser 'parser': end
+[18:03:59.848] [bmv2] [D] [thread 25596] [12.0] [cxt 0] Pipeline 'ingress': start
+[18:03:59.848] [bmv2] [T] [thread 25596] [12.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:03:59.848] [bmv2] [D] [thread 25596] [12.0] [cxt 0] Pipeline 'ingress': end
+[18:03:59.848] [bmv2] [D] [thread 25596] [12.0] [cxt 0] Egress port is 0
+[18:03:59.848] [bmv2] [D] [thread 25597] [12.0] [cxt 0] Pipeline 'egress': start
+[18:03:59.848] [bmv2] [T] [thread 25597] [12.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:03:59.848] [bmv2] [D] [thread 25597] [12.0] [cxt 0] Looking up key:
+
+[18:03:59.848] [bmv2] [D] [thread 25597] [12.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:03:59.848] [bmv2] [D] [thread 25597] [12.0] [cxt 0] Action entry is ecn132 - 
+[18:03:59.848] [bmv2] [T] [thread 25597] [12.0] [cxt 0] Action ecn132
+[18:03:59.848] [bmv2] [T] [thread 25597] [12.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.848] [bmv2] [T] [thread 25597] [12.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:03:59.848] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:03:59.848] [bmv2] [T] [thread 25597] [12.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:03:59.848] [bmv2] [D] [thread 25597] [12.0] [cxt 0] Pipeline 'egress': end
+[18:03:59.848] [bmv2] [D] [thread 25597] [12.0] [cxt 0] Deparser 'deparser': start
+[18:03:59.848] [bmv2] [T] [thread 25597] [12.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:03:59.848] [bmv2] [D] [thread 25597] [12.0] [cxt 0] Deparsing header 'ethernet'
+[18:03:59.848] [bmv2] [D] [thread 25597] [12.0] [cxt 0] Deparser 'deparser': end
+[18:03:59.849] [bmv2] [D] [thread 25601] [12.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[18:04:00.293] [bmv2] [W] [thread 25654] [P4Runtime] p4::tmp::P4DeviceConfig is deprecated
+[18:04:00.295] [bmv2] [D] [thread 25654] Set default default entry for table 'MyIngress.ipv4_lpm': MyIngress.drop - 
+[18:04:00.296] [bmv2] [D] [thread 25654] Set default default entry for table 'tbl_ecn132': ecn132 - 
+[18:04:00.297] [bmv2] [D] [thread 25654] simple_switch target has been notified of a config swap
+[18:04:00.298] [bmv2] [D] [thread 25654] Entry 0 added to table 'MyIngress.ipv4_lpm'
+[18:04:00.298] [bmv2] [D] [thread 25654] Dumping entry 0
+Match key:
+* hdr.ipv4.dstAddr    : LPM       0a000303/32
+Action entry: MyIngress.ipv4_forward - 80000000303,1,
+
+[18:04:00.300] [bmv2] [D] [thread 25655] Entry 1 added to table 'MyIngress.ipv4_lpm'
+[18:04:00.300] [bmv2] [D] [thread 25655] Dumping entry 1
+Match key:
+* hdr.ipv4.dstAddr    : LPM       0a000100/24
+Action entry: MyIngress.ipv4_forward - 80000000100,2,
+
+[18:04:00.301] [bmv2] [D] [thread 25654] Entry 2 added to table 'MyIngress.ipv4_lpm'
+[18:04:00.301] [bmv2] [D] [thread 25654] Dumping entry 2
+Match key:
+* hdr.ipv4.dstAddr    : LPM       0a000200/24
+Action entry: MyIngress.ipv4_forward - 80000000200,3,
+
+[18:04:02.832] [bmv2] [D] [thread 25596] [13.0] [cxt 0] Processing packet received on port 3
+[18:04:02.832] [bmv2] [D] [thread 25596] [13.0] [cxt 0] Parser 'parser': start
+[18:04:02.832] [bmv2] [D] [thread 25596] [13.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:02.832] [bmv2] [D] [thread 25596] [13.0] [cxt 0] Extracting header 'ethernet'
+[18:04:02.832] [bmv2] [D] [thread 25596] [13.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:02.832] [bmv2] [T] [thread 25596] [13.0] [cxt 0] Bytes parsed: 14
+[18:04:02.832] [bmv2] [D] [thread 25596] [13.0] [cxt 0] Parser 'parser': end
+[18:04:02.832] [bmv2] [D] [thread 25596] [13.0] [cxt 0] Pipeline 'ingress': start
+[18:04:02.832] [bmv2] [T] [thread 25596] [13.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:02.832] [bmv2] [D] [thread 25596] [13.0] [cxt 0] Pipeline 'ingress': end
+[18:04:02.832] [bmv2] [D] [thread 25596] [13.0] [cxt 0] Egress port is 0
+[18:04:02.832] [bmv2] [D] [thread 25597] [13.0] [cxt 0] Pipeline 'egress': start
+[18:04:02.832] [bmv2] [T] [thread 25597] [13.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:02.832] [bmv2] [D] [thread 25597] [13.0] [cxt 0] Looking up key:
+
+[18:04:02.833] [bmv2] [D] [thread 25597] [13.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:02.833] [bmv2] [D] [thread 25597] [13.0] [cxt 0] Action entry is ecn132 - 
+[18:04:02.833] [bmv2] [T] [thread 25597] [13.0] [cxt 0] Action ecn132
+[18:04:02.833] [bmv2] [T] [thread 25597] [13.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:02.833] [bmv2] [T] [thread 25597] [13.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:02.833] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:02.833] [bmv2] [T] [thread 25597] [13.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:02.833] [bmv2] [D] [thread 25597] [13.0] [cxt 0] Pipeline 'egress': end
+[18:04:02.833] [bmv2] [D] [thread 25597] [13.0] [cxt 0] Deparser 'deparser': start
+[18:04:02.833] [bmv2] [T] [thread 25597] [13.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:02.833] [bmv2] [D] [thread 25597] [13.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:02.833] [bmv2] [D] [thread 25597] [13.0] [cxt 0] Deparser 'deparser': end
+[18:04:02.833] [bmv2] [D] [thread 25601] [13.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:03.216] [bmv2] [D] [thread 25596] [14.0] [cxt 0] Processing packet received on port 3
+[18:04:03.216] [bmv2] [D] [thread 25596] [14.0] [cxt 0] Parser 'parser': start
+[18:04:03.216] [bmv2] [D] [thread 25596] [14.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:03.216] [bmv2] [D] [thread 25596] [14.0] [cxt 0] Extracting header 'ethernet'
+[18:04:03.216] [bmv2] [D] [thread 25596] [14.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:03.216] [bmv2] [T] [thread 25596] [14.0] [cxt 0] Bytes parsed: 14
+[18:04:03.216] [bmv2] [D] [thread 25596] [14.0] [cxt 0] Parser 'parser': end
+[18:04:03.216] [bmv2] [D] [thread 25596] [14.0] [cxt 0] Pipeline 'ingress': start
+[18:04:03.216] [bmv2] [T] [thread 25596] [14.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:03.216] [bmv2] [D] [thread 25596] [14.0] [cxt 0] Pipeline 'ingress': end
+[18:04:03.216] [bmv2] [D] [thread 25596] [14.0] [cxt 0] Egress port is 0
+[18:04:03.216] [bmv2] [D] [thread 25597] [14.0] [cxt 0] Pipeline 'egress': start
+[18:04:03.216] [bmv2] [T] [thread 25597] [14.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:03.216] [bmv2] [D] [thread 25597] [14.0] [cxt 0] Looking up key:
+
+[18:04:03.216] [bmv2] [D] [thread 25597] [14.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:03.216] [bmv2] [D] [thread 25597] [14.0] [cxt 0] Action entry is ecn132 - 
+[18:04:03.216] [bmv2] [T] [thread 25597] [14.0] [cxt 0] Action ecn132
+[18:04:03.216] [bmv2] [T] [thread 25597] [14.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:03.216] [bmv2] [T] [thread 25597] [14.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:03.216] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:03.216] [bmv2] [T] [thread 25597] [14.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:03.216] [bmv2] [D] [thread 25597] [14.0] [cxt 0] Pipeline 'egress': end
+[18:04:03.216] [bmv2] [D] [thread 25597] [14.0] [cxt 0] Deparser 'deparser': start
+[18:04:03.216] [bmv2] [T] [thread 25597] [14.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:03.216] [bmv2] [D] [thread 25597] [14.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:03.216] [bmv2] [D] [thread 25597] [14.0] [cxt 0] Deparser 'deparser': end
+[18:04:03.217] [bmv2] [D] [thread 25601] [14.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:03.344] [bmv2] [D] [thread 25596] [15.0] [cxt 0] Processing packet received on port 2
+[18:04:03.344] [bmv2] [D] [thread 25596] [15.0] [cxt 0] Parser 'parser': start
+[18:04:03.344] [bmv2] [D] [thread 25596] [15.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:03.344] [bmv2] [D] [thread 25596] [15.0] [cxt 0] Extracting header 'ethernet'
+[18:04:03.344] [bmv2] [D] [thread 25596] [15.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:03.344] [bmv2] [T] [thread 25596] [15.0] [cxt 0] Bytes parsed: 14
+[18:04:03.344] [bmv2] [D] [thread 25596] [15.0] [cxt 0] Parser 'parser': end
+[18:04:03.344] [bmv2] [D] [thread 25596] [15.0] [cxt 0] Pipeline 'ingress': start
+[18:04:03.344] [bmv2] [T] [thread 25596] [15.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:03.344] [bmv2] [D] [thread 25596] [15.0] [cxt 0] Pipeline 'ingress': end
+[18:04:03.344] [bmv2] [D] [thread 25596] [15.0] [cxt 0] Egress port is 0
+[18:04:03.344] [bmv2] [D] [thread 25596] [16.0] [cxt 0] Processing packet received on port 2
+[18:04:03.344] [bmv2] [D] [thread 25596] [16.0] [cxt 0] Parser 'parser': start
+[18:04:03.344] [bmv2] [D] [thread 25596] [16.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:03.344] [bmv2] [D] [thread 25596] [16.0] [cxt 0] Extracting header 'ethernet'
+[18:04:03.344] [bmv2] [D] [thread 25596] [16.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:03.344] [bmv2] [T] [thread 25596] [16.0] [cxt 0] Bytes parsed: 14
+[18:04:03.344] [bmv2] [D] [thread 25596] [16.0] [cxt 0] Parser 'parser': end
+[18:04:03.344] [bmv2] [D] [thread 25596] [16.0] [cxt 0] Pipeline 'ingress': start
+[18:04:03.344] [bmv2] [T] [thread 25596] [16.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:03.344] [bmv2] [D] [thread 25596] [16.0] [cxt 0] Pipeline 'ingress': end
+[18:04:03.344] [bmv2] [D] [thread 25597] [15.0] [cxt 0] Pipeline 'egress': start
+[18:04:03.344] [bmv2] [D] [thread 25596] [16.0] [cxt 0] Egress port is 0
+[18:04:03.344] [bmv2] [T] [thread 25597] [15.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:03.344] [bmv2] [D] [thread 25597] [15.0] [cxt 0] Looking up key:
+
+[18:04:03.344] [bmv2] [D] [thread 25597] [15.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:03.344] [bmv2] [D] [thread 25597] [15.0] [cxt 0] Action entry is ecn132 - 
+[18:04:03.344] [bmv2] [T] [thread 25597] [15.0] [cxt 0] Action ecn132
+[18:04:03.344] [bmv2] [T] [thread 25597] [15.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:03.344] [bmv2] [T] [thread 25597] [15.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:03.344] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:03.344] [bmv2] [T] [thread 25597] [15.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:03.344] [bmv2] [D] [thread 25597] [15.0] [cxt 0] Pipeline 'egress': end
+[18:04:03.344] [bmv2] [D] [thread 25597] [15.0] [cxt 0] Deparser 'deparser': start
+[18:04:03.344] [bmv2] [T] [thread 25597] [15.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:03.344] [bmv2] [D] [thread 25597] [15.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:03.344] [bmv2] [D] [thread 25597] [15.0] [cxt 0] Deparser 'deparser': end
+[18:04:03.345] [bmv2] [D] [thread 25597] [16.0] [cxt 0] Pipeline 'egress': start
+[18:04:03.345] [bmv2] [T] [thread 25597] [16.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:03.345] [bmv2] [D] [thread 25597] [16.0] [cxt 0] Looking up key:
+
+[18:04:03.345] [bmv2] [D] [thread 25601] [15.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:03.345] [bmv2] [D] [thread 25597] [16.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:03.345] [bmv2] [D] [thread 25597] [16.0] [cxt 0] Action entry is ecn132 - 
+[18:04:03.345] [bmv2] [T] [thread 25597] [16.0] [cxt 0] Action ecn132
+[18:04:03.345] [bmv2] [T] [thread 25597] [16.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:03.345] [bmv2] [T] [thread 25597] [16.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:03.345] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:03.345] [bmv2] [T] [thread 25597] [16.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:03.345] [bmv2] [D] [thread 25597] [16.0] [cxt 0] Pipeline 'egress': end
+[18:04:03.345] [bmv2] [D] [thread 25597] [16.0] [cxt 0] Deparser 'deparser': start
+[18:04:03.345] [bmv2] [T] [thread 25597] [16.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:03.345] [bmv2] [D] [thread 25597] [16.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:03.345] [bmv2] [D] [thread 25597] [16.0] [cxt 0] Deparser 'deparser': end
+[18:04:03.345] [bmv2] [D] [thread 25601] [16.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:03.856] [bmv2] [D] [thread 25596] [17.0] [cxt 0] Processing packet received on port 1
+[18:04:03.856] [bmv2] [D] [thread 25596] [17.0] [cxt 0] Parser 'parser': start
+[18:04:03.856] [bmv2] [D] [thread 25596] [17.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:03.856] [bmv2] [D] [thread 25596] [17.0] [cxt 0] Extracting header 'ethernet'
+[18:04:03.856] [bmv2] [D] [thread 25596] [17.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:03.856] [bmv2] [T] [thread 25596] [17.0] [cxt 0] Bytes parsed: 14
+[18:04:03.856] [bmv2] [D] [thread 25596] [17.0] [cxt 0] Parser 'parser': end
+[18:04:03.856] [bmv2] [D] [thread 25596] [17.0] [cxt 0] Pipeline 'ingress': start
+[18:04:03.856] [bmv2] [T] [thread 25596] [17.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:03.856] [bmv2] [D] [thread 25596] [17.0] [cxt 0] Pipeline 'ingress': end
+[18:04:03.856] [bmv2] [D] [thread 25596] [17.0] [cxt 0] Egress port is 0
+[18:04:03.856] [bmv2] [D] [thread 25597] [17.0] [cxt 0] Pipeline 'egress': start
+[18:04:03.856] [bmv2] [T] [thread 25597] [17.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:03.856] [bmv2] [D] [thread 25597] [17.0] [cxt 0] Looking up key:
+
+[18:04:03.856] [bmv2] [D] [thread 25597] [17.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:03.856] [bmv2] [D] [thread 25597] [17.0] [cxt 0] Action entry is ecn132 - 
+[18:04:03.856] [bmv2] [T] [thread 25597] [17.0] [cxt 0] Action ecn132
+[18:04:03.856] [bmv2] [T] [thread 25597] [17.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:03.856] [bmv2] [T] [thread 25597] [17.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:03.856] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:03.856] [bmv2] [T] [thread 25597] [17.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:03.856] [bmv2] [D] [thread 25597] [17.0] [cxt 0] Pipeline 'egress': end
+[18:04:03.856] [bmv2] [D] [thread 25597] [17.0] [cxt 0] Deparser 'deparser': start
+[18:04:03.856] [bmv2] [T] [thread 25597] [17.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:03.856] [bmv2] [D] [thread 25597] [17.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:03.856] [bmv2] [D] [thread 25597] [17.0] [cxt 0] Deparser 'deparser': end
+[18:04:03.856] [bmv2] [D] [thread 25601] [17.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:11.536] [bmv2] [D] [thread 25596] [18.0] [cxt 0] Processing packet received on port 2
+[18:04:11.536] [bmv2] [D] [thread 25596] [18.0] [cxt 0] Parser 'parser': start
+[18:04:11.536] [bmv2] [D] [thread 25596] [18.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:11.536] [bmv2] [D] [thread 25596] [18.0] [cxt 0] Extracting header 'ethernet'
+[18:04:11.536] [bmv2] [D] [thread 25596] [18.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:11.536] [bmv2] [T] [thread 25596] [18.0] [cxt 0] Bytes parsed: 14
+[18:04:11.536] [bmv2] [D] [thread 25596] [18.0] [cxt 0] Parser 'parser': end
+[18:04:11.536] [bmv2] [D] [thread 25596] [18.0] [cxt 0] Pipeline 'ingress': start
+[18:04:11.536] [bmv2] [T] [thread 25596] [18.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:11.536] [bmv2] [D] [thread 25596] [18.0] [cxt 0] Pipeline 'ingress': end
+[18:04:11.536] [bmv2] [D] [thread 25596] [18.0] [cxt 0] Egress port is 0
+[18:04:11.536] [bmv2] [D] [thread 25596] [19.0] [cxt 0] Processing packet received on port 3
+[18:04:11.536] [bmv2] [D] [thread 25596] [19.0] [cxt 0] Parser 'parser': start
+[18:04:11.536] [bmv2] [D] [thread 25596] [19.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:11.536] [bmv2] [D] [thread 25596] [19.0] [cxt 0] Extracting header 'ethernet'
+[18:04:11.536] [bmv2] [D] [thread 25596] [19.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:11.536] [bmv2] [D] [thread 25597] [18.0] [cxt 0] Pipeline 'egress': start
+[18:04:11.536] [bmv2] [T] [thread 25597] [18.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:11.536] [bmv2] [T] [thread 25596] [19.0] [cxt 0] Bytes parsed: 14
+[18:04:11.536] [bmv2] [D] [thread 25597] [18.0] [cxt 0] Looking up key:
+
+[18:04:11.536] [bmv2] [D] [thread 25596] [19.0] [cxt 0] Parser 'parser': end
+[18:04:11.536] [bmv2] [D] [thread 25597] [18.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:11.536] [bmv2] [D] [thread 25596] [19.0] [cxt 0] Pipeline 'ingress': start
+[18:04:11.536] [bmv2] [D] [thread 25597] [18.0] [cxt 0] Action entry is ecn132 - 
+[18:04:11.536] [bmv2] [T] [thread 25596] [19.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:11.536] [bmv2] [D] [thread 25596] [19.0] [cxt 0] Pipeline 'ingress': end
+[18:04:11.536] [bmv2] [T] [thread 25597] [18.0] [cxt 0] Action ecn132
+[18:04:11.536] [bmv2] [D] [thread 25596] [19.0] [cxt 0] Egress port is 0
+[18:04:11.536] [bmv2] [T] [thread 25597] [18.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:11.536] [bmv2] [D] [thread 25596] [20.0] [cxt 0] Processing packet received on port 3
+[18:04:11.536] [bmv2] [T] [thread 25597] [18.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:11.536] [bmv2] [D] [thread 25596] [20.0] [cxt 0] Parser 'parser': start
+[18:04:11.536] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:11.536] [bmv2] [T] [thread 25597] [18.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:11.536] [bmv2] [D] [thread 25596] [20.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:11.536] [bmv2] [D] [thread 25597] [18.0] [cxt 0] Pipeline 'egress': end
+[18:04:11.536] [bmv2] [D] [thread 25596] [20.0] [cxt 0] Extracting header 'ethernet'
+[18:04:11.536] [bmv2] [D] [thread 25597] [18.0] [cxt 0] Deparser 'deparser': start
+[18:04:11.536] [bmv2] [T] [thread 25597] [18.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:11.536] [bmv2] [D] [thread 25596] [20.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:11.537] [bmv2] [D] [thread 25597] [18.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:11.537] [bmv2] [T] [thread 25596] [20.0] [cxt 0] Bytes parsed: 14
+[18:04:11.537] [bmv2] [D] [thread 25596] [20.0] [cxt 0] Parser 'parser': end
+[18:04:11.537] [bmv2] [D] [thread 25597] [18.0] [cxt 0] Deparser 'deparser': end
+[18:04:11.537] [bmv2] [D] [thread 25596] [20.0] [cxt 0] Pipeline 'ingress': start
+[18:04:11.537] [bmv2] [T] [thread 25596] [20.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:11.537] [bmv2] [D] [thread 25596] [20.0] [cxt 0] Pipeline 'ingress': end
+[18:04:11.537] [bmv2] [D] [thread 25597] [19.0] [cxt 0] Pipeline 'egress': start
+[18:04:11.537] [bmv2] [D] [thread 25601] [18.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:11.537] [bmv2] [D] [thread 25596] [20.0] [cxt 0] Egress port is 0
+[18:04:11.537] [bmv2] [T] [thread 25597] [19.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:11.537] [bmv2] [D] [thread 25597] [19.0] [cxt 0] Looking up key:
+
+[18:04:11.537] [bmv2] [D] [thread 25597] [19.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:11.537] [bmv2] [D] [thread 25597] [19.0] [cxt 0] Action entry is ecn132 - 
+[18:04:11.537] [bmv2] [T] [thread 25597] [19.0] [cxt 0] Action ecn132
+[18:04:11.537] [bmv2] [T] [thread 25597] [19.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:11.537] [bmv2] [T] [thread 25597] [19.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:11.537] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:11.537] [bmv2] [T] [thread 25597] [19.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:11.537] [bmv2] [D] [thread 25597] [19.0] [cxt 0] Pipeline 'egress': end
+[18:04:11.537] [bmv2] [D] [thread 25597] [19.0] [cxt 0] Deparser 'deparser': start
+[18:04:11.537] [bmv2] [T] [thread 25597] [19.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:11.537] [bmv2] [D] [thread 25597] [19.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:11.537] [bmv2] [D] [thread 25597] [19.0] [cxt 0] Deparser 'deparser': end
+[18:04:11.537] [bmv2] [D] [thread 25597] [20.0] [cxt 0] Pipeline 'egress': start
+[18:04:11.537] [bmv2] [D] [thread 25601] [19.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:11.537] [bmv2] [T] [thread 25597] [20.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:11.537] [bmv2] [D] [thread 25597] [20.0] [cxt 0] Looking up key:
+
+[18:04:11.537] [bmv2] [D] [thread 25597] [20.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:11.537] [bmv2] [D] [thread 25597] [20.0] [cxt 0] Action entry is ecn132 - 
+[18:04:11.537] [bmv2] [T] [thread 25597] [20.0] [cxt 0] Action ecn132
+[18:04:11.537] [bmv2] [T] [thread 25597] [20.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:11.537] [bmv2] [T] [thread 25597] [20.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:11.537] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:11.537] [bmv2] [T] [thread 25597] [20.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:11.537] [bmv2] [D] [thread 25597] [20.0] [cxt 0] Pipeline 'egress': end
+[18:04:11.537] [bmv2] [D] [thread 25597] [20.0] [cxt 0] Deparser 'deparser': start
+[18:04:11.537] [bmv2] [T] [thread 25597] [20.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:11.537] [bmv2] [D] [thread 25597] [20.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:11.537] [bmv2] [D] [thread 25597] [20.0] [cxt 0] Deparser 'deparser': end
+[18:04:11.537] [bmv2] [D] [thread 25601] [20.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:12.048] [bmv2] [D] [thread 25596] [21.0] [cxt 0] Processing packet received on port 2
+[18:04:12.048] [bmv2] [D] [thread 25596] [21.0] [cxt 0] Parser 'parser': start
+[18:04:12.048] [bmv2] [D] [thread 25596] [21.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:12.048] [bmv2] [D] [thread 25596] [21.0] [cxt 0] Extracting header 'ethernet'
+[18:04:12.048] [bmv2] [D] [thread 25596] [21.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:12.048] [bmv2] [T] [thread 25596] [21.0] [cxt 0] Bytes parsed: 14
+[18:04:12.048] [bmv2] [D] [thread 25596] [21.0] [cxt 0] Parser 'parser': end
+[18:04:12.048] [bmv2] [D] [thread 25596] [21.0] [cxt 0] Pipeline 'ingress': start
+[18:04:12.048] [bmv2] [T] [thread 25596] [21.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:12.048] [bmv2] [D] [thread 25596] [21.0] [cxt 0] Pipeline 'ingress': end
+[18:04:12.048] [bmv2] [D] [thread 25596] [21.0] [cxt 0] Egress port is 0
+[18:04:12.048] [bmv2] [D] [thread 25597] [21.0] [cxt 0] Pipeline 'egress': start
+[18:04:12.048] [bmv2] [T] [thread 25597] [21.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:12.048] [bmv2] [D] [thread 25597] [21.0] [cxt 0] Looking up key:
+
+[18:04:12.048] [bmv2] [D] [thread 25597] [21.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:12.048] [bmv2] [D] [thread 25597] [21.0] [cxt 0] Action entry is ecn132 - 
+[18:04:12.048] [bmv2] [T] [thread 25597] [21.0] [cxt 0] Action ecn132
+[18:04:12.048] [bmv2] [T] [thread 25597] [21.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:12.048] [bmv2] [T] [thread 25597] [21.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:12.048] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:12.048] [bmv2] [T] [thread 25597] [21.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:12.048] [bmv2] [D] [thread 25597] [21.0] [cxt 0] Pipeline 'egress': end
+[18:04:12.048] [bmv2] [D] [thread 25597] [21.0] [cxt 0] Deparser 'deparser': start
+[18:04:12.048] [bmv2] [T] [thread 25597] [21.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:12.048] [bmv2] [D] [thread 25597] [21.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:12.048] [bmv2] [D] [thread 25597] [21.0] [cxt 0] Deparser 'deparser': end
+[18:04:12.049] [bmv2] [D] [thread 25601] [21.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:12.560] [bmv2] [D] [thread 25596] [22.0] [cxt 0] Processing packet received on port 1
+[18:04:12.560] [bmv2] [D] [thread 25596] [22.0] [cxt 0] Parser 'parser': start
+[18:04:12.560] [bmv2] [D] [thread 25596] [22.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:12.560] [bmv2] [D] [thread 25596] [22.0] [cxt 0] Extracting header 'ethernet'
+[18:04:12.560] [bmv2] [D] [thread 25596] [22.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:12.560] [bmv2] [T] [thread 25596] [22.0] [cxt 0] Bytes parsed: 14
+[18:04:12.560] [bmv2] [D] [thread 25596] [22.0] [cxt 0] Parser 'parser': end
+[18:04:12.560] [bmv2] [D] [thread 25596] [22.0] [cxt 0] Pipeline 'ingress': start
+[18:04:12.560] [bmv2] [T] [thread 25596] [22.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:12.560] [bmv2] [D] [thread 25596] [22.0] [cxt 0] Pipeline 'ingress': end
+[18:04:12.560] [bmv2] [D] [thread 25596] [22.0] [cxt 0] Egress port is 0
+[18:04:12.560] [bmv2] [D] [thread 25597] [22.0] [cxt 0] Pipeline 'egress': start
+[18:04:12.560] [bmv2] [T] [thread 25597] [22.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:12.560] [bmv2] [D] [thread 25597] [22.0] [cxt 0] Looking up key:
+
+[18:04:12.560] [bmv2] [D] [thread 25597] [22.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:12.560] [bmv2] [D] [thread 25597] [22.0] [cxt 0] Action entry is ecn132 - 
+[18:04:12.560] [bmv2] [T] [thread 25597] [22.0] [cxt 0] Action ecn132
+[18:04:12.560] [bmv2] [T] [thread 25597] [22.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:12.560] [bmv2] [T] [thread 25597] [22.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:12.560] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:12.560] [bmv2] [T] [thread 25597] [22.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:12.560] [bmv2] [D] [thread 25597] [22.0] [cxt 0] Pipeline 'egress': end
+[18:04:12.560] [bmv2] [D] [thread 25597] [22.0] [cxt 0] Deparser 'deparser': start
+[18:04:12.560] [bmv2] [T] [thread 25597] [22.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:12.560] [bmv2] [D] [thread 25597] [22.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:12.560] [bmv2] [D] [thread 25597] [22.0] [cxt 0] Deparser 'deparser': end
+[18:04:12.561] [bmv2] [D] [thread 25601] [22.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:26.896] [bmv2] [D] [thread 25596] [23.0] [cxt 0] Processing packet received on port 2
+[18:04:26.896] [bmv2] [D] [thread 25596] [23.0] [cxt 0] Parser 'parser': start
+[18:04:26.896] [bmv2] [D] [thread 25596] [23.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:26.896] [bmv2] [D] [thread 25596] [23.0] [cxt 0] Extracting header 'ethernet'
+[18:04:26.896] [bmv2] [D] [thread 25596] [23.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:26.896] [bmv2] [T] [thread 25596] [23.0] [cxt 0] Bytes parsed: 14
+[18:04:26.896] [bmv2] [D] [thread 25596] [23.0] [cxt 0] Parser 'parser': end
+[18:04:26.896] [bmv2] [D] [thread 25596] [23.0] [cxt 0] Pipeline 'ingress': start
+[18:04:26.896] [bmv2] [T] [thread 25596] [23.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:26.896] [bmv2] [D] [thread 25596] [23.0] [cxt 0] Pipeline 'ingress': end
+[18:04:26.896] [bmv2] [D] [thread 25596] [23.0] [cxt 0] Egress port is 0
+[18:04:26.896] [bmv2] [D] [thread 25597] [23.0] [cxt 0] Pipeline 'egress': start
+[18:04:26.896] [bmv2] [T] [thread 25597] [23.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:26.896] [bmv2] [D] [thread 25597] [23.0] [cxt 0] Looking up key:
+
+[18:04:26.896] [bmv2] [D] [thread 25597] [23.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:26.896] [bmv2] [D] [thread 25597] [23.0] [cxt 0] Action entry is ecn132 - 
+[18:04:26.896] [bmv2] [T] [thread 25597] [23.0] [cxt 0] Action ecn132
+[18:04:26.896] [bmv2] [T] [thread 25597] [23.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:26.896] [bmv2] [T] [thread 25597] [23.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:26.896] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:26.896] [bmv2] [T] [thread 25597] [23.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:26.896] [bmv2] [D] [thread 25597] [23.0] [cxt 0] Pipeline 'egress': end
+[18:04:26.896] [bmv2] [D] [thread 25597] [23.0] [cxt 0] Deparser 'deparser': start
+[18:04:26.896] [bmv2] [T] [thread 25597] [23.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:26.896] [bmv2] [D] [thread 25597] [23.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:26.897] [bmv2] [D] [thread 25597] [23.0] [cxt 0] Deparser 'deparser': end
+[18:04:26.897] [bmv2] [D] [thread 25601] [23.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:28.432] [bmv2] [D] [thread 25596] [24.0] [cxt 0] Processing packet received on port 3
+[18:04:28.432] [bmv2] [D] [thread 25596] [24.0] [cxt 0] Parser 'parser': start
+[18:04:28.432] [bmv2] [D] [thread 25596] [24.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:28.432] [bmv2] [D] [thread 25596] [24.0] [cxt 0] Extracting header 'ethernet'
+[18:04:28.432] [bmv2] [D] [thread 25596] [24.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:28.432] [bmv2] [T] [thread 25596] [24.0] [cxt 0] Bytes parsed: 14
+[18:04:28.432] [bmv2] [D] [thread 25596] [24.0] [cxt 0] Parser 'parser': end
+[18:04:28.432] [bmv2] [D] [thread 25596] [24.0] [cxt 0] Pipeline 'ingress': start
+[18:04:28.432] [bmv2] [T] [thread 25596] [24.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:28.432] [bmv2] [D] [thread 25596] [24.0] [cxt 0] Pipeline 'ingress': end
+[18:04:28.432] [bmv2] [D] [thread 25596] [24.0] [cxt 0] Egress port is 0
+[18:04:28.432] [bmv2] [D] [thread 25597] [24.0] [cxt 0] Pipeline 'egress': start
+[18:04:28.432] [bmv2] [T] [thread 25597] [24.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:28.432] [bmv2] [D] [thread 25597] [24.0] [cxt 0] Looking up key:
+
+[18:04:28.432] [bmv2] [D] [thread 25597] [24.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:28.432] [bmv2] [D] [thread 25597] [24.0] [cxt 0] Action entry is ecn132 - 
+[18:04:28.432] [bmv2] [T] [thread 25597] [24.0] [cxt 0] Action ecn132
+[18:04:28.432] [bmv2] [T] [thread 25597] [24.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:28.432] [bmv2] [T] [thread 25597] [24.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:28.432] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:28.432] [bmv2] [T] [thread 25597] [24.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:28.432] [bmv2] [D] [thread 25597] [24.0] [cxt 0] Pipeline 'egress': end
+[18:04:28.432] [bmv2] [D] [thread 25597] [24.0] [cxt 0] Deparser 'deparser': start
+[18:04:28.432] [bmv2] [T] [thread 25597] [24.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:28.432] [bmv2] [D] [thread 25597] [24.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:28.432] [bmv2] [D] [thread 25597] [24.0] [cxt 0] Deparser 'deparser': end
+[18:04:28.433] [bmv2] [D] [thread 25601] [24.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:29.456] [bmv2] [D] [thread 25596] [25.0] [cxt 0] Processing packet received on port 3
+[18:04:29.456] [bmv2] [D] [thread 25596] [25.0] [cxt 0] Parser 'parser': start
+[18:04:29.456] [bmv2] [D] [thread 25596] [25.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:29.456] [bmv2] [D] [thread 25596] [25.0] [cxt 0] Extracting header 'ethernet'
+[18:04:29.456] [bmv2] [D] [thread 25596] [25.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:29.456] [bmv2] [T] [thread 25596] [25.0] [cxt 0] Bytes parsed: 14
+[18:04:29.456] [bmv2] [D] [thread 25596] [25.0] [cxt 0] Parser 'parser': end
+[18:04:29.456] [bmv2] [D] [thread 25596] [25.0] [cxt 0] Pipeline 'ingress': start
+[18:04:29.456] [bmv2] [T] [thread 25596] [25.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:29.456] [bmv2] [D] [thread 25596] [25.0] [cxt 0] Pipeline 'ingress': end
+[18:04:29.456] [bmv2] [D] [thread 25596] [25.0] [cxt 0] Egress port is 0
+[18:04:29.456] [bmv2] [D] [thread 25597] [25.0] [cxt 0] Pipeline 'egress': start
+[18:04:29.456] [bmv2] [T] [thread 25597] [25.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:29.456] [bmv2] [D] [thread 25597] [25.0] [cxt 0] Looking up key:
+
+[18:04:29.456] [bmv2] [D] [thread 25597] [25.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:29.456] [bmv2] [D] [thread 25597] [25.0] [cxt 0] Action entry is ecn132 - 
+[18:04:29.456] [bmv2] [T] [thread 25597] [25.0] [cxt 0] Action ecn132
+[18:04:29.456] [bmv2] [T] [thread 25597] [25.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:29.456] [bmv2] [T] [thread 25597] [25.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:29.456] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:29.456] [bmv2] [T] [thread 25597] [25.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:29.456] [bmv2] [D] [thread 25597] [25.0] [cxt 0] Pipeline 'egress': end
+[18:04:29.456] [bmv2] [D] [thread 25597] [25.0] [cxt 0] Deparser 'deparser': start
+[18:04:29.456] [bmv2] [T] [thread 25597] [25.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:29.456] [bmv2] [D] [thread 25597] [25.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:29.456] [bmv2] [D] [thread 25597] [25.0] [cxt 0] Deparser 'deparser': end
+[18:04:29.456] [bmv2] [D] [thread 25601] [25.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:29.968] [bmv2] [D] [thread 25596] [26.0] [cxt 0] Processing packet received on port 1
+[18:04:29.968] [bmv2] [D] [thread 25596] [26.0] [cxt 0] Parser 'parser': start
+[18:04:29.968] [bmv2] [D] [thread 25596] [26.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:29.968] [bmv2] [D] [thread 25596] [26.0] [cxt 0] Extracting header 'ethernet'
+[18:04:29.968] [bmv2] [D] [thread 25596] [26.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:29.968] [bmv2] [T] [thread 25596] [26.0] [cxt 0] Bytes parsed: 14
+[18:04:29.968] [bmv2] [D] [thread 25596] [26.0] [cxt 0] Parser 'parser': end
+[18:04:29.968] [bmv2] [D] [thread 25596] [26.0] [cxt 0] Pipeline 'ingress': start
+[18:04:29.968] [bmv2] [T] [thread 25596] [26.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:29.968] [bmv2] [D] [thread 25596] [26.0] [cxt 0] Pipeline 'ingress': end
+[18:04:29.968] [bmv2] [D] [thread 25596] [26.0] [cxt 0] Egress port is 0
+[18:04:29.968] [bmv2] [D] [thread 25596] [27.0] [cxt 0] Processing packet received on port 2
+[18:04:29.968] [bmv2] [D] [thread 25596] [27.0] [cxt 0] Parser 'parser': start
+[18:04:29.968] [bmv2] [D] [thread 25596] [27.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:29.968] [bmv2] [D] [thread 25596] [27.0] [cxt 0] Extracting header 'ethernet'
+[18:04:29.968] [bmv2] [D] [thread 25596] [27.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:29.968] [bmv2] [D] [thread 25597] [26.0] [cxt 0] Pipeline 'egress': start
+[18:04:29.968] [bmv2] [T] [thread 25597] [26.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:29.968] [bmv2] [T] [thread 25596] [27.0] [cxt 0] Bytes parsed: 14
+[18:04:29.968] [bmv2] [D] [thread 25596] [27.0] [cxt 0] Parser 'parser': end
+[18:04:29.968] [bmv2] [D] [thread 25597] [26.0] [cxt 0] Looking up key:
+
+[18:04:29.968] [bmv2] [D] [thread 25596] [27.0] [cxt 0] Pipeline 'ingress': start
+[18:04:29.968] [bmv2] [D] [thread 25597] [26.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:29.968] [bmv2] [T] [thread 25596] [27.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:29.968] [bmv2] [D] [thread 25597] [26.0] [cxt 0] Action entry is ecn132 - 
+[18:04:29.968] [bmv2] [D] [thread 25596] [27.0] [cxt 0] Pipeline 'ingress': end
+[18:04:29.968] [bmv2] [T] [thread 25597] [26.0] [cxt 0] Action ecn132
+[18:04:29.968] [bmv2] [D] [thread 25596] [27.0] [cxt 0] Egress port is 0
+[18:04:29.968] [bmv2] [T] [thread 25597] [26.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:29.968] [bmv2] [T] [thread 25597] [26.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:29.968] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:29.968] [bmv2] [T] [thread 25597] [26.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:29.968] [bmv2] [D] [thread 25597] [26.0] [cxt 0] Pipeline 'egress': end
+[18:04:29.968] [bmv2] [D] [thread 25597] [26.0] [cxt 0] Deparser 'deparser': start
+[18:04:29.968] [bmv2] [T] [thread 25597] [26.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:29.969] [bmv2] [D] [thread 25597] [26.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:29.969] [bmv2] [D] [thread 25597] [26.0] [cxt 0] Deparser 'deparser': end
+[18:04:29.969] [bmv2] [D] [thread 25597] [27.0] [cxt 0] Pipeline 'egress': start
+[18:04:29.969] [bmv2] [T] [thread 25597] [27.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:29.969] [bmv2] [D] [thread 25601] [26.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:29.969] [bmv2] [D] [thread 25597] [27.0] [cxt 0] Looking up key:
+
+[18:04:29.969] [bmv2] [D] [thread 25597] [27.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:29.969] [bmv2] [D] [thread 25597] [27.0] [cxt 0] Action entry is ecn132 - 
+[18:04:29.969] [bmv2] [T] [thread 25597] [27.0] [cxt 0] Action ecn132
+[18:04:29.969] [bmv2] [T] [thread 25597] [27.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:29.969] [bmv2] [T] [thread 25597] [27.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:29.969] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:29.969] [bmv2] [T] [thread 25597] [27.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:29.969] [bmv2] [D] [thread 25597] [27.0] [cxt 0] Pipeline 'egress': end
+[18:04:29.969] [bmv2] [D] [thread 25597] [27.0] [cxt 0] Deparser 'deparser': start
+[18:04:29.969] [bmv2] [T] [thread 25597] [27.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:29.969] [bmv2] [D] [thread 25597] [27.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:29.969] [bmv2] [D] [thread 25597] [27.0] [cxt 0] Deparser 'deparser': end
+[18:04:29.969] [bmv2] [D] [thread 25601] [27.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:04:58.128] [bmv2] [D] [thread 25596] [28.0] [cxt 0] Processing packet received on port 2
+[18:04:58.128] [bmv2] [D] [thread 25596] [28.0] [cxt 0] Parser 'parser': start
+[18:04:58.128] [bmv2] [D] [thread 25596] [28.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:04:58.128] [bmv2] [D] [thread 25596] [28.0] [cxt 0] Extracting header 'ethernet'
+[18:04:58.128] [bmv2] [D] [thread 25596] [28.0] [cxt 0] Parser state 'start': key is 86dd
+[18:04:58.128] [bmv2] [T] [thread 25596] [28.0] [cxt 0] Bytes parsed: 14
+[18:04:58.128] [bmv2] [D] [thread 25596] [28.0] [cxt 0] Parser 'parser': end
+[18:04:58.128] [bmv2] [D] [thread 25596] [28.0] [cxt 0] Pipeline 'ingress': start
+[18:04:58.128] [bmv2] [T] [thread 25596] [28.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:04:58.128] [bmv2] [D] [thread 25596] [28.0] [cxt 0] Pipeline 'ingress': end
+[18:04:58.128] [bmv2] [D] [thread 25596] [28.0] [cxt 0] Egress port is 0
+[18:04:58.128] [bmv2] [D] [thread 25597] [28.0] [cxt 0] Pipeline 'egress': start
+[18:04:58.128] [bmv2] [T] [thread 25597] [28.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:04:58.128] [bmv2] [D] [thread 25597] [28.0] [cxt 0] Looking up key:
+
+[18:04:58.128] [bmv2] [D] [thread 25597] [28.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:04:58.128] [bmv2] [D] [thread 25597] [28.0] [cxt 0] Action entry is ecn132 - 
+[18:04:58.128] [bmv2] [T] [thread 25597] [28.0] [cxt 0] Action ecn132
+[18:04:58.128] [bmv2] [T] [thread 25597] [28.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:58.128] [bmv2] [T] [thread 25597] [28.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:04:58.128] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:04:58.128] [bmv2] [T] [thread 25597] [28.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:04:58.128] [bmv2] [D] [thread 25597] [28.0] [cxt 0] Pipeline 'egress': end
+[18:04:58.128] [bmv2] [D] [thread 25597] [28.0] [cxt 0] Deparser 'deparser': start
+[18:04:58.128] [bmv2] [T] [thread 25597] [28.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:04:58.128] [bmv2] [D] [thread 25597] [28.0] [cxt 0] Deparsing header 'ethernet'
+[18:04:58.128] [bmv2] [D] [thread 25597] [28.0] [cxt 0] Deparser 'deparser': end
+[18:04:58.129] [bmv2] [D] [thread 25601] [28.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:05:00.176] [bmv2] [D] [thread 25596] [29.0] [cxt 0] Processing packet received on port 3
+[18:05:00.176] [bmv2] [D] [thread 25596] [29.0] [cxt 0] Parser 'parser': start
+[18:05:00.176] [bmv2] [D] [thread 25596] [29.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:05:00.176] [bmv2] [D] [thread 25596] [29.0] [cxt 0] Extracting header 'ethernet'
+[18:05:00.176] [bmv2] [D] [thread 25596] [29.0] [cxt 0] Parser state 'start': key is 86dd
+[18:05:00.176] [bmv2] [T] [thread 25596] [29.0] [cxt 0] Bytes parsed: 14
+[18:05:00.176] [bmv2] [D] [thread 25596] [29.0] [cxt 0] Parser 'parser': end
+[18:05:00.176] [bmv2] [D] [thread 25596] [29.0] [cxt 0] Pipeline 'ingress': start
+[18:05:00.176] [bmv2] [T] [thread 25596] [29.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:05:00.176] [bmv2] [D] [thread 25596] [29.0] [cxt 0] Pipeline 'ingress': end
+[18:05:00.176] [bmv2] [D] [thread 25596] [29.0] [cxt 0] Egress port is 0
+[18:05:00.176] [bmv2] [D] [thread 25597] [29.0] [cxt 0] Pipeline 'egress': start
+[18:05:00.176] [bmv2] [T] [thread 25597] [29.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:05:00.176] [bmv2] [D] [thread 25597] [29.0] [cxt 0] Looking up key:
+
+[18:05:00.176] [bmv2] [D] [thread 25597] [29.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:05:00.176] [bmv2] [D] [thread 25597] [29.0] [cxt 0] Action entry is ecn132 - 
+[18:05:00.176] [bmv2] [T] [thread 25597] [29.0] [cxt 0] Action ecn132
+[18:05:00.176] [bmv2] [T] [thread 25597] [29.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:05:00.176] [bmv2] [T] [thread 25597] [29.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:05:00.176] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:05:00.176] [bmv2] [T] [thread 25597] [29.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:05:00.176] [bmv2] [D] [thread 25597] [29.0] [cxt 0] Pipeline 'egress': end
+[18:05:00.176] [bmv2] [D] [thread 25597] [29.0] [cxt 0] Deparser 'deparser': start
+[18:05:00.176] [bmv2] [T] [thread 25597] [29.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:05:00.176] [bmv2] [D] [thread 25597] [29.0] [cxt 0] Deparsing header 'ethernet'
+[18:05:00.176] [bmv2] [D] [thread 25597] [29.0] [cxt 0] Deparser 'deparser': end
+[18:05:00.176] [bmv2] [D] [thread 25601] [29.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:05:03.760] [bmv2] [D] [thread 25596] [30.0] [cxt 0] Processing packet received on port 1
+[18:05:03.760] [bmv2] [D] [thread 25596] [30.0] [cxt 0] Parser 'parser': start
+[18:05:03.760] [bmv2] [D] [thread 25596] [30.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:05:03.760] [bmv2] [D] [thread 25596] [30.0] [cxt 0] Extracting header 'ethernet'
+[18:05:03.760] [bmv2] [D] [thread 25596] [30.0] [cxt 0] Parser state 'start': key is 86dd
+[18:05:03.760] [bmv2] [T] [thread 25596] [30.0] [cxt 0] Bytes parsed: 14
+[18:05:03.760] [bmv2] [D] [thread 25596] [30.0] [cxt 0] Parser 'parser': end
+[18:05:03.760] [bmv2] [D] [thread 25596] [30.0] [cxt 0] Pipeline 'ingress': start
+[18:05:03.760] [bmv2] [T] [thread 25596] [30.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:05:03.760] [bmv2] [D] [thread 25596] [30.0] [cxt 0] Pipeline 'ingress': end
+[18:05:03.760] [bmv2] [D] [thread 25596] [30.0] [cxt 0] Egress port is 0
+[18:05:03.760] [bmv2] [D] [thread 25597] [30.0] [cxt 0] Pipeline 'egress': start
+[18:05:03.760] [bmv2] [T] [thread 25597] [30.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:05:03.760] [bmv2] [D] [thread 25597] [30.0] [cxt 0] Looking up key:
+
+[18:05:03.760] [bmv2] [D] [thread 25597] [30.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:05:03.760] [bmv2] [D] [thread 25597] [30.0] [cxt 0] Action entry is ecn132 - 
+[18:05:03.760] [bmv2] [T] [thread 25597] [30.0] [cxt 0] Action ecn132
+[18:05:03.760] [bmv2] [T] [thread 25597] [30.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:05:03.760] [bmv2] [T] [thread 25597] [30.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:05:03.760] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:05:03.760] [bmv2] [T] [thread 25597] [30.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:05:03.760] [bmv2] [D] [thread 25597] [30.0] [cxt 0] Pipeline 'egress': end
+[18:05:03.760] [bmv2] [D] [thread 25597] [30.0] [cxt 0] Deparser 'deparser': start
+[18:05:03.760] [bmv2] [T] [thread 25597] [30.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:05:03.760] [bmv2] [D] [thread 25597] [30.0] [cxt 0] Deparsing header 'ethernet'
+[18:05:03.760] [bmv2] [D] [thread 25597] [30.0] [cxt 0] Deparser 'deparser': end
+[18:05:03.761] [bmv2] [D] [thread 25601] [30.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:05:07.856] [bmv2] [D] [thread 25596] [31.0] [cxt 0] Processing packet received on port 2
+[18:05:07.856] [bmv2] [D] [thread 25596] [31.0] [cxt 0] Parser 'parser': start
+[18:05:07.856] [bmv2] [D] [thread 25596] [31.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:05:07.856] [bmv2] [D] [thread 25596] [31.0] [cxt 0] Extracting header 'ethernet'
+[18:05:07.856] [bmv2] [D] [thread 25596] [31.0] [cxt 0] Parser state 'start': key is 86dd
+[18:05:07.856] [bmv2] [T] [thread 25596] [31.0] [cxt 0] Bytes parsed: 14
+[18:05:07.856] [bmv2] [D] [thread 25596] [31.0] [cxt 0] Parser 'parser': end
+[18:05:07.856] [bmv2] [D] [thread 25596] [31.0] [cxt 0] Pipeline 'ingress': start
+[18:05:07.856] [bmv2] [T] [thread 25596] [31.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:05:07.856] [bmv2] [D] [thread 25596] [31.0] [cxt 0] Pipeline 'ingress': end
+[18:05:07.856] [bmv2] [D] [thread 25596] [31.0] [cxt 0] Egress port is 0
+[18:05:07.856] [bmv2] [D] [thread 25596] [32.0] [cxt 0] Processing packet received on port 3
+[18:05:07.856] [bmv2] [D] [thread 25596] [32.0] [cxt 0] Parser 'parser': start
+[18:05:07.856] [bmv2] [D] [thread 25596] [32.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:05:07.856] [bmv2] [D] [thread 25596] [32.0] [cxt 0] Extracting header 'ethernet'
+[18:05:07.856] [bmv2] [D] [thread 25596] [32.0] [cxt 0] Parser state 'start': key is 86dd
+[18:05:07.856] [bmv2] [D] [thread 25597] [31.0] [cxt 0] Pipeline 'egress': start
+[18:05:07.856] [bmv2] [T] [thread 25597] [31.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:05:07.856] [bmv2] [T] [thread 25596] [32.0] [cxt 0] Bytes parsed: 14
+[18:05:07.856] [bmv2] [D] [thread 25596] [32.0] [cxt 0] Parser 'parser': end
+[18:05:07.856] [bmv2] [D] [thread 25597] [31.0] [cxt 0] Looking up key:
+
+[18:05:07.856] [bmv2] [D] [thread 25596] [32.0] [cxt 0] Pipeline 'ingress': start
+[18:05:07.856] [bmv2] [D] [thread 25597] [31.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:05:07.856] [bmv2] [T] [thread 25596] [32.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:05:07.856] [bmv2] [D] [thread 25596] [32.0] [cxt 0] Pipeline 'ingress': end
+[18:05:07.856] [bmv2] [D] [thread 25597] [31.0] [cxt 0] Action entry is ecn132 - 
+[18:05:07.856] [bmv2] [D] [thread 25596] [32.0] [cxt 0] Egress port is 0
+[18:05:07.856] [bmv2] [T] [thread 25597] [31.0] [cxt 0] Action ecn132
+[18:05:07.856] [bmv2] [T] [thread 25597] [31.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:05:07.856] [bmv2] [T] [thread 25597] [31.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:05:07.857] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:05:07.857] [bmv2] [T] [thread 25597] [31.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:05:07.857] [bmv2] [D] [thread 25597] [31.0] [cxt 0] Pipeline 'egress': end
+[18:05:07.857] [bmv2] [D] [thread 25597] [31.0] [cxt 0] Deparser 'deparser': start
+[18:05:07.857] [bmv2] [T] [thread 25597] [31.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:05:07.857] [bmv2] [D] [thread 25597] [31.0] [cxt 0] Deparsing header 'ethernet'
+[18:05:07.857] [bmv2] [D] [thread 25597] [31.0] [cxt 0] Deparser 'deparser': end
+[18:05:07.857] [bmv2] [D] [thread 25597] [32.0] [cxt 0] Pipeline 'egress': start
+[18:05:07.857] [bmv2] [T] [thread 25597] [32.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:05:07.857] [bmv2] [D] [thread 25601] [31.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:05:07.857] [bmv2] [D] [thread 25597] [32.0] [cxt 0] Looking up key:
+
+[18:05:07.857] [bmv2] [D] [thread 25597] [32.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:05:07.857] [bmv2] [D] [thread 25597] [32.0] [cxt 0] Action entry is ecn132 - 
+[18:05:07.857] [bmv2] [T] [thread 25597] [32.0] [cxt 0] Action ecn132
+[18:05:07.857] [bmv2] [T] [thread 25597] [32.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:05:07.857] [bmv2] [T] [thread 25597] [32.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:05:07.857] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:05:07.857] [bmv2] [T] [thread 25597] [32.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:05:07.857] [bmv2] [D] [thread 25597] [32.0] [cxt 0] Pipeline 'egress': end
+[18:05:07.857] [bmv2] [D] [thread 25597] [32.0] [cxt 0] Deparser 'deparser': start
+[18:05:07.857] [bmv2] [T] [thread 25597] [32.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:05:07.857] [bmv2] [D] [thread 25597] [32.0] [cxt 0] Deparsing header 'ethernet'
+[18:05:07.857] [bmv2] [D] [thread 25597] [32.0] [cxt 0] Deparser 'deparser': end
+[18:05:07.857] [bmv2] [D] [thread 25601] [32.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:06:05.200] [bmv2] [D] [thread 25596] [33.0] [cxt 0] Processing packet received on port 2
+[18:06:05.200] [bmv2] [D] [thread 25596] [33.0] [cxt 0] Parser 'parser': start
+[18:06:05.200] [bmv2] [D] [thread 25596] [33.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:06:05.200] [bmv2] [D] [thread 25596] [33.0] [cxt 0] Extracting header 'ethernet'
+[18:06:05.200] [bmv2] [D] [thread 25596] [33.0] [cxt 0] Parser state 'start': key is 86dd
+[18:06:05.200] [bmv2] [T] [thread 25596] [33.0] [cxt 0] Bytes parsed: 14
+[18:06:05.200] [bmv2] [D] [thread 25596] [33.0] [cxt 0] Parser 'parser': end
+[18:06:05.200] [bmv2] [D] [thread 25596] [33.0] [cxt 0] Pipeline 'ingress': start
+[18:06:05.200] [bmv2] [T] [thread 25596] [33.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:06:05.200] [bmv2] [D] [thread 25596] [33.0] [cxt 0] Pipeline 'ingress': end
+[18:06:05.200] [bmv2] [D] [thread 25596] [33.0] [cxt 0] Egress port is 0
+[18:06:05.200] [bmv2] [D] [thread 25596] [34.0] [cxt 0] Processing packet received on port 3
+[18:06:05.200] [bmv2] [D] [thread 25596] [34.0] [cxt 0] Parser 'parser': start
+[18:06:05.200] [bmv2] [D] [thread 25596] [34.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:06:05.200] [bmv2] [D] [thread 25596] [34.0] [cxt 0] Extracting header 'ethernet'
+[18:06:05.200] [bmv2] [D] [thread 25597] [33.0] [cxt 0] Pipeline 'egress': start
+[18:06:05.200] [bmv2] [D] [thread 25596] [34.0] [cxt 0] Parser state 'start': key is 86dd
+[18:06:05.200] [bmv2] [T] [thread 25597] [33.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:06:05.200] [bmv2] [T] [thread 25596] [34.0] [cxt 0] Bytes parsed: 14
+[18:06:05.200] [bmv2] [D] [thread 25596] [34.0] [cxt 0] Parser 'parser': end
+[18:06:05.200] [bmv2] [D] [thread 25597] [33.0] [cxt 0] Looking up key:
+
+[18:06:05.200] [bmv2] [D] [thread 25596] [34.0] [cxt 0] Pipeline 'ingress': start
+[18:06:05.200] [bmv2] [D] [thread 25597] [33.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:06:05.200] [bmv2] [T] [thread 25596] [34.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:06:05.200] [bmv2] [D] [thread 25596] [34.0] [cxt 0] Pipeline 'ingress': end
+[18:06:05.200] [bmv2] [D] [thread 25597] [33.0] [cxt 0] Action entry is ecn132 - 
+[18:06:05.200] [bmv2] [D] [thread 25596] [34.0] [cxt 0] Egress port is 0
+[18:06:05.200] [bmv2] [T] [thread 25597] [33.0] [cxt 0] Action ecn132
+[18:06:05.200] [bmv2] [T] [thread 25597] [33.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:06:05.200] [bmv2] [T] [thread 25597] [33.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:06:05.200] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:06:05.200] [bmv2] [T] [thread 25597] [33.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:06:05.200] [bmv2] [D] [thread 25597] [33.0] [cxt 0] Pipeline 'egress': end
+[18:06:05.201] [bmv2] [D] [thread 25597] [33.0] [cxt 0] Deparser 'deparser': start
+[18:06:05.201] [bmv2] [T] [thread 25597] [33.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:06:05.201] [bmv2] [D] [thread 25597] [33.0] [cxt 0] Deparsing header 'ethernet'
+[18:06:05.201] [bmv2] [D] [thread 25597] [33.0] [cxt 0] Deparser 'deparser': end
+[18:06:05.201] [bmv2] [D] [thread 25597] [34.0] [cxt 0] Pipeline 'egress': start
+[18:06:05.201] [bmv2] [D] [thread 25601] [33.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:06:05.201] [bmv2] [T] [thread 25597] [34.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:06:05.201] [bmv2] [D] [thread 25597] [34.0] [cxt 0] Looking up key:
+
+[18:06:05.201] [bmv2] [D] [thread 25597] [34.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:06:05.201] [bmv2] [D] [thread 25597] [34.0] [cxt 0] Action entry is ecn132 - 
+[18:06:05.201] [bmv2] [T] [thread 25597] [34.0] [cxt 0] Action ecn132
+[18:06:05.201] [bmv2] [T] [thread 25597] [34.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:06:05.201] [bmv2] [T] [thread 25597] [34.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:06:05.201] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:06:05.201] [bmv2] [T] [thread 25597] [34.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:06:05.201] [bmv2] [D] [thread 25597] [34.0] [cxt 0] Pipeline 'egress': end
+[18:06:05.201] [bmv2] [D] [thread 25597] [34.0] [cxt 0] Deparser 'deparser': start
+[18:06:05.201] [bmv2] [T] [thread 25597] [34.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:06:05.201] [bmv2] [D] [thread 25597] [34.0] [cxt 0] Deparsing header 'ethernet'
+[18:06:05.201] [bmv2] [D] [thread 25597] [34.0] [cxt 0] Deparser 'deparser': end
+[18:06:05.201] [bmv2] [D] [thread 25601] [34.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:06:13.392] [bmv2] [D] [thread 25596] [35.0] [cxt 0] Processing packet received on port 1
+[18:06:13.392] [bmv2] [D] [thread 25596] [35.0] [cxt 0] Parser 'parser': start
+[18:06:13.392] [bmv2] [D] [thread 25596] [35.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:06:13.392] [bmv2] [D] [thread 25596] [35.0] [cxt 0] Extracting header 'ethernet'
+[18:06:13.392] [bmv2] [D] [thread 25596] [35.0] [cxt 0] Parser state 'start': key is 86dd
+[18:06:13.392] [bmv2] [T] [thread 25596] [35.0] [cxt 0] Bytes parsed: 14
+[18:06:13.392] [bmv2] [D] [thread 25596] [35.0] [cxt 0] Parser 'parser': end
+[18:06:13.392] [bmv2] [D] [thread 25596] [35.0] [cxt 0] Pipeline 'ingress': start
+[18:06:13.392] [bmv2] [T] [thread 25596] [35.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:06:13.392] [bmv2] [D] [thread 25596] [35.0] [cxt 0] Pipeline 'ingress': end
+[18:06:13.392] [bmv2] [D] [thread 25596] [35.0] [cxt 0] Egress port is 0
+[18:06:13.392] [bmv2] [D] [thread 25597] [35.0] [cxt 0] Pipeline 'egress': start
+[18:06:13.392] [bmv2] [T] [thread 25597] [35.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:06:13.392] [bmv2] [D] [thread 25597] [35.0] [cxt 0] Looking up key:
+
+[18:06:13.392] [bmv2] [D] [thread 25597] [35.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:06:13.392] [bmv2] [D] [thread 25597] [35.0] [cxt 0] Action entry is ecn132 - 
+[18:06:13.392] [bmv2] [T] [thread 25597] [35.0] [cxt 0] Action ecn132
+[18:06:13.392] [bmv2] [T] [thread 25597] [35.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:06:13.392] [bmv2] [T] [thread 25597] [35.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:06:13.392] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:06:13.392] [bmv2] [T] [thread 25597] [35.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:06:13.392] [bmv2] [D] [thread 25597] [35.0] [cxt 0] Pipeline 'egress': end
+[18:06:13.392] [bmv2] [D] [thread 25597] [35.0] [cxt 0] Deparser 'deparser': start
+[18:06:13.392] [bmv2] [T] [thread 25597] [35.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:06:13.392] [bmv2] [D] [thread 25597] [35.0] [cxt 0] Deparsing header 'ethernet'
+[18:06:13.393] [bmv2] [D] [thread 25597] [35.0] [cxt 0] Deparser 'deparser': end
+[18:06:13.393] [bmv2] [D] [thread 25601] [35.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:06:17.488] [bmv2] [D] [thread 25596] [36.0] [cxt 0] Processing packet received on port 3
+[18:06:17.488] [bmv2] [D] [thread 25596] [36.0] [cxt 0] Parser 'parser': start
+[18:06:17.488] [bmv2] [D] [thread 25596] [36.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:06:17.488] [bmv2] [D] [thread 25596] [36.0] [cxt 0] Extracting header 'ethernet'
+[18:06:17.488] [bmv2] [D] [thread 25596] [36.0] [cxt 0] Parser state 'start': key is 86dd
+[18:06:17.488] [bmv2] [T] [thread 25596] [36.0] [cxt 0] Bytes parsed: 14
+[18:06:17.488] [bmv2] [D] [thread 25596] [36.0] [cxt 0] Parser 'parser': end
+[18:06:17.488] [bmv2] [D] [thread 25596] [36.0] [cxt 0] Pipeline 'ingress': start
+[18:06:17.488] [bmv2] [T] [thread 25596] [36.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:06:17.488] [bmv2] [D] [thread 25596] [36.0] [cxt 0] Pipeline 'ingress': end
+[18:06:17.488] [bmv2] [D] [thread 25596] [36.0] [cxt 0] Egress port is 0
+[18:06:17.488] [bmv2] [D] [thread 25597] [36.0] [cxt 0] Pipeline 'egress': start
+[18:06:17.488] [bmv2] [T] [thread 25597] [36.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:06:17.488] [bmv2] [D] [thread 25597] [36.0] [cxt 0] Looking up key:
+
+[18:06:17.488] [bmv2] [D] [thread 25597] [36.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:06:17.488] [bmv2] [D] [thread 25597] [36.0] [cxt 0] Action entry is ecn132 - 
+[18:06:17.488] [bmv2] [T] [thread 25597] [36.0] [cxt 0] Action ecn132
+[18:06:17.488] [bmv2] [T] [thread 25597] [36.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:06:17.488] [bmv2] [T] [thread 25597] [36.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:06:17.488] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:06:17.488] [bmv2] [T] [thread 25597] [36.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:06:17.488] [bmv2] [D] [thread 25597] [36.0] [cxt 0] Pipeline 'egress': end
+[18:06:17.488] [bmv2] [D] [thread 25597] [36.0] [cxt 0] Deparser 'deparser': start
+[18:06:17.488] [bmv2] [T] [thread 25597] [36.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:06:17.488] [bmv2] [D] [thread 25597] [36.0] [cxt 0] Deparsing header 'ethernet'
+[18:06:17.488] [bmv2] [D] [thread 25597] [36.0] [cxt 0] Deparser 'deparser': end
+[18:06:17.489] [bmv2] [D] [thread 25601] [36.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:06:21.584] [bmv2] [D] [thread 25596] [37.0] [cxt 0] Processing packet received on port 2
+[18:06:21.584] [bmv2] [D] [thread 25596] [37.0] [cxt 0] Parser 'parser': start
+[18:06:21.584] [bmv2] [D] [thread 25596] [37.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:06:21.584] [bmv2] [D] [thread 25596] [37.0] [cxt 0] Extracting header 'ethernet'
+[18:06:21.584] [bmv2] [D] [thread 25596] [37.0] [cxt 0] Parser state 'start': key is 86dd
+[18:06:21.584] [bmv2] [T] [thread 25596] [37.0] [cxt 0] Bytes parsed: 14
+[18:06:21.584] [bmv2] [D] [thread 25596] [37.0] [cxt 0] Parser 'parser': end
+[18:06:21.584] [bmv2] [D] [thread 25596] [37.0] [cxt 0] Pipeline 'ingress': start
+[18:06:21.584] [bmv2] [T] [thread 25596] [37.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:06:21.584] [bmv2] [D] [thread 25596] [37.0] [cxt 0] Pipeline 'ingress': end
+[18:06:21.584] [bmv2] [D] [thread 25596] [37.0] [cxt 0] Egress port is 0
+[18:06:21.584] [bmv2] [D] [thread 25597] [37.0] [cxt 0] Pipeline 'egress': start
+[18:06:21.584] [bmv2] [T] [thread 25597] [37.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:06:21.584] [bmv2] [D] [thread 25597] [37.0] [cxt 0] Looking up key:
+
+[18:06:21.584] [bmv2] [D] [thread 25597] [37.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:06:21.584] [bmv2] [D] [thread 25597] [37.0] [cxt 0] Action entry is ecn132 - 
+[18:06:21.584] [bmv2] [T] [thread 25597] [37.0] [cxt 0] Action ecn132
+[18:06:21.584] [bmv2] [T] [thread 25597] [37.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:06:21.584] [bmv2] [T] [thread 25597] [37.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:06:21.584] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:06:21.584] [bmv2] [T] [thread 25597] [37.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:06:21.584] [bmv2] [D] [thread 25597] [37.0] [cxt 0] Pipeline 'egress': end
+[18:06:21.584] [bmv2] [D] [thread 25597] [37.0] [cxt 0] Deparser 'deparser': start
+[18:06:21.584] [bmv2] [T] [thread 25597] [37.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:06:21.584] [bmv2] [D] [thread 25597] [37.0] [cxt 0] Deparsing header 'ethernet'
+[18:06:21.584] [bmv2] [D] [thread 25597] [37.0] [cxt 0] Deparser 'deparser': end
+[18:06:21.585] [bmv2] [D] [thread 25601] [37.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:08:08.080] [bmv2] [D] [thread 25596] [38.0] [cxt 0] Processing packet received on port 3
+[18:08:08.080] [bmv2] [D] [thread 25596] [38.0] [cxt 0] Parser 'parser': start
+[18:08:08.080] [bmv2] [D] [thread 25596] [38.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:08:08.080] [bmv2] [D] [thread 25596] [38.0] [cxt 0] Extracting header 'ethernet'
+[18:08:08.080] [bmv2] [D] [thread 25596] [38.0] [cxt 0] Parser state 'start': key is 86dd
+[18:08:08.080] [bmv2] [T] [thread 25596] [38.0] [cxt 0] Bytes parsed: 14
+[18:08:08.080] [bmv2] [D] [thread 25596] [38.0] [cxt 0] Parser 'parser': end
+[18:08:08.080] [bmv2] [D] [thread 25596] [38.0] [cxt 0] Pipeline 'ingress': start
+[18:08:08.080] [bmv2] [T] [thread 25596] [38.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:08:08.080] [bmv2] [D] [thread 25596] [38.0] [cxt 0] Pipeline 'ingress': end
+[18:08:08.080] [bmv2] [D] [thread 25596] [38.0] [cxt 0] Egress port is 0
+[18:08:08.080] [bmv2] [D] [thread 25597] [38.0] [cxt 0] Pipeline 'egress': start
+[18:08:08.080] [bmv2] [T] [thread 25597] [38.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:08:08.080] [bmv2] [D] [thread 25597] [38.0] [cxt 0] Looking up key:
+
+[18:08:08.080] [bmv2] [D] [thread 25597] [38.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:08:08.080] [bmv2] [D] [thread 25597] [38.0] [cxt 0] Action entry is ecn132 - 
+[18:08:08.080] [bmv2] [T] [thread 25597] [38.0] [cxt 0] Action ecn132
+[18:08:08.080] [bmv2] [T] [thread 25597] [38.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:08:08.080] [bmv2] [T] [thread 25597] [38.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:08:08.080] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:08:08.080] [bmv2] [T] [thread 25597] [38.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:08:08.080] [bmv2] [D] [thread 25597] [38.0] [cxt 0] Pipeline 'egress': end
+[18:08:08.080] [bmv2] [D] [thread 25597] [38.0] [cxt 0] Deparser 'deparser': start
+[18:08:08.081] [bmv2] [T] [thread 25597] [38.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:08:08.081] [bmv2] [D] [thread 25597] [38.0] [cxt 0] Deparsing header 'ethernet'
+[18:08:08.081] [bmv2] [D] [thread 25597] [38.0] [cxt 0] Deparser 'deparser': end
+[18:08:08.081] [bmv2] [D] [thread 25601] [38.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:08:12.176] [bmv2] [D] [thread 25596] [39.0] [cxt 0] Processing packet received on port 2
+[18:08:12.176] [bmv2] [D] [thread 25596] [39.0] [cxt 0] Parser 'parser': start
+[18:08:12.176] [bmv2] [D] [thread 25596] [39.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:08:12.176] [bmv2] [D] [thread 25596] [39.0] [cxt 0] Extracting header 'ethernet'
+[18:08:12.176] [bmv2] [D] [thread 25596] [39.0] [cxt 0] Parser state 'start': key is 86dd
+[18:08:12.176] [bmv2] [T] [thread 25596] [39.0] [cxt 0] Bytes parsed: 14
+[18:08:12.176] [bmv2] [D] [thread 25596] [39.0] [cxt 0] Parser 'parser': end
+[18:08:12.176] [bmv2] [D] [thread 25596] [39.0] [cxt 0] Pipeline 'ingress': start
+[18:08:12.176] [bmv2] [T] [thread 25596] [39.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:08:12.176] [bmv2] [D] [thread 25596] [39.0] [cxt 0] Pipeline 'ingress': end
+[18:08:12.176] [bmv2] [D] [thread 25596] [39.0] [cxt 0] Egress port is 0
+[18:08:12.176] [bmv2] [D] [thread 25597] [39.0] [cxt 0] Pipeline 'egress': start
+[18:08:12.176] [bmv2] [T] [thread 25597] [39.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:08:12.176] [bmv2] [D] [thread 25597] [39.0] [cxt 0] Looking up key:
+
+[18:08:12.176] [bmv2] [D] [thread 25597] [39.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:08:12.176] [bmv2] [D] [thread 25597] [39.0] [cxt 0] Action entry is ecn132 - 
+[18:08:12.176] [bmv2] [T] [thread 25597] [39.0] [cxt 0] Action ecn132
+[18:08:12.176] [bmv2] [T] [thread 25597] [39.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:08:12.176] [bmv2] [T] [thread 25597] [39.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:08:12.176] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:08:12.176] [bmv2] [T] [thread 25597] [39.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:08:12.176] [bmv2] [D] [thread 25597] [39.0] [cxt 0] Pipeline 'egress': end
+[18:08:12.176] [bmv2] [D] [thread 25597] [39.0] [cxt 0] Deparser 'deparser': start
+[18:08:12.176] [bmv2] [T] [thread 25597] [39.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:08:12.176] [bmv2] [D] [thread 25597] [39.0] [cxt 0] Deparsing header 'ethernet'
+[18:08:12.176] [bmv2] [D] [thread 25597] [39.0] [cxt 0] Deparser 'deparser': end
+[18:08:12.177] [bmv2] [D] [thread 25601] [39.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:08:32.656] [bmv2] [D] [thread 25596] [40.0] [cxt 0] Processing packet received on port 1
+[18:08:32.656] [bmv2] [D] [thread 25596] [40.0] [cxt 0] Parser 'parser': start
+[18:08:32.656] [bmv2] [D] [thread 25596] [40.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:08:32.656] [bmv2] [D] [thread 25596] [40.0] [cxt 0] Extracting header 'ethernet'
+[18:08:32.656] [bmv2] [D] [thread 25596] [40.0] [cxt 0] Parser state 'start': key is 86dd
+[18:08:32.656] [bmv2] [T] [thread 25596] [40.0] [cxt 0] Bytes parsed: 14
+[18:08:32.656] [bmv2] [D] [thread 25596] [40.0] [cxt 0] Parser 'parser': end
+[18:08:32.656] [bmv2] [D] [thread 25596] [40.0] [cxt 0] Pipeline 'ingress': start
+[18:08:32.656] [bmv2] [T] [thread 25596] [40.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:08:32.656] [bmv2] [D] [thread 25596] [40.0] [cxt 0] Pipeline 'ingress': end
+[18:08:32.656] [bmv2] [D] [thread 25596] [40.0] [cxt 0] Egress port is 0
+[18:08:32.656] [bmv2] [D] [thread 25596] [41.0] [cxt 0] Processing packet received on port 3
+[18:08:32.656] [bmv2] [D] [thread 25596] [41.0] [cxt 0] Parser 'parser': start
+[18:08:32.656] [bmv2] [D] [thread 25596] [41.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:08:32.656] [bmv2] [D] [thread 25596] [41.0] [cxt 0] Extracting header 'ethernet'
+[18:08:32.656] [bmv2] [D] [thread 25596] [41.0] [cxt 0] Parser state 'start': key is 86dd
+[18:08:32.656] [bmv2] [D] [thread 25597] [40.0] [cxt 0] Pipeline 'egress': start
+[18:08:32.656] [bmv2] [T] [thread 25597] [40.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:08:32.656] [bmv2] [T] [thread 25596] [41.0] [cxt 0] Bytes parsed: 14
+[18:08:32.656] [bmv2] [D] [thread 25597] [40.0] [cxt 0] Looking up key:
+
+[18:08:32.656] [bmv2] [D] [thread 25596] [41.0] [cxt 0] Parser 'parser': end
+[18:08:32.656] [bmv2] [D] [thread 25597] [40.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:08:32.656] [bmv2] [D] [thread 25596] [41.0] [cxt 0] Pipeline 'ingress': start
+[18:08:32.656] [bmv2] [D] [thread 25597] [40.0] [cxt 0] Action entry is ecn132 - 
+[18:08:32.656] [bmv2] [T] [thread 25596] [41.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:08:32.656] [bmv2] [T] [thread 25597] [40.0] [cxt 0] Action ecn132
+[18:08:32.656] [bmv2] [D] [thread 25596] [41.0] [cxt 0] Pipeline 'ingress': end
+[18:08:32.656] [bmv2] [T] [thread 25597] [40.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:08:32.656] [bmv2] [D] [thread 25596] [41.0] [cxt 0] Egress port is 0
+[18:08:32.656] [bmv2] [T] [thread 25597] [40.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:08:32.656] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:08:32.656] [bmv2] [T] [thread 25597] [40.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:08:32.656] [bmv2] [D] [thread 25597] [40.0] [cxt 0] Pipeline 'egress': end
+[18:08:32.656] [bmv2] [D] [thread 25597] [40.0] [cxt 0] Deparser 'deparser': start
+[18:08:32.656] [bmv2] [T] [thread 25597] [40.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:08:32.656] [bmv2] [D] [thread 25597] [40.0] [cxt 0] Deparsing header 'ethernet'
+[18:08:32.656] [bmv2] [D] [thread 25597] [40.0] [cxt 0] Deparser 'deparser': end
+[18:08:32.656] [bmv2] [D] [thread 25597] [41.0] [cxt 0] Pipeline 'egress': start
+[18:08:32.656] [bmv2] [T] [thread 25597] [41.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:08:32.656] [bmv2] [D] [thread 25597] [41.0] [cxt 0] Looking up key:
+
+[18:08:32.656] [bmv2] [D] [thread 25597] [41.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:08:32.657] [bmv2] [D] [thread 25597] [41.0] [cxt 0] Action entry is ecn132 - 
+[18:08:32.657] [bmv2] [T] [thread 25597] [41.0] [cxt 0] Action ecn132
+[18:08:32.657] [bmv2] [T] [thread 25597] [41.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:08:32.657] [bmv2] [D] [thread 25601] [40.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:08:32.657] [bmv2] [T] [thread 25597] [41.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:08:32.657] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:08:32.657] [bmv2] [T] [thread 25597] [41.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:08:32.657] [bmv2] [D] [thread 25597] [41.0] [cxt 0] Pipeline 'egress': end
+[18:08:32.657] [bmv2] [D] [thread 25597] [41.0] [cxt 0] Deparser 'deparser': start
+[18:08:32.657] [bmv2] [T] [thread 25597] [41.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:08:32.657] [bmv2] [D] [thread 25597] [41.0] [cxt 0] Deparsing header 'ethernet'
+[18:08:32.657] [bmv2] [D] [thread 25597] [41.0] [cxt 0] Deparser 'deparser': end
+[18:08:32.657] [bmv2] [D] [thread 25601] [41.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:08:57.232] [bmv2] [D] [thread 25596] [42.0] [cxt 0] Processing packet received on port 2
+[18:08:57.232] [bmv2] [D] [thread 25596] [42.0] [cxt 0] Parser 'parser': start
+[18:08:57.232] [bmv2] [D] [thread 25596] [42.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:08:57.232] [bmv2] [D] [thread 25596] [42.0] [cxt 0] Extracting header 'ethernet'
+[18:08:57.232] [bmv2] [D] [thread 25596] [42.0] [cxt 0] Parser state 'start': key is 86dd
+[18:08:57.232] [bmv2] [T] [thread 25596] [42.0] [cxt 0] Bytes parsed: 14
+[18:08:57.232] [bmv2] [D] [thread 25596] [42.0] [cxt 0] Parser 'parser': end
+[18:08:57.232] [bmv2] [D] [thread 25596] [42.0] [cxt 0] Pipeline 'ingress': start
+[18:08:57.232] [bmv2] [T] [thread 25596] [42.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:08:57.232] [bmv2] [D] [thread 25596] [42.0] [cxt 0] Pipeline 'ingress': end
+[18:08:57.232] [bmv2] [D] [thread 25596] [42.0] [cxt 0] Egress port is 0
+[18:08:57.232] [bmv2] [D] [thread 25597] [42.0] [cxt 0] Pipeline 'egress': start
+[18:08:57.232] [bmv2] [T] [thread 25597] [42.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:08:57.232] [bmv2] [D] [thread 25597] [42.0] [cxt 0] Looking up key:
+
+[18:08:57.232] [bmv2] [D] [thread 25597] [42.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:08:57.232] [bmv2] [D] [thread 25597] [42.0] [cxt 0] Action entry is ecn132 - 
+[18:08:57.232] [bmv2] [T] [thread 25597] [42.0] [cxt 0] Action ecn132
+[18:08:57.232] [bmv2] [T] [thread 25597] [42.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:08:57.232] [bmv2] [T] [thread 25597] [42.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:08:57.232] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:08:57.232] [bmv2] [T] [thread 25597] [42.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:08:57.233] [bmv2] [D] [thread 25597] [42.0] [cxt 0] Pipeline 'egress': end
+[18:08:57.233] [bmv2] [D] [thread 25597] [42.0] [cxt 0] Deparser 'deparser': start
+[18:08:57.233] [bmv2] [T] [thread 25597] [42.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:08:57.233] [bmv2] [D] [thread 25597] [42.0] [cxt 0] Deparsing header 'ethernet'
+[18:08:57.233] [bmv2] [D] [thread 25597] [42.0] [cxt 0] Deparser 'deparser': end
+[18:08:57.233] [bmv2] [D] [thread 25601] [42.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:12:09.744] [bmv2] [D] [thread 25596] [43.0] [cxt 0] Processing packet received on port 3
+[18:12:09.744] [bmv2] [D] [thread 25596] [43.0] [cxt 0] Parser 'parser': start
+[18:12:09.744] [bmv2] [D] [thread 25596] [43.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:12:09.744] [bmv2] [D] [thread 25596] [43.0] [cxt 0] Extracting header 'ethernet'
+[18:12:09.744] [bmv2] [D] [thread 25596] [43.0] [cxt 0] Parser state 'start': key is 86dd
+[18:12:09.744] [bmv2] [T] [thread 25596] [43.0] [cxt 0] Bytes parsed: 14
+[18:12:09.744] [bmv2] [D] [thread 25596] [43.0] [cxt 0] Parser 'parser': end
+[18:12:09.744] [bmv2] [D] [thread 25596] [43.0] [cxt 0] Pipeline 'ingress': start
+[18:12:09.744] [bmv2] [T] [thread 25596] [43.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:12:09.744] [bmv2] [D] [thread 25596] [43.0] [cxt 0] Pipeline 'ingress': end
+[18:12:09.744] [bmv2] [D] [thread 25596] [43.0] [cxt 0] Egress port is 0
+[18:12:09.744] [bmv2] [D] [thread 25597] [43.0] [cxt 0] Pipeline 'egress': start
+[18:12:09.744] [bmv2] [T] [thread 25597] [43.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:12:09.744] [bmv2] [D] [thread 25597] [43.0] [cxt 0] Looking up key:
+
+[18:12:09.744] [bmv2] [D] [thread 25597] [43.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:12:09.744] [bmv2] [D] [thread 25597] [43.0] [cxt 0] Action entry is ecn132 - 
+[18:12:09.744] [bmv2] [T] [thread 25597] [43.0] [cxt 0] Action ecn132
+[18:12:09.744] [bmv2] [T] [thread 25597] [43.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:12:09.744] [bmv2] [T] [thread 25597] [43.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:12:09.744] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:12:09.744] [bmv2] [T] [thread 25597] [43.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:12:09.744] [bmv2] [D] [thread 25597] [43.0] [cxt 0] Pipeline 'egress': end
+[18:12:09.744] [bmv2] [D] [thread 25597] [43.0] [cxt 0] Deparser 'deparser': start
+[18:12:09.744] [bmv2] [T] [thread 25597] [43.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:12:09.744] [bmv2] [D] [thread 25597] [43.0] [cxt 0] Deparsing header 'ethernet'
+[18:12:09.744] [bmv2] [D] [thread 25597] [43.0] [cxt 0] Deparser 'deparser': end
+[18:12:09.745] [bmv2] [D] [thread 25601] [43.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:12:13.840] [bmv2] [D] [thread 25596] [44.0] [cxt 0] Processing packet received on port 2
+[18:12:13.841] [bmv2] [D] [thread 25596] [44.0] [cxt 0] Parser 'parser': start
+[18:12:13.841] [bmv2] [D] [thread 25596] [44.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:12:13.841] [bmv2] [D] [thread 25596] [44.0] [cxt 0] Extracting header 'ethernet'
+[18:12:13.841] [bmv2] [D] [thread 25596] [44.0] [cxt 0] Parser state 'start': key is 86dd
+[18:12:13.841] [bmv2] [T] [thread 25596] [44.0] [cxt 0] Bytes parsed: 14
+[18:12:13.841] [bmv2] [D] [thread 25596] [44.0] [cxt 0] Parser 'parser': end
+[18:12:13.841] [bmv2] [D] [thread 25596] [44.0] [cxt 0] Pipeline 'ingress': start
+[18:12:13.841] [bmv2] [T] [thread 25596] [44.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:12:13.841] [bmv2] [D] [thread 25596] [44.0] [cxt 0] Pipeline 'ingress': end
+[18:12:13.841] [bmv2] [D] [thread 25596] [44.0] [cxt 0] Egress port is 0
+[18:12:13.841] [bmv2] [D] [thread 25597] [44.0] [cxt 0] Pipeline 'egress': start
+[18:12:13.841] [bmv2] [T] [thread 25597] [44.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:12:13.841] [bmv2] [D] [thread 25597] [44.0] [cxt 0] Looking up key:
+
+[18:12:13.841] [bmv2] [D] [thread 25597] [44.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:12:13.841] [bmv2] [D] [thread 25597] [44.0] [cxt 0] Action entry is ecn132 - 
+[18:12:13.841] [bmv2] [T] [thread 25597] [44.0] [cxt 0] Action ecn132
+[18:12:13.841] [bmv2] [T] [thread 25597] [44.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:12:13.841] [bmv2] [T] [thread 25597] [44.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:12:13.841] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:12:13.841] [bmv2] [T] [thread 25597] [44.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:12:13.841] [bmv2] [D] [thread 25597] [44.0] [cxt 0] Pipeline 'egress': end
+[18:12:13.841] [bmv2] [D] [thread 25597] [44.0] [cxt 0] Deparser 'deparser': start
+[18:12:13.841] [bmv2] [T] [thread 25597] [44.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:12:13.841] [bmv2] [D] [thread 25597] [44.0] [cxt 0] Deparsing header 'ethernet'
+[18:12:13.841] [bmv2] [D] [thread 25597] [44.0] [cxt 0] Deparser 'deparser': end
+[18:12:13.841] [bmv2] [D] [thread 25601] [44.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:12:46.608] [bmv2] [D] [thread 25596] [45.0] [cxt 0] Processing packet received on port 3
+[18:12:46.608] [bmv2] [D] [thread 25596] [45.0] [cxt 0] Parser 'parser': start
+[18:12:46.608] [bmv2] [D] [thread 25596] [45.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:12:46.608] [bmv2] [D] [thread 25596] [45.0] [cxt 0] Extracting header 'ethernet'
+[18:12:46.608] [bmv2] [D] [thread 25596] [45.0] [cxt 0] Parser state 'start': key is 86dd
+[18:12:46.608] [bmv2] [T] [thread 25596] [45.0] [cxt 0] Bytes parsed: 14
+[18:12:46.608] [bmv2] [D] [thread 25596] [45.0] [cxt 0] Parser 'parser': end
+[18:12:46.608] [bmv2] [D] [thread 25596] [45.0] [cxt 0] Pipeline 'ingress': start
+[18:12:46.608] [bmv2] [T] [thread 25596] [45.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:12:46.608] [bmv2] [D] [thread 25596] [45.0] [cxt 0] Pipeline 'ingress': end
+[18:12:46.608] [bmv2] [D] [thread 25596] [45.0] [cxt 0] Egress port is 0
+[18:12:46.608] [bmv2] [D] [thread 25597] [45.0] [cxt 0] Pipeline 'egress': start
+[18:12:46.608] [bmv2] [T] [thread 25597] [45.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:12:46.608] [bmv2] [D] [thread 25597] [45.0] [cxt 0] Looking up key:
+
+[18:12:46.608] [bmv2] [D] [thread 25597] [45.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:12:46.608] [bmv2] [D] [thread 25597] [45.0] [cxt 0] Action entry is ecn132 - 
+[18:12:46.608] [bmv2] [T] [thread 25597] [45.0] [cxt 0] Action ecn132
+[18:12:46.608] [bmv2] [T] [thread 25597] [45.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:12:46.608] [bmv2] [T] [thread 25597] [45.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:12:46.608] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:12:46.608] [bmv2] [T] [thread 25597] [45.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:12:46.608] [bmv2] [D] [thread 25597] [45.0] [cxt 0] Pipeline 'egress': end
+[18:12:46.608] [bmv2] [D] [thread 25597] [45.0] [cxt 0] Deparser 'deparser': start
+[18:12:46.609] [bmv2] [T] [thread 25597] [45.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:12:46.609] [bmv2] [D] [thread 25597] [45.0] [cxt 0] Deparsing header 'ethernet'
+[18:12:46.609] [bmv2] [D] [thread 25597] [45.0] [cxt 0] Deparser 'deparser': end
+[18:12:46.609] [bmv2] [D] [thread 25601] [45.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:13:43.952] [bmv2] [D] [thread 25596] [46.0] [cxt 0] Processing packet received on port 1
+[18:13:43.952] [bmv2] [D] [thread 25596] [46.0] [cxt 0] Parser 'parser': start
+[18:13:43.952] [bmv2] [D] [thread 25596] [46.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:13:43.952] [bmv2] [D] [thread 25596] [46.0] [cxt 0] Extracting header 'ethernet'
+[18:13:43.952] [bmv2] [D] [thread 25596] [46.0] [cxt 0] Parser state 'start': key is 86dd
+[18:13:43.952] [bmv2] [T] [thread 25596] [46.0] [cxt 0] Bytes parsed: 14
+[18:13:43.952] [bmv2] [D] [thread 25596] [46.0] [cxt 0] Parser 'parser': end
+[18:13:43.952] [bmv2] [D] [thread 25596] [46.0] [cxt 0] Pipeline 'ingress': start
+[18:13:43.952] [bmv2] [T] [thread 25596] [46.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:13:43.952] [bmv2] [D] [thread 25596] [46.0] [cxt 0] Pipeline 'ingress': end
+[18:13:43.952] [bmv2] [D] [thread 25596] [46.0] [cxt 0] Egress port is 0
+[18:13:43.952] [bmv2] [D] [thread 25597] [46.0] [cxt 0] Pipeline 'egress': start
+[18:13:43.952] [bmv2] [T] [thread 25597] [46.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:13:43.952] [bmv2] [D] [thread 25597] [46.0] [cxt 0] Looking up key:
+
+[18:13:43.952] [bmv2] [D] [thread 25597] [46.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:13:43.952] [bmv2] [D] [thread 25597] [46.0] [cxt 0] Action entry is ecn132 - 
+[18:13:43.952] [bmv2] [T] [thread 25597] [46.0] [cxt 0] Action ecn132
+[18:13:43.952] [bmv2] [T] [thread 25597] [46.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:13:43.952] [bmv2] [T] [thread 25597] [46.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:13:43.952] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:13:43.952] [bmv2] [T] [thread 25597] [46.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:13:43.952] [bmv2] [D] [thread 25597] [46.0] [cxt 0] Pipeline 'egress': end
+[18:13:43.952] [bmv2] [D] [thread 25597] [46.0] [cxt 0] Deparser 'deparser': start
+[18:13:43.952] [bmv2] [T] [thread 25597] [46.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:13:43.952] [bmv2] [D] [thread 25597] [46.0] [cxt 0] Deparsing header 'ethernet'
+[18:13:43.953] [bmv2] [D] [thread 25597] [46.0] [cxt 0] Deparser 'deparser': end
+[18:13:43.953] [bmv2] [D] [thread 25601] [46.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[18:14:16.720] [bmv2] [D] [thread 25596] [47.0] [cxt 0] Processing packet received on port 2
+[18:14:16.720] [bmv2] [D] [thread 25596] [47.0] [cxt 0] Parser 'parser': start
+[18:14:16.720] [bmv2] [D] [thread 25596] [47.0] [cxt 0] Parser 'parser' entering state 'start'
+[18:14:16.720] [bmv2] [D] [thread 25596] [47.0] [cxt 0] Extracting header 'ethernet'
+[18:14:16.720] [bmv2] [D] [thread 25596] [47.0] [cxt 0] Parser state 'start': key is 86dd
+[18:14:16.720] [bmv2] [T] [thread 25596] [47.0] [cxt 0] Bytes parsed: 14
+[18:14:16.720] [bmv2] [D] [thread 25596] [47.0] [cxt 0] Parser 'parser': end
+[18:14:16.720] [bmv2] [D] [thread 25596] [47.0] [cxt 0] Pipeline 'ingress': start
+[18:14:16.720] [bmv2] [T] [thread 25596] [47.0] [cxt 0] ecn.p4(118) Condition "hdr.ipv4.isValid()" (node_2) is false
+[18:14:16.720] [bmv2] [D] [thread 25596] [47.0] [cxt 0] Pipeline 'ingress': end
+[18:14:16.720] [bmv2] [D] [thread 25596] [47.0] [cxt 0] Egress port is 0
+[18:14:16.720] [bmv2] [D] [thread 25597] [47.0] [cxt 0] Pipeline 'egress': start
+[18:14:16.720] [bmv2] [T] [thread 25597] [47.0] [cxt 0] Applying table 'tbl_ecn132'
+[18:14:16.720] [bmv2] [D] [thread 25597] [47.0] [cxt 0] Looking up key:
+
+[18:14:16.720] [bmv2] [D] [thread 25597] [47.0] [cxt 0] Table 'tbl_ecn132': miss
+[18:14:16.720] [bmv2] [D] [thread 25597] [47.0] [cxt 0] Action entry is ecn132 - 
+[18:14:16.720] [bmv2] [T] [thread 25597] [47.0] [cxt 0] Action ecn132
+[18:14:16.720] [bmv2] [T] [thread 25597] [47.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:14:16.720] [bmv2] [T] [thread 25597] [47.0] [cxt 0] ecn.p4(132) Primitive         log_msg(\"QDEPTH == {}\", {standard_metadata.enq_qdepth});
+[18:14:16.720] [bmv2] [I] [thread 25597] QDEPTH == 0
+[18:14:16.720] [bmv2] [T] [thread 25597] [47.0] [cxt 0] ecn.p4(133) Primitive hdr.ipv4.tos = 3
+[18:14:16.720] [bmv2] [D] [thread 25597] [47.0] [cxt 0] Pipeline 'egress': end
+[18:14:16.720] [bmv2] [D] [thread 25597] [47.0] [cxt 0] Deparser 'deparser': start
+[18:14:16.720] [bmv2] [T] [thread 25597] [47.0] [cxt 0] Skipping checksum 'cksum' update because condition not met
+[18:14:16.720] [bmv2] [D] [thread 25597] [47.0] [cxt 0] Deparsing header 'ethernet'
+[18:14:16.720] [bmv2] [D] [thread 25597] [47.0] [cxt 0] Deparser 'deparser': end
+[18:14:16.721] [bmv2] [D] [thread 25601] [47.0] [cxt 0] Transmitting packet of size 70 out of port 0

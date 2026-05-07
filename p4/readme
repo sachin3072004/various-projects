@@ -8,3 +8,9 @@ cd src
 
 a) every directory has a make file. That is used to start the mininet.
 b) log_msg() is the command to print messages
+c) p4runtime is the standardized API that sits between controller and switch
+
+5) flowcache:- In this experiment, If we get egress port for a given ip address then we forward it
+otherwise we punt it to controller. contoller sets the egress port in switch's table. Which can be used to egress packet.
+
+6) simple_switch_CLI --thrift-port 9091
