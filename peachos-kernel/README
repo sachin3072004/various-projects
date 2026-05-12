@@ -1,0 +1,14 @@
+1) Written 16 bit bootloader
+2) Used Qemu to loead the kernel
+3) In real mode, 16 bit can be accessed. 1MB memory is available. In real mode, there is no memory securtiy and no hardware security.
+4) kernel area is ring0 and user are is ring 3
+5) What are segment registers.
+a) Code Segment
+b) Stack Segment
+c) Data Segment
+d) Extra Segment
+6) Implemented vector interrupt table: You do not call it through function call. You call it by number.
+Q:- What is an interrupt ?
+A:- a) Processor is interrupted b) old state is saved on stack c) interrupt executed
+
+7) Read from the disk in real mode
