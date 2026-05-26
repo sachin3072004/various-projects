@@ -12,3 +12,12 @@ Q:- What is an interrupt ?
 A:- a) Processor is interrupted b) old state is saved on stack c) interrupt executed
 
 7) Read from the disk in real mode
+8) Protection Mode:- Protection Mode allows you to protect memory from hardware talking to memory. There are various rings in protection mode.
+RING -0 ==> Kernel
+RING-3 ===> User applications
+Protection mode gives access to 4 gb of memory. while real mode give 1 MB of memory.
+
+9) implemented GDT, GDT describes various memory segents. descriptors are 8 bytes. Describe size/access right of that memory segment.
+10) segent registers hold Segment selctors. Each segment selector is 2 byte. segment selector corresponds to the descriptors in GDT.
+A segment selector is a 16-bit value that identifies a specific segment by pointing to an entry in a descriptor table (the GDT or LDT). 
+It's what gets loaded into a segment register — the segment register doesn't hold the segment's properties directly, just this "pointer" to where those properties are described.
