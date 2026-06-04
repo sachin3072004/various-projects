@@ -1,0 +1,173 @@
+1) join all the strings present in slice
+func main(){
+        sl := []string{"sacgub","Gupta"}
+        result := strings.Join(sl," ")
+        fmt.Println(result)
+}
+
+2) Find Size of rune and byte
+func main(){
+        sl := []string{"sacgub","Gupta"}
+        result := strings.Join(sl," ")
+        fmt.Println(result)
+        for _,ch := range result {
+                fmt.Printf("%T %d \n", ch, unsafe.Sizeof(ch)) //rune
+        }
+        for i:=0;i<len(result);i++ {
+                fmt.Printf("%T %d \n", result[i],unsafe.Sizeof(result[i])) //byte
+        }
+}
+
+ i3) Convert slice of byte into slice of runes
+func main(){
+        str1 := "sachin"
+        b := []byte(str1)
+        rs := bytes.Runes(b)
+        fmt.Println(rs)
+}
+
+4) Usage of bytes.Buffer.Write slice and string in the bytes.buffer
+import ("bytes"
+        "fmt")
+
+func main(){
+        b := new(bytes.Buffer)
+        b.Write([]byte("Sachin"))
+        b.WriteString("Gypta")
+        for _, ch := range b.Bytes() {
+                fmt.Println(ch)
+        }
+        d := b.Bytes()
+        for i:=0;i<len(d);i++ {
+                fmt.Println("B == ",d[i])
+        }
+}
+
+5) Atomics
+Run following program with following command
+//go run -race hello.go
+import ("sync"
+        "fmt")
+
+func main(){
+        var wg sync.WaitGroup
+        count := 0
+        wg.Add(6)
+        go func() {
+                count = 1
+                wg.Done()
+        }()
+        go func() {
+                count = 2
+                wg.Done()
+        }()
+        go func() {
+                count = 3
+                wg.Done()
+        }()
+        go func() {
+                count = 4
+                wg.Done()
+        }()
+        go func() {
+                count = 5
+                wg.Done()
+        }()
+        go func() {
+                count = 6
+                wg.Done()
+        }()
+        wg.Wait()
+        fmt.Println(count)
+}
+
+6)  Example of atomics. How to use AddInt32
+import ("sync"
+        "sync/atomic"
+        "fmt"
+        "time"
+        )
+
+ var count int32 = 0
+var count1 int32 = 0
+
+func first(wg *sync.WaitGroup){
+        defer wg.Done()
+        for i:=0;i<100;i++ {
+                atomic.AddInt32(&count, 1)
+                time.Sleep(time.Millisecond)
+        }
+        atomic.StoreInt32(&count1, 100)
+}
+
+func second(wg *sync.WaitGroup){
+
+        defer wg.Done()
+        for i:=0;i<100;i++ {
+                atomic.AddInt32(&count, 1)
+                time.Sleep(time.Millisecond)
+        }
+        atomic.StoreInt32(&count1, 200)
+}
+
+func main(){
+        var wg sync.WaitGroup
+        wg.Add(2)
+        go first(&wg)
+        go second(&wg)
+        wg.Wait()
+        fmt.Println(count," ",count1)
+}
+
+7) using struct as Atomic
+import ("sync"
+        "sync/atomic"
+        "fmt"
+        "time"
+        )
+
+type Config struct {
+        num int
+}
+
+var a atomic.Value
+func first(wg *sync.WaitGroup){
+        defer wg.Done()
+        for i:=0;i<100;i++ {
+                a.Store(Config{num:i})
+                time.Sleep(time.Millisecond)
+        }
+}
+
+func second(wg *sync.WaitGroup){
+
+        defer wg.Done()
+        for i:=0;i<100;i++ {
+                _, ok := a.Load().(Config)
+                if ok == false {
+                        fmt.Println("empty")
+                        continue
+                }
+                time.Sleep(time.Millisecond)
+        }
+}
+
+func main(){
+        var wg sync.WaitGroup
+        wg.Add(2)
+        go first(&wg)
+        go second(&wg)
+        wg.Wait()
+        result,_ := a.Load().(Config)
+        fmt.Println("Result == ",result)
+}
+
+8) Convert int to string
+strconv.Itoa(10)
+
+9) convert String to int
+num := "12"
+n, ok := strconv.Atoi(num)
+if ok == nil {
+	fmt.Println(n)
+} 
