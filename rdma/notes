@@ -50,14 +50,6 @@ Server
 4) Wait for connection request
 5) After receiving the request server create CQ,PD and QP.
 6) Now accepts the connection
-5) After receiving the request servercreate CQ,PD and QP.
-6) Now accepts the connection
-5) After receiving the request servercreate CQ,PD and QP.
-6) Now accepts the connection
-5) After receiving the request servercreate CQ,PD and QP.
-6) Now accepts the connection
-5) After receiving the request servercreate CQ,PD and QP.
-6) Now accepts the connection
 
 Client:-
 1) On RDMA Client, create an event channel to recv rdmacm events.
