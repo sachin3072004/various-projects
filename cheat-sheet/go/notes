@@ -1,0 +1,609 @@
+iGood example on golang concurrency:- https://www.youtube.com/watch?v=qyM8Pi1KiiM&list=PL7g1jYj15RUNqJStuwE9SCmeOKpgxC0HP&index=1
+1) join all the strings present in slice
+func main(){
+        sl := []string{"sacgub","Gupta"}
+        result := strings.Join(sl," ")
+        fmt.Println(result)
+}
+
+2) Find Size of rune and byte
+func main(){
+        sl := []string{"sacgub","Gupta"}
+        result := strings.Join(sl," ")
+        fmt.Println(result)
+        for _,ch := range result {
+                fmt.Printf("%T %d \n", ch, unsafe.Sizeof(ch)) //rune
+        }
+        for i:=0;i<len(result);i++ {
+                fmt.Printf("%T %d \n", result[i],unsafe.Sizeof(result[i])) //byte
+        }
+}
+
+ i3) Convert slice of byte into slice of runes
+func main(){
+        str1 := "sachin"
+        b := []byte(str1)
+        rs := bytes.Runes(b)
+        fmt.Println(rs)
+}
+
+4) Usage of bytes.Buffer.Write slice and string in the bytes.buffer
+import ("bytes"
+        "fmt")
+
+func main(){
+        b := new(bytes.Buffer)
+        b.Write([]byte("Sachin"))
+        b.WriteString("Gypta")
+        for _, ch := range b.Bytes() {
+                fmt.Println(ch)
+        }
+        d := b.Bytes()
+        for i:=0;i<len(d);i++ {
+                fmt.Println("B == ",d[i])
+        }
+}
+
+5) Atomics
+Run following program with following command
+//go run -race hello.go
+import ("sync"
+        "fmt")
+
+func main(){
+        var wg sync.WaitGroup
+        count := 0
+        wg.Add(6)
+        go func() {
+                count = 1
+                wg.Done()
+        }()
+        go func() {
+                count = 2
+                wg.Done()
+        }()
+        go func() {
+                count = 3
+                wg.Done()
+        }()
+        go func() {
+                count = 4
+                wg.Done()
+        }()
+        go func() {
+                count = 5
+                wg.Done()
+        }()
+        go func() {
+                count = 6
+                wg.Done()
+        }()
+        wg.Wait()
+        fmt.Println(count)
+}
+
+6)  Example of atomics. How to use AddInt32
+import ("sync"
+        "sync/atomic"
+        "fmt"
+        "time"
+        )
+
+ var count int32 = 0
+var count1 int32 = 0
+
+func first(wg *sync.WaitGroup){
+        defer wg.Done()
+        for i:=0;i<100;i++ {
+                atomic.AddInt32(&count, 1)
+                time.Sleep(time.Millisecond)
+        }
+        atomic.StoreInt32(&count1, 100)
+}
+
+func second(wg *sync.WaitGroup){
+
+        defer wg.Done()
+        for i:=0;i<100;i++ {
+                atomic.AddInt32(&count, 1)
+                time.Sleep(time.Millisecond)
+        }
+        atomic.StoreInt32(&count1, 200)
+}
+
+func main(){
+        var wg sync.WaitGroup
+        wg.Add(2)
+        go first(&wg)
+        go second(&wg)
+        wg.Wait()
+        fmt.Println(count," ",count1)
+}
+
+7) using struct as Atomic
+import ("sync"
+        "sync/atomic"
+        "fmt"
+        "time"
+        )
+
+type Config struct {
+        num int
+}
+
+var a atomic.Value
+func first(wg *sync.WaitGroup){
+        defer wg.Done()
+        for i:=0;i<100;i++ {
+                a.Store(Config{num:i})
+                time.Sleep(time.Millisecond)
+        }
+}
+
+func second(wg *sync.WaitGroup){
+
+        defer wg.Done()
+        for i:=0;i<100;i++ {
+                _, ok := a.Load().(Config)
+                if ok == false {
+                        fmt.Println("empty")
+                        continue
+                }
+                time.Sleep(time.Millisecond)
+        }
+}
+
+func main(){
+        var wg sync.WaitGroup
+        wg.Add(2)
+        go first(&wg)
+        go second(&wg)
+        wg.Wait()
+        result,_ := a.Load().(Config)
+        fmt.Println("Result == ",result)
+}
+
+8) Convert int to string
+strconv.Itoa(10)
+
+9) convert String to int
+num := "12"
+n, ok := strconv.Atoi(num)
+if ok == nil {
+	fmt.Println(n)
+}
+
+10)  This example shows when 2 channel are writing how a goroutine can read from 2 different channles with the help of select. 
+import ("fmt"
+        "sync"
+        "time"
+        "strconv")
+
+
+func test1(ch chan string, wg *sync.WaitGroup){
+        defer wg.Done()
+        for i :=0;i<10;i++ {
+                fmt.Println("Pushed1 == ",i)
+                ch <- strconv.Itoa(i)
+                time.Sleep(time.Millisecond)
+                fmt.Println("Done Pushing1")
+        }
+        close(ch)
+}
+
+func test2(ch chan string, wg *sync.WaitGroup){
+        defer wg.Done()
+        for i :=0;i<10;i++ {
+                fmt.Println("Pushed2 == ",i*10)
+                ch <- strconv.Itoa(i*10)
+                time.Sleep(time.Millisecond)
+                fmt.Println("Done Pushing2")
+        }
+        close(ch)
+}
+
+func test3(ch1 chan string,ch2 chan string,  wg *sync.WaitGroup){
+        defer wg.Done()
+        for  ch1 != nil || ch2 != nil{
+                select {
+                        case str1, ok1 :=  <- ch1:
+                                if !ok1 {
+                                        ch1 = nil
+                                        continue
+                                }
+                                fmt.Println("Channel1 == ",str1)
+                        case str2, ok2 :=  <- ch2:
+                                if !ok2 {
+                                        ch2 = nil
+                                        continue
+                                }
+                                fmt.Println("Channel2 == ",str2)
+                }
+        }
+}
+
+func main(){
+        var wg sync.WaitGroup
+        wg.Add(3)
+        ch1 := make(chan string)
+        ch2 := make(chan string)
+        go test1(ch1, &wg)
+        go test2(ch2, &wg)
+        go test3(ch1, ch2, &wg)
+        wg.Wait()
+} 
+
+11) how selct is used to push data on a channel
+import ("fmt"
+        "sync"
+        "time"
+        "strconv")
+
+
+func test1(ch chan string, wg *sync.WaitGroup){
+        num := 0
+        for range(time.Second) {
+                select {
+                        case ch <- strconv.Itoa(num):{
+                                num += 1
+                        }
+
+                }
+        }
+}
+
+func test2(ch chan string, wg *sync.WaitGroup){
+        for range(time.Second) {
+                select {
+                        case s,_ := <- ch:{
+                                fmt.Println("Received == ",s)
+                        }
+                }
+        }
+}
+
+func main(){
+        var wg sync.WaitGroup
+        wg.Add(2)
+        ch1 := make(chan string)
+        go test1(ch1, &wg)
+        go test2(ch1, &wg)
+        wg.Wait()
+}
+
+13) Example code how one gorouting can be cancelled by another go routine
+import ("fmt"
+        "sync"
+        "time")
+
+
+func test1(ch <-chan string, wg *sync.WaitGroup){
+        defer wg.Done()
+        for range(time.Tick(time.Second*3)) {
+                select {
+                case _, ok := <-ch:
+                        if !ok  {
+                                return
+                        }
+                        default:
+                                fmt.Println("Running")
+                }
+        }
+}
+
+func test2(ch chan string, wg *sync.WaitGroup){
+        defer wg.Done()
+        time.Sleep(10 * time.Second)
+        fmt.Println("Timer over closing time")
+        close(ch)
+}
+
+func main(){
+        var wg sync.WaitGroup
+        wg.Add(2)
+        ch1 := make(chan string)
+        go test1(ch1, &wg)
+        go test2(ch1, &wg)
+        wg.Wait()
+}
+
+14) Create a pipeline of goroutines to create square of given list
+import ("fmt"
+        "sync"
+        )
+
+
+func converToChannel(sl []int, wg *sync.WaitGroup) chan int{
+        ch := make(chan int)
+        go func() {
+                defer wg.Done()
+                for _,num := range sl {
+                        ch <- num
+                }
+                close(ch)
+        }()
+        return ch
+}
+
+func sq2(ch chan int, wg *sync.WaitGroup) chan int{
+        nCh := make(chan int)
+        go func(){
+                defer wg.Done()
+                for ch != nil {
+                                num, ok := <- ch
+                                        if ok == false {
+                                                close(nCh)
+                                                return
+                                        }
+                                        nCh <- num * num
+
+                }
+        }()
+        return nCh
+}
+
+func main(){
+        sl := []int{1,2,3,4,5,6,7,8}
+        var wg sync.WaitGroup
+        wg.Add(2)
+        ch1 := converToChannel(sl, &wg)
+        ch2 := sq2(ch1, &wg)
+        for num := range ch2 {
+                fmt.Println(num)
+        }
+        wg.Wait()
+
+15) Interface examples
+package main
+
+import "fmt"
+
+type Human struct {
+        legs int
+}
+
+func (h Human) walk(){
+        fmt.Println("\n Human can walk \n")
+}
+
+
+func (h *Human) eat(){
+        fmt.Println("\n EAT \n")
+}
+
+type Animal struct {
+        legs int
+}
+
+func (a Animal) walk(){
+        fmt.Println("\n Animal can walk \n")
+}
+
+func (h *Animal) chew(){
+        fmt.Println("\n CHEW \n")
+}
+
+type Living interface {
+        walk()
+}
+
+func walk(x Living) {
+        switch x.(type) {
+                case *Human:{
+                        fmt.Println("\n Human can Eat \n")
+                }
+                case *Animal:{
+                        fmt.Println("\n Animal can chew \n")
+                }
+                case Human:{
+                        fmt.Println("\n Human Value can Eat \n")
+                }
+                case Animal:{
+                        fmt.Println("\n Animal Value can chew \n")
+                }
+        }
+}
+
+func main(){
+        h1 := new(Human)
+        a1 := new(Animal)
+        h := Human{}
+        a := Animal{}
+        walk(h1)
+        walk(a1)
+        walk(h)
+        walk(a)
+}
+
+16) Strings module and its functions
+Searching / testing
+
+Contains(s, substr) — does s contain substr?
+ContainsAny(s, chars) — contains any char from chars?
+ContainsRune(s, r) — contains rune r?
+HasPrefix(s, prefix) / HasSuffix(s, suffix)
+Index(s, substr) — index of first occurrence, or -1
+LastIndex(s, substr) — index of last occurrence
+IndexByte(s, b), IndexRune(s, r), IndexAny(s, chars)
+Count(s, substr) — number of non-overlapping occurrences
+
+Splitting / joining
+
+Split(s, sep) — split into []string
+SplitN(s, sep, n) — split into at most n pieces
+SplitAfter(s, sep) — keeps the separator on each piece
+Fields(s) — split on whitespace, dropping empties
+Join(elems []string, sep) — opposite of split
+
+Modifying
+
+Replace(s, old, new, n) — replace first n (use -1 for all)
+ReplaceAll(s, old, new)
+ToUpper(s), ToLower(s), Title(s) (deprecated — use golang.org/x/text/cases)
+Trim(s, cutset), TrimLeft, TrimRight
+TrimSpace(s) — strip leading/trailing whitespace
+TrimPrefix(s, prefix), TrimSuffix(s, suffix)
+Repeat(s, count)
+Map(func(rune) rune, s) — transform each rune
+
+Builder:-
+strings.NewReader(s)
+
+17) strings.Builder and reflect usage example
+import ("fmt"
+        "strings"
+	"reflect")
+
+
+func main(){
+        var r strings.Builder
+        sl := []string{"Sachin","Gupta","Is","Building"}
+        for _, str := range sl {
+                r.WriteString(str)
+        }
+        fmt.Println(r.String()," ",reflect.TypeOf(x))
+}
+
+17) Bytes module
+
+Searching / testing (mirror strings)
+
+Contains(b, subslice), ContainsAny(b, chars), ContainsRune(b, r)
+HasPrefix(b, prefix), HasSuffix(b, suffix)
+Index(b, sep), LastIndex(b, sep), IndexByte(b, c), IndexRune(b, r), IndexAny(b, chars)
+Count(b, sep) — non-overlapping occurrences
+Equal(a, b) — compare two byte slices (faster and clearer than == conversions)
+EqualFold(a, b) — case-insensitive comparison
+Compare(a, b) — returns -1, 0, or 1 (for sorting)
+
+Splitting / joining
+
+Split(b, sep), SplitN(b, sep, n), SplitAfter(b, sep)
+Fields(b) — split on whitespace
+Join(s [][]byte, sep)
+Cut(b, sep) — split once, returns before, after, found (Go 1.18+)
+
+Modifying (these return new slices)
+
+Replace(b, old, new, n), ReplaceAll(b, old, new)
+ToUpper(b), ToLower(b), Title(b) (deprecated)
+Trim(b, cutset), TrimLeft, TrimRight, TrimSpace(b)
+TrimPrefix(b, prefix), TrimSuffix(b, suffix)
+Repeat(b, count), Map(mapping, b)
+
+18) sort.Sort(data Interface)
+sort.Stable(data Interface)
+sort.IsSorted(data Interface) bool
+sort.Reverse(data Interface) Interface
+sort.Slice(x any, less func(i, j int) bool)
+sort.SliceStable(x any, less func(i, j int) bool)
+sort.SliceIsSorted(x any, less func(i, j int) bool) bool
+sort.Ints(x []int)
+sort.IntsAreSorted(x []int) bool
+sort.Float64s(x []float64)
+sort.Float64sAreSorted(x []float64) bool
+sort.Strings(x []string)
+sort.StringsAreSorted(x []string) bool
+sort.Search(n int, f func(int) bool) int
+sort.SearchInts(a []int, x int) int
+sort.SearchFloat64s(a []float64, x float64) int
+sort.SearchStrings(a []string, x string) int
+
+Types
+
+sort.Interface (interface with Len, Less, Swap)
+sort.IntSlice — []int with interface methods, plus a Sort() and Search(x) method
+sort.Float64Slice — []float64, likewise
+sort.StringSlice — []string, likewise
+
+
+18) sort interface example 
+import ("fmt"
+        "sort"
+        )
+
+type Human struct {
+        name string
+        age int
+}
+
+type ByAge []Human
+
+func (b ByAge)Less(i,j int)bool{
+        return b[i].age > b[j].age
+}
+
+func (b ByAge)Len() int{
+        return len(b)
+}
+
+func (b ByAge)Swap(i,j int){
+        b[i],b[j] = b[j], b[i]
+}
+
+
+func main(){
+        sl := []Human{
+                        Human{name:"Sachin1", age:1},
+                        Human{name:"Sachin2", age:2},
+                        Human{name:"Sachin3", age:3},
+                        Human{name:"Sachin4", age:4},
+                        Human{name:"Sachin5", age:5},
+                        }
+        sort.Sort(ByAge(sl))
+        fmt.Println(sl)
+
+}
+
+19) Buffered channels can be read after being closed.
+import "fmt"
+func main(){
+        ch := make(chan string, 3)
+        sl := []string{"sachin","is","a"}
+        for _, s := range sl {
+                ch <- s
+        }
+        close(ch)
+        for s := range ch {
+                fmt.Println(s)
+        }
+}
+~
+20)  Instead of using default use timeout in select statement.Default gives a busy waiting
+import ("fmt"
+        "sync"
+        "time")
+
+func test1(ch chan int, wg *sync.WaitGroup){
+        defer wg.Done()
+        for i := 0;i<10;i++{
+                ch <- i
+                time.Sleep(time.Millisecond)
+        }
+        close(ch)
+}
+
+func test2(ch chan int, wg *sync.WaitGroup){
+        defer wg.Done()
+        for ch != nil{
+                select {
+                        case num, ok := <- ch:
+                                if ok == false {
+                                        ch = nil
+                                        continue
+                                }
+                                fmt.Println(num)
+                        case <- time.After(time.Millisecond):
+                                fmt.Println("Defautl")
+                }
+        }
+}
+
+func main(){
+        var wg sync.WaitGroup
+        wg.Add(2)
+        ch := make(chan int)
+        go test1(ch, &wg)
+        go test2(ch, &wg)
+        wg.Wait()
+}    
