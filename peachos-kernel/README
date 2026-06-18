@@ -21,3 +21,50 @@ Protection mode gives access to 4 gb of memory. while real mode give 1 MB of mem
 10) segent registers hold Segment selctors. Each segment selector is 2 byte. segment selector corresponds to the descriptors in GDT.
 A segment selector is a 16-bit value that identifies a specific segment by pointing to an entry in a descriptor table (the GDT or LDT). 
 It's what gets loaded into a segment register — the segment register doesn't hold the segment's properties directly, just this "pointer" to where those properties are described.
+
+11) Interrupt vector table is implementation of interrupts in the real mode. While interrupt descriptor table is implemention in the protected mode.
+
+12) Interrupt Vector Table (IVT)
+Used in real mode (the original 16-bit mode of 8086/8088 processors, still used during early boot).
+
+Located at a fixed physical address: 0x0000:0x0000 (the very bottom of memory)
+Size: 1 KB total (256 entries × 4 bytes each)
+Each entry is a simple far pointer: 2 bytes for segment + 2 bytes for offset (CS:IP)
+No protection, no privilege levels — any code can read/write it
+CPU finds handler by: address = IVT[interrupt_number] = 4 × interrupt_number
+
+Interrupt Descriptor Table (IDT)
+Used in protected mode and long mode (32-bit and 64-bit x86).
+
+Can be located anywhere in memory — its base address is stored in the IDTR register (loaded via LIDT instruction)
+Size: up to 256 entries, each entry is 8 bytes (32-bit mode) or 16 bytes (64-bit mode)
+Each entry is a gate descriptor, not just a pointer. Three types:
+
+Interrupt gate — disables interrupts on entry
+Trap gate — leaves interrupts enabled
+Task gate — triggers a hardware task switch (rarely used)
+
+
+Each descriptor contains: handler address, segment selector, DPL (privilege level), present bit, gate type
+Supports privilege checking (ring 0/1/2/3), so user-mode code can't invoke arbitrary kernel handlers
+
+13) Gate Descriptors Explained
+A gate is an x86 mechanism that controls a transfer of execution — it's not just "where to jump" but also "how to jump there" (what privilege level, with what CPU state changes, through what kind of transition). Each IDT entry is one of these gates.
+Interrupt Gate
+When the CPU enters the handler through an interrupt gate, it automatically clears the IF (Interrupt Flag) in the EFLAGS/RFLAGS register. This means maskable hardware interrupts are disabled while your handler runs.
+Why this matters: imagine a timer interrupt fires and your handler starts saving registers and manipulating shared data structures. If another interrupt fired right in the middle, it could corrupt that state or cause re-entrancy bugs. The interrupt gate gives you a guaranteed atomic entry — you decide later whether and when to re-enable interrupts (via STI).
+When the handler finishes and executes IRET, the original IF value is restored from the saved flags on the stack.
+Used for: hardware IRQs (keyboard, timer, disk, network card) where re-entrancy would be dangerous.
+Trap Gate
+Structurally almost identical to an interrupt gate, but with one critical difference: it does NOT clear IF. Interrupts remain in whatever state they were in before the gate was taken — usually enabled.
+Why this matters: some events aren't truly "asynchronous emergencies." If a user program executes a INT 0x80 syscall, there's no reason to block the timer or keyboard while servicing it. Letting interrupts stay enabled keeps the system responsive.
+Used for:
+
+CPU exceptions like divide-by-zero, page faults, general protection faults — these are synchronous (caused by the current instruction), so blocking other interrupts isn't necessary
+Software interrupts / syscalls (INT n instructions)
+Debug exceptions (breakpoints) — you specifically want other interrupts to keep working while debugging
+
+The only practical difference between an interrupt gate and a trap gate is that one line: does IF get cleared on entry, yes or no.
+
+
+14)
