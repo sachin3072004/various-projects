@@ -231,3 +231,6 @@ Result: The local transport timeout retry count is exceeded, leading to the erro
 
 RNR Retry Counter Exceeded
 This error (RNR stands for Receiver Not Ready) indicates that the sender received a Receiver Not Ready Nack (RNR Nack) from the remote side, but after repeated retries, the condition persisted and the RNR Nack retry count was exceeded. 
+
+Q:- Why does completion channel exist ?
+A:- CQ can not have select system. It can do busy polling only. While completion channel can do select. thats why completion channel are way to avoid busy polling.
