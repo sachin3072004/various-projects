@@ -7,6 +7,16 @@
 struct rdma_event_channel *chan;
 struct ibv_comp_channel *shared_channel = NULL;
 
+struct ibv_srq* create_srq(struct ibv_pd *pd){
+        struct ibv_srq_init_attr srq_attr = {
+                .attr = {
+                        .max_wr = 10,
+                        .max_sge = 1,
+                },
+        };
+        struct ibv_srq* srq = ibv_create_srq(pd, &srq_attr);
+	return srq;
+}
 
 void setup_send_buf(char* send_buf, struct ibv_mr* send_mr, struct ibv_qp *qp, int received_num){
 	struct ibv_send_wr *send_bad_wr;
@@ -34,7 +44,7 @@ void setup_send_buf(char* send_buf, struct ibv_mr* send_mr, struct ibv_qp *qp, i
 	}
 }
 
-void setup_recv_buf(char* recv_buf, struct ibv_mr* recv_mr,struct ibv_qp *qp){
+void setup_recv_buf(char* recv_buf, struct ibv_mr* recv_mr,struct ibv_qp *qp, struct ibv_srq* srq){
 	struct ibv_sge recv_sge = {
 	    .addr   = (uintptr_t)recv_buf, // Pointer to your registered buffer
 	    .length = BUFFER_SIZE,              // Size of the buffer
@@ -49,12 +59,13 @@ void setup_recv_buf(char* recv_buf, struct ibv_mr* recv_mr,struct ibv_qp *qp){
 	};
 
 	struct ibv_recv_wr *bad_wr;
-	if (ibv_post_recv(qp, &recv_wr, &bad_wr)) {
+	if (ibv_post_srq_recv(srq, &recv_wr, &bad_wr)) {
+	//if (ibv_post_recv(qp, &recv_wr, &bad_wr)) {
 	    fprintf(stderr, "Failed to post receive\n");
 	}
 }
 
-void poll_cq(struct ibv_cq *cq, void* recv_buf,struct ibv_mr *recv_mr , void* send_buf, struct ibv_mr *send_mr, struct ibv_qp *qp){
+void poll_cq(struct ibv_cq *cq, void* recv_buf,struct ibv_mr *recv_mr , void* send_buf, struct ibv_mr *send_mr, struct ibv_qp *qp, struct ibv_srq* srq){
         int num = 0;
         struct ibv_wc wc = {};
         while(num<=0 || wc.opcode != IBV_WC_RECV){
@@ -62,7 +73,7 @@ void poll_cq(struct ibv_cq *cq, void* recv_buf,struct ibv_mr *recv_mr , void* se
         }
 
 	printf("Received from Client: %s \n", recv_buf);
-	setup_recv_buf(recv_buf, recv_mr, qp);
+	setup_recv_buf(recv_buf, recv_mr, qp, srq);
 	int receivedToken = atoi(recv_buf);
 	//if (receivedToken == -1){
 	//	break;
@@ -73,7 +84,7 @@ void poll_cq(struct ibv_cq *cq, void* recv_buf,struct ibv_mr *recv_mr , void* se
 
 }
 
-void poll_shared_completion_channel(void* recv_buf,struct ibv_mr *recv_mr , void* send_buf, struct ibv_mr *send_mr, struct ibv_qp *qp){
+void poll_shared_completion_channel(void* recv_buf,struct ibv_mr *recv_mr , void* send_buf, struct ibv_mr *send_mr, struct ibv_qp *qp, struct ibv_srq* srq){
         while (1) {
                 struct ibv_cq *ev_cq;
                 void *ev_ctx;
@@ -90,7 +101,7 @@ void poll_shared_completion_channel(void* recv_buf,struct ibv_mr *recv_mr , void
                         break;
                 }
 		printf("Poll_CQ == %p \n", ev_cq);
-                poll_cq(ev_cq, recv_buf, recv_mr , send_buf, send_mr, qp);
+                poll_cq(ev_cq, recv_buf, recv_mr , send_buf, send_mr, qp, srq);
         }
 }
 
@@ -112,6 +123,7 @@ void* handle_client_connection(void* client)
 	    fprintf(stderr, "Failed to allocate Protection Domain\n");
 	    return NULL;
 	}
+	struct ibv_srq* srq = create_srq(pd);
 	void* recv_buf = calloc(1, BUFFER_SIZE);
 	struct ibv_mr *recv_mr = ibv_reg_mr(pd, recv_buf, BUFFER_SIZE, IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_WRITE | IBV_ACCESS_REMOTE_READ);	
 	void* send_buf = calloc(1, BUFFER_SIZE);
@@ -122,21 +134,22 @@ void* handle_client_connection(void* client)
 						    .send_cq = cq,
 						    .recv_cq = cq,
 						    .qp_type = IBV_QPT_RC, // Reliable Connected
+						    .srq = srq,
 						    .cap = {
 							.max_send_wr = 10,
-							.max_recv_wr = 10,
+							.max_recv_wr = 0,
 							.max_send_sge = 1,
 							.max_recv_sge = 1,
 						    },
 						};
 	rdma_create_qp(client_id, pd, &qp_init_attr);
 	struct ibv_qp *qp = client_id->qp;
-	setup_recv_buf(recv_buf, recv_mr, qp);
+	setup_recv_buf(recv_buf, recv_mr, qp, srq);
 	struct rdma_conn_param conn_param = {};
 	rdma_accept(client_id, &conn_param);
 	while(1){
 		int num = 0;
-		poll_shared_completion_channel(recv_buf, recv_mr, send_buf, send_mr, qp);
+		poll_shared_completion_channel(recv_buf, recv_mr, send_buf, send_mr, qp, srq);
 	
 		//poll(cq);
 		/*printf("Received from Client: %s \n", recv_buf);
