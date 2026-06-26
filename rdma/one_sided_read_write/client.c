@@ -125,6 +125,37 @@ int main(){
                 }
         }while(n == 0);
         printf("Buf %s\n", send_buf);
+	//////////////////////////////////////////////////
+	   char msg[] = "Congratulations!!! Changed the server content";
+		strcpy(send_buf, msg);
+        struct ibv_sge sge_write1 = {
+                        .addr = (uintptr_t)send_buf,
+                        .length = strlen(msg),
+                        .lkey = send_mr->lkey
+        };
+        struct ibv_send_wr swr1 = {
+                .wr_id = 2,
+                .sg_list = &sge_write1,
+                .num_sge = 1,
+                .opcode = IBV_WR_RDMA_WRITE,
+                .send_flags = IBV_SEND_SIGNALED,
+                .wr.rdma.remote_addr = mriinfo->addr,
+                .wr.rdma.rkey = mriinfo->key
+        }, *bad_swr1;
+        printf("Trying to write to remote\n")  ;
+        if (ibv_post_send(id->qp, &swr1, &bad_swr)) perror("ibv_post_send write");
+        do {
+                n = ibv_poll_cq(cq, 1, &wc);
+                if(n == 0){
+                        continue;
+                }
+                if(wc.opcode == IBV_WC_RDMA_WRITE){
+                        break;
+                }
+        }while(n == 0);
+        printf("Buf %s\n", send_buf);
+	//////////////////////////////////////////////////
+	strcpy(send_buf, "Clint is done writing");	
         while(1){
                 sleep(5);
         }	
