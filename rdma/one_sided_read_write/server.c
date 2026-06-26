@@ -120,6 +120,8 @@ int main(){
          }while(n == 0);
 	printf("\n Server has already sent %d Stored text is %s \n",n, buf);	
 	////////////////////////////////////////
+	sleep(5);
+	printf("Now server contains ==  %s \n", buf);
 	while(1){
 		sleep(5);
 	}
