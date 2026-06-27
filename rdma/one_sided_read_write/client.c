@@ -11,6 +11,20 @@
 #define BUFFER_SIZE 4096
 #define MAX_WR 10
 
+struct conn_info {
+    uint64_t addr;   /* remote virtual address of the counter (network byte order via htonll-style packing below) */
+    uint32_t rkey;   /* remote key for that memory region */
+};
+
+static inline uint64_t htonll_(uint64_t v) {
+    return ((uint64_t)htonl((uint32_t)(v & 0xFFFFFFFFULL)) << 32) |
+           (uint64_t)htonl((uint32_t)(v >> 32));
+}
+
+static inline uint64_t ntohll_(uint64_t v) {
+    return htonll_(v); /* symmetric */
+}
+
 struct MRInfo{
         uint64_t addr;
         uint32_t sz;
@@ -77,8 +91,55 @@ int main(){
         if (event->event != RDMA_CM_EVENT_ESTABLISHED) {
                 printf("Expected ESTABLISHED %s \n", rdma_event_str(event->event));
         }
+	struct conn_info info;
+	memcpy(&info, event->param.conn.private_data, sizeof(info));
+	uint64_t remote_addr = ntohll_(info.addr); 
+	uint32_t remote_key = ntohl(info.rkey);
         rdma_ack_cm_event(event);
         printf("Connected to server\n");
+	/*------------------------Atomic Fetch and Add------------*/
+	{
+        uint64_t add_value = 5;
+
+	uint64_t send_result_buf ;
+        struct ibv_mr *send_result_mr = ibv_reg_mr(pd, &send_result_buf, BUFFER_SIZE, IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_READ | IBV_ACCESS_REMOTE_WRITE);
+        struct ibv_sge sge = {
+            .addr   = (uintptr_t)&send_result_buf,
+            .length = sizeof(send_result_buf),
+            .lkey   = send_result_mr->lkey,
+        };
+
+        struct ibv_send_wr wr;
+        memset(&wr, 0, sizeof(wr));
+        wr.wr_id      = 1;
+        wr.opcode     = IBV_WR_ATOMIC_FETCH_AND_ADD;
+        wr.sg_list    = &sge;
+        wr.num_sge    = 1;
+        wr.send_flags = IBV_SEND_SIGNALED;
+        wr.wr.atomic.remote_addr = remote_addr;
+        wr.wr.atomic.rkey        = remote_key;
+        wr.wr.atomic.compare_add = add_value;   /* the value to add */
+
+        struct ibv_send_wr *bad_wr;
+        if (ibv_post_send(qp, &wr, &bad_wr)) {
+		printf("\n Problem with ibv_post_send \n");
+	}
+	int n = 0;
+	struct ibv_wc wc = {};
+        do {
+                n = ibv_poll_cq(cq, 1, &wc);
+                if(n == 0){
+                        continue;
+                }
+                if(wc.opcode == IBV_WC_FETCH_ADD){
+                        break;
+                }
+        }while(n == 0);
+        printf("FETCH_AND_ADD(+%lu): old value was %lu (now %lu)\n",
+               (unsigned long)add_value,
+               (unsigned long)send_result_buf,
+               (unsigned long)(send_result_buf + add_value));
+    	}
         //---------------------
 	int n = 0;
         struct ibv_wc wc = {};
