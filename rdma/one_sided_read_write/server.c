@@ -7,6 +7,19 @@
 #define BUFFER_SIZE 4096
 #define MAX_WR 10
 
+struct conn_info {
+    uint64_t addr;   /* remote virtual address of the counter (network byte order via htonll-style packing below) */
+    uint32_t rkey;   /* remote key for that memory region */
+};
+
+static inline uint64_t htonll_(uint64_t v) {
+    return ((uint64_t)htonl((uint32_t)(v & 0xFFFFFFFFULL)) << 32) |
+           (uint64_t)htonl((uint32_t)(v >> 32));
+}
+static inline uint64_t ntohll_(uint64_t v) {
+    return htonll_(v); /* symmetric */
+}
+
 struct MRInfo{
         uint64_t addr;
         uint32_t sz;
@@ -67,6 +80,14 @@ int main(){
                 };
         ibv_post_recv(qp, &wr, &bad_wr);
 	struct rdma_conn_param conn_param = {};
+	int64_t counter  __attribute__((aligned(8))) = 123;
+	struct ibv_mr *counter_mr = ibv_reg_mr(pd, &counter, sizeof(counter), IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_READ | IBV_ACCESS_REMOTE_WRITE | IBV_ACCESS_REMOTE_ATOMIC);
+	struct conn_info info;
+	info.addr = htonll_((uint64_t)(uintptr_t)&counter);
+    	
+	info.rkey = htonl(counter_mr->rkey);
+	conn_param.private_data = &info;
+	conn_param.private_data_len = sizeof(info);
 	conn_param.initiator_depth = 1;
         conn_param.responder_resources = 1;
         conn_param.rnr_retry_count = 7;
@@ -121,7 +142,7 @@ int main(){
 	printf("\n Server has already sent %d Stored text is %s \n",n, buf);	
 	////////////////////////////////////////
 	sleep(5);
-	printf("Now server contains ==  %s \n", buf);
+	printf("Now server contains ==  %s %ld \n", buf,counter);
 	while(1){
 		sleep(5);
 	}

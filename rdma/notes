@@ -122,6 +122,7 @@ message. The WQE is enqueued in the receive queue.
 MPI uses RDMA.
 
 Youtube: Netdev 0x16 - RDMA programming tutorial
+https://nwktimes.blogspot.com/2024/06/aiml-networking-part-i-rdma-basics.html
 Other than Infiniband there is AWS EFA/ intel omnipath are example of RDMA
 
 
